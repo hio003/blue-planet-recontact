@@ -1,0 +1,315 @@
+{
+  "Actor": {
+    "types": ["character", "npc", "cetacean", "creature"],
+    "templates": {
+      "base": {
+        "attributes": {
+          "cognition": {
+            "value": 0,
+            "focus": {
+              "primary": {
+                "name": "",
+                "value": 1
+              },
+              "secondary": {
+                "name": "",
+                "value": 1
+              }
+            }
+          },
+          "psyche": {
+            "value": 0,
+            "focus": {
+              "primary": {
+                "name": "",
+                "value": 1
+              },
+              "secondary": {
+                "name": "",
+                "value": 1
+              }
+            }
+          },
+          "coordination": {
+            "value": 0,
+            "dual": 0,
+            "focus": {
+              "primary": {
+                "name": "",
+                "value": 1
+              },
+              "secondary": {
+                "name": "",
+                "value": 1
+              }
+            }
+          },
+          "physique": {
+            "value": 0,
+            "dual": 0,
+            "focus": {
+              "primary": {
+                "name": "",
+                "value": 1
+              },
+              "secondary": {
+                "name": "",
+                "value": 1
+              }
+            }
+          }
+        }
+      },
+      "character_base": {
+        "tier": "everyday",
+        "species": "",
+        "profile": {
+          "attitude": "",
+          "motivation": "",
+          "goal": "",
+          "reputation": {
+            "type": "",
+            "level": 0
+          }
+        },
+        "strain": {
+          "mental": {
+            "value": 0,
+            "max": 4
+          },
+          "physical": {
+            "value": 0,
+            "max": 6
+          }
+        },
+        "skills": {},
+        "tags": [],
+        "tracks": {},
+        "ties": [],
+        "biomods": [],
+        "wounds": {
+          "minor": 0,
+          "major": 0,
+          "mortal": 0
+        },
+        "features": {
+          "name": "",
+          "pronouns": "",
+          "age": {
+            "apparent": 0,
+            "actual": 0
+          },
+          "height": "",
+          "stature": "",
+          "eyes": "",
+          "hair": "",
+          "complexion": "",
+          "style": "",
+          "clothing": "",
+          "biomods": ""
+        },
+        "advancement": {
+          "chips": 0
+        },
+        "status": {
+          "condition": ""
+        }
+      },
+      "creature_base": {
+        "attributes": {
+          "awareness": {
+            "value": 0
+          },
+          "coordination": {
+            "value": 0,
+            "dual": 0
+          },
+          "physique": {
+            "value": 0,
+            "dual": 0
+          }
+        },
+        "biology": {
+          "description": "",
+          "behavior": "",
+          "distribution": "",
+          "size": {
+            "length": 0,
+            "mass": 0
+          },
+          "encounter_rate": "",
+          "resource_value": "low",
+          "threat_level": "low"
+        },
+        "attack": {
+          "type": "",
+          "damage": 0,
+          "venom": {
+            "effect": "",
+            "onset": "",
+            "damage": 0
+          }
+        }
+      }
+    },
+    "character": {
+      "templates": ["base", "character_base"]
+    },
+    "npc": {
+      "templates": ["base", "character_base"]
+    },
+    "cetacean": {
+      "templates": ["base", "character_base"],
+      "echolocation": true,
+      "diving": {
+        "depth": 0,
+        "duration": 0
+      }
+    },
+    "creature": {
+      "templates": ["creature_base"]
+    }
+  },
+  "Item": {
+    "types": ["weapon", "equipment", "biomod", "skill", "feature", "species", "ammo_type", "sensor"],
+    "templates": {
+      "base": {
+        "description": "",
+        "cost": 0,
+        "availability": "common",
+        "legality": "legal"
+      }
+    },
+    "weapon": {
+      "templates": ["base"],
+      "damage": 0,
+      "effective_range": 0,
+      "features": [],
+      "weapon_type": "melee",
+      "durability": 0,
+      "dimensions": "",
+      "ammo_capacity": "high",
+      "rate_of_fire": "single",
+      "ammo_types": [],
+      "models": "",
+      "recoil_penalty": 0,
+      "range_modifiers": {
+        "short": 0,
+        "medium": 0,
+        "long": -2,
+        "extreme": -4
+      }
+    },
+    "equipment": {
+      "templates": ["base"],
+      "quantity": 1,
+      "weight": 0,
+      "durability": 10,
+      "max_durability": 10,
+      "category": "other",
+      "features": [],
+      "dimensions": "",
+      "power_type": "rechargeable",
+      "autonomy": "",
+      "interfacing": "cold",
+      "models": "",
+      "sensors": [],
+      "manipulators": false,
+      "sealed": false,
+      "hardened": false
+    },
+    "biomod": {
+      "templates": ["base"],
+      "type": "genetic",
+      "effects": [],
+      "attributes": {
+        "cognition": 0,
+        "psyche": 0,
+        "coordination": 0,
+        "physique": 0
+      },
+      "durability": 0,
+      "transformation_time": "",
+      "healing_time": "",
+      "dimensions": "",
+      "models": "",
+      "strain_modifiers": {
+        "mental": 0,
+        "physical": 0
+      },
+      "special_rules": []
+    },
+    "skill": {
+      "templates": ["base"],
+      "rank": 1,
+      "level_type": "general",
+      "attribute": "cognition",
+      "levels": {
+        "general": {
+          "name": "",
+          "description": ""
+        },
+        "core": {
+          "name": "",
+          "description": ""
+        },
+        "specialty": {
+          "name": "",
+          "description": ""
+        }
+      },
+      "category": "origin",
+      "tags": []
+    },
+    "feature": {
+      "templates": ["base"],
+      "category": "technology",
+      "feature_type": "",
+      "subtype": "",
+      "bonus_type": "none",
+      "bonus_value": 0,
+      "effect": "",
+      "game_rules": ""
+    },
+    "species": {
+      "templates": ["base"],
+      "attributes": {
+        "cognition": 0,
+        "psyche": 0,
+        "coordination": 0,
+        "physique": 0
+      },
+      "special_abilities": [],
+      "size_category": "medium"
+    },
+    "ammo_type": {
+      "templates": ["base"],
+      "type": "standard",
+      "damage_modifier": 0,
+      "range_modifier": 0,
+      "features": [],
+      "compatible_weapons": [],
+      "weight": 0.1,
+      "quantity_per_unit": 20,
+      "manufacturer": "",
+      "penetration_rating": 0,
+      "blast_radius": 0,
+      "notes": ""
+    },
+    "sensor": {
+      "templates": ["base"],
+      "sensor_type": "visual",
+      "range": 0,
+      "resolution": "standard",
+      "power_consumption": "low",
+      "environmental_conditions": [],
+      "data_processing": "passive",
+      "interface_type": "digital",
+      "weight": 0.5,
+      "dimensions": "micro",
+      "manufacturer": "",
+      "special_features": [],
+      "notes": ""
+    }
+  }
+}

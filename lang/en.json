@@ -1,0 +1,145 @@
+{
+  "TYPES": {
+    "Actor": {
+      "character": "Character",
+      "npc": "NPC", 
+      "cetacean": "Cetacean",
+      "creature": "Creature"
+    },
+    "Item": {
+      "weapon": "Weapon",
+      "equipment": "Equipment", 
+      "biomod": "Biomod",
+      "skill": "Skill",
+      "feature": "Feature",
+      "species": "Species"
+    }
+  },
+  
+  "BP": {
+    "ActorName": "Actor Name",
+    "ItemName": "Item Name",
+    
+    "Attributes": {
+      "Cognition": "Cognition",
+      "Psyche": "Psyche", 
+      "Coordination": "Coordination",
+      "Physique": "Physique",
+      "Awareness": "Awareness"
+    },
+    
+    "Skills": {
+      "General": "General",
+      "Core": "Core",
+      "Specialty": "Specialty",
+      "Rank": "Rank"
+    },
+    
+    "Character": {
+      "Concept": "Concept",
+      "Tier": "Tier",
+      "Species": "Species",
+      "Everyday": "Everyday",
+      "Exceptional": "Exceptional",
+      "Elite": "Elite",
+      "Chips": "C.H.I.P.S",
+      "Reputation": "Reputation",
+      "Profile": "Profile",
+      "Attitude": "Attitude",
+      "Motivation": "Motivation",
+      "Goal": "Goal",
+      "Features": "Features"
+    },
+    
+    "Wounds": {
+      "Minor": "Minor",
+      "Major": "Major", 
+      "Mortal": "Mortal",
+      "Penalty": "Penalty",
+      "TotalPenalty": "Total Penalty"
+    },
+    
+    "Strain": {
+      "Mental": "Mental",
+      "Physical": "Physical", 
+      "Spend": "Spend"
+    },
+    
+    "Creature": {
+      "Description": "Description",
+      "Behavior": "Behavior",
+      "Distribution": "Distribution",
+      "Size": "Size",
+      "Length": "Length",
+      "Mass": "Mass",
+      "EncounterRate": "Encounter Rate",
+      "ResourceValue": "Resource Value",
+      "ThreatLevel": "Threat Level",
+      "Attack": "Attack",
+      "Damage": "Damage",
+      "Venom": "Venom",
+      "Effect": "Effect",
+      "Onset": "Onset"
+    },
+    
+    "Equipment": {
+      "Cost": "Cost",
+      "Availability": "Availability",
+      "Legality": "Legality",
+      "Weight": "Weight",
+      "Quantity": "Quantity",
+      "Durability": "Durability"
+    },
+    
+    "Weapon": {
+      "DamageRating": "Damage Rating",
+      "EffectiveRange": "Effective Range",
+      "WeaponType": "Weapon Type",
+      "Features": "Features"
+    },
+    
+    "Biomod": {
+      "Type": "Type",
+      "Effects": "Effects",
+      "Genetic": "Genetic",
+      "Cybernetic": "Cybernetic",
+      "Surgical": "Surgical"
+    },
+    
+    "Rolls": {
+      "SkillTest": "Skill Test",
+      "AttributeTest": "Attribute Test", 
+      "DamageTest": "Damage Test",
+      "Target": "Target",
+      "Success": "Success",
+      "Failure": "Failure",
+      "ActionValue": "Action Value"
+    },
+    
+    "Tabs": {
+      "Skills": "SKILLS",
+      "Items": "ITEMS", 
+      "Profile": "PROFILE",
+      "Biology": "BIOLOGY",
+      "Combat": "COMBAT"
+    },
+    
+    "Buttons": {
+      "Roll": "Roll",
+      "Edit": "Edit",
+      "Delete": "Delete",
+      "Create": "Create",
+      "Add": "Add"
+    },
+    
+    "Labels": {
+      "Name": "Name",
+      "Value": "Value",
+      "Rank": "Rank",
+      "Level": "Level",
+      "Type": "Type",
+      "Description": "Description",
+      "Notes": "Notes"
+    }
+  }
+}

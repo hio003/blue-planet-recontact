@@ -1,0 +1,606 @@
+/* Blue Planet Roll Dialog - Match Character Sheet Aesthetic Exactly */
+/* Last updated: 2025-09-12 13:45 - Ultra Force cache refresh */
+
+/* FIXED SIZE DIALOG - NO RESIZE */
+* .blue-planet-recontact.sheet.dialog,
+html body .blue-planet-recontact.sheet.dialog,
+html body #ui-windows .blue-planet-recontact.sheet.dialog,
+html body .window-app.dialog.blue-planet-recontact.sheet,
+[class*="blue-planet-recontact"][class*="dialog"][class*="sheet"] {
+  width: 700px !important;
+  height: 520px !important;
+  max-width: 700px !important;
+  max-height: 520px !important;
+  min-width: 700px !important;
+  min-height: 520px !important;
+  resize: none !important;
+  position: fixed !important;
+}
+
+/* FIXED SIZE STRAIN-ENHANCED DIALOG */
+.blue-planet-recontact.sheet.dialog.strain-enhanced,
+html body .blue-planet-recontact.sheet.dialog.strain-enhanced,
+html body #ui-windows .blue-planet-recontact.sheet.dialog.strain-enhanced,
+body .window-app.dialog.blue-planet-recontact.sheet.strain-enhanced {
+  width: 700px !important;
+  height: 520px !important;
+  max-width: 700px !important;
+  max-height: 520px !important;
+  min-width: 700px !important;
+  min-height: 520px !important;
+  resize: none !important;
+  position: fixed !important;
+}
+
+/* Dialog Window - FIXED SIZE */
+body .blue-planet-recontact.sheet.dialog,
+body .dialog.blue-planet-recontact.sheet,
+body .application.dialog.blue-planet-recontact.sheet,
+body #ui-windows .blue-planet-recontact.sheet.dialog,
+body .window-app.dialog.blue-planet-recontact.sheet {
+  width: 700px !important;
+  height: 520px !important;
+  max-width: 700px !important;
+  max-height: 520px !important;
+  min-width: 700px !important;
+  min-height: 520px !important;
+  resize: none !important;
+  position: fixed !important;
+}
+
+
+.blue-planet-recontact.sheet.dialog .window-content,
+.dialog.blue-planet-recontact.sheet .window-content,
+.application.dialog.blue-planet-recontact.sheet .window-content {
+  background: linear-gradient(135deg, #0a1824 0%, #1a3e5c 25%, #2b5a80 50%, #1a3e5c 75%, #0a1824 100%);
+  border: 2px solid #4a90e2;
+  border-radius: 8px;
+  color: #e8f4fd;
+  padding: 0;
+  position: relative;
+  overflow: visible !important;
+  box-shadow: 0 4px 16px rgba(74, 144, 226, 0.15), inset 0 1px 2px rgba(255, 255, 255, 0.1);
+  width: 100% !important;
+  height: auto !important;
+  min-height: 100%;
+}
+
+.blue-planet-recontact.sheet.dialog .window-content::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 80%, rgba(74, 144, 226, 0.03) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(107, 182, 255, 0.02) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(53, 122, 189, 0.02) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Form Structure */
+.blue-planet-roll-dialog {
+  background: transparent;
+  padding: 0;
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  display: flex !important;
+  flex-direction: column !important;
+  min-height: 280px;
+}
+
+/* Compact Header for Roll Dialog */
+.blue-planet-roll-dialog .compact-header {
+  background: linear-gradient(135deg, #1a3e5c 0%, #2b5a80 50%, #1a3e5c 100%);
+  border-bottom: 1px solid #4a90e2;
+  padding: 3px 6px;
+  text-align: center;
+}
+
+.blue-planet-roll-dialog .skill-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.blue-planet-roll-dialog .skill-name {
+  font-size: 11px;
+  font-weight: bold;
+  color: #6bb6ff;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.blue-planet-roll-dialog .skill-level {
+  font-size: 9px;
+  color: #b8d4f0;
+  font-style: italic;
+}
+
+.blue-planet-roll-dialog .header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.blue-planet-roll-dialog .name-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.blue-planet-roll-dialog .character-name {
+  font-size: 16px;
+  font-weight: bold;
+  color: #ffffff;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #6bb6ff;
+  padding: 2px 0;
+  width: 100%;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  margin: 0;
+}
+
+.blue-planet-roll-dialog .character-concept {
+  font-size: 11px;
+  color: #b8d4f0;
+  background: transparent;
+  border: none;
+  width: 100%;
+  padding: 1px 0;
+  font-style: italic;
+  margin: 0;
+}
+
+/* Main Content Area - Allow full height */
+.blue-planet-roll-dialog .sheet-main {
+  background: transparent;
+  flex: 1;
+  overflow-y: visible;
+  max-height: none;
+}
+
+.blue-planet-roll-dialog .main-content {
+  padding: 3px 5px;
+  height: 100%;
+}
+
+/* Sections - Ultra Compact */
+.base-calculation-section,
+.attribute-section,
+.strain-section,
+.equipment-section,
+.modifiers-section,
+.roll-options-section {
+  background: linear-gradient(180deg, #1e3a52 0%, #2a4d6b 50%, #1e3a52 100%);
+  border: 1px solid rgba(74, 144, 226, 0.4);
+  border-radius: 3px;
+  padding: 3px 4px;
+  margin-bottom: 2px;
+  box-shadow: inset -1px 0 2px rgba(0, 0, 0, 0.2);
+}
+
+.base-calculation-section:hover,
+.attribute-section:hover,
+.strain-section:hover,
+.equipment-section:hover,
+.modifiers-section:hover {
+  border-color: rgba(107, 182, 255, 0.6);
+  background: linear-gradient(180deg, #2a4d6b 0%, #1e3a52 100%);
+  box-shadow: 0 2px 8px rgba(74, 144, 226, 0.15);
+}
+
+/* Section Headers - Ultra Compact */
+.base-calculation-section h3,
+.attribute-section h3,
+.strain-section h3,
+.equipment-section h3,
+.modifiers-section h3,
+.roll-options-section h3 {
+  color: #6bb6ff;
+  font-size: 8px;
+  font-weight: bold;
+  margin: 0 0 2px 0;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  border-bottom: 1px solid rgba(107, 182, 255, 0.3);
+  padding-bottom: 1px;
+}
+
+.base-calculation-section h3::after,
+.attribute-section h3::after,
+.strain-section h3::after,
+.equipment-section h3::after,
+.modifiers-section h3::after,
+.roll-options-section h3::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 30%;
+  height: 2px;
+  background: #6bb6ff;
+  box-shadow: 0 0 6px rgba(107, 182, 255, 0.5);
+}
+
+/* Calculation Display - Ultra Compact */
+.calculation-display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  font-size: 9px;
+  font-weight: bold;
+  padding: 2px;
+  background: rgba(74, 144, 226, 0.1);
+  border: 1px solid #4a90e2;
+  border-radius: 2px;
+}
+
+.skill-part {
+  color: #6bb6ff;
+  background: rgba(107, 182, 255, 0.1);
+  padding: 2px 4px;
+  border-radius: 3px;
+  border: 1px solid rgba(107, 182, 255, 0.3);
+  font-size: 9px;
+}
+
+.plus, .equals {
+  color: #e8f4fd;
+  font-size: 12px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.attribute-part {
+  color: #4a90e2;
+  background: rgba(74, 144, 226, 0.1);
+  padding: 2px 4px;
+  border-radius: 3px;
+  border: 1px solid rgba(74, 144, 226, 0.3);
+  font-size: 9px;
+}
+
+.total {
+  color: #ffffff;
+  background: linear-gradient(135deg, #4a90e2 0%, #6bb6ff 100%);
+  padding: 3px 6px;
+  border-radius: 3px;
+  font-size: 11px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Form Elements - Ultra Compact */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2px;
+}
+
+.form-group label {
+  color: #6bb6ff;
+  font-size: 7px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  margin-bottom: 1px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.form-group select,
+.form-group input[type="number"] {
+  background: rgba(26, 35, 50, 0.8);
+  border: 1px solid #4a90e2;
+  border-radius: 2px;
+  color: #e0e0e0;
+  padding: 2px 3px;
+  font-size: 9px;
+}
+
+.form-group select:focus,
+.form-group input:focus {
+  outline: none;
+  border-color: #6bb6ff;
+  box-shadow: 0 0 5px rgba(107, 182, 255, 0.3);
+}
+
+.form-group select option {
+  background: #1a3e5c;
+  color: #e8f4fd;
+}
+
+/* Strain Section - Ultra Compact */
+.strain-options {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.strain-type {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin-bottom: 1px;
+  font-size: 8px;
+}
+
+.strain-type label {
+  min-width: 40px;
+  color: #e0e0e0;
+  font-size: 8px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  margin: 0;
+}
+
+.strain-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1;
+}
+
+.strain-info {
+  color: #b8d4f0;
+  font-size: 7px;
+  font-style: italic;
+}
+
+.strain-controls input[type="checkbox"] {
+  margin: 0;
+  accent-color: #f39c12;
+}
+
+.strain-controls input[type="number"] {
+  width: 30px;
+  background: rgba(26, 35, 50, 0.8);
+  border: 1px solid #4a90e2;
+  border-radius: 2px;
+  color: #e8f4fd;
+  padding: 1px 2px;
+  text-align: center;
+  font-size: 8px;
+}
+
+/* Equipment Section - Compact */
+.equipment-list {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.equipment-item {
+  background: rgba(74, 144, 226, 0.1);
+  border: 1px solid rgba(74, 144, 226, 0.3);
+  border-radius: 2px;
+  padding: 4px 6px;
+}
+
+.equipment-item label {
+  color: #e8f4fd;
+  font-size: 9px;
+  font-weight: normal;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  text-transform: none;
+  letter-spacing: normal;
+  text-shadow: none;
+}
+
+.equipment-item input[type="checkbox"] {
+  margin: 0;
+  accent-color: #4a90e2;
+}
+
+.no-equipment {
+  color: #b8d4f0;
+  font-style: italic;
+  text-align: center;
+  margin: 0;
+  padding: 4px;
+  font-size: 9px;
+}
+
+/* Roll Options - Compact */
+.roll-options-section .form-group {
+  margin-bottom: 0;
+}
+
+.roll-options-section label {
+  color: #e8f4fd;
+  font-size: 9px;
+  font-weight: normal;
+  text-transform: none;
+  letter-spacing: normal;
+  text-shadow: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0;
+}
+
+.roll-options-section input[type="checkbox"] {
+  margin: 0;
+  accent-color: #4a90e2;
+}
+
+/* Dialog Button Overrides - Ultra Minimal Padding */
+.blue-planet-recontact.sheet.dialog .dialog-buttons {
+  background: linear-gradient(135deg, #1a3e5c 0%, #2b5a80 50%, #1a3e5c 100%);
+  border-top: 1px solid #4a90e2;
+  padding: 1px 2px;
+  margin: 0 !important;
+  margin-top: -5px !important;
+  height: 28px;
+  min-height: 28px;
+  max-height: 28px;
+}
+
+/* Compact dialog buttons for strain-enhanced */
+.blue-planet-recontact.sheet.dialog.strain-enhanced .dialog-buttons {
+  padding: 2px 4px;
+  margin: 0 !important;
+  margin-top: -8px !important;
+  height: 26px;
+  min-height: 26px;
+  max-height: 26px;
+  overflow: hidden;
+}
+
+.blue-planet-recontact.sheet.dialog .dialog-buttons button {
+  background: linear-gradient(135deg, #4a90e2 0%, #6bb6ff 100%);
+  color: #ffffff;
+  border: 1px solid #4a90e2;
+  border-radius: 2px;
+  padding: 1px 3px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.2px;
+  font-size: 8px;
+  transition: all 0.3s ease;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  margin: 0 1px;
+  height: 20px;
+  line-height: 18px;
+}
+
+/* Improved buttons for strain-enhanced dialog */
+.blue-planet-recontact.sheet.dialog.strain-enhanced .dialog-buttons button {
+  padding: 2px 4px;
+  font-size: 9px;
+  margin: 0 1px;
+  height: 20px;
+  line-height: 18px;
+  min-width: 45px;
+}
+
+.blue-planet-recontact.sheet.dialog .dialog-buttons button:hover {
+  background: linear-gradient(135deg, #6bb6ff 0%, #4a90e2 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(74, 144, 226, 0.3);
+}
+
+.blue-planet-recontact.sheet.dialog .dialog-buttons button[data-button="cancel"] {
+  background: linear-gradient(135deg, #6c757d 0%, #adb5bd 100%);
+  border-color: #6c757d;
+}
+
+.blue-planet-recontact.sheet.dialog .dialog-buttons button[data-button="cancel"]:hover {
+  background: linear-gradient(135deg, #adb5bd 0%, #6c757d 100%);
+}
+
+/* Enhanced Dialog - Full Content Visible */
+.blue-planet-enhanced-roll-dialog {
+  padding: 8px;
+  padding-bottom: 2px !important;
+  font-size: 12px;
+  height: auto;
+  overflow: visible;
+  max-height: none;
+}
+
+.blue-planet-enhanced-roll-dialog .form-group {
+  margin-bottom: 6px;
+}
+
+.blue-planet-enhanced-roll-dialog h4 {
+  font-size: 12px !important;
+  margin-bottom: 4px !important;
+  text-align: center;
+  color: #6bb6ff;
+  text-transform: none;
+}
+
+.blue-planet-enhanced-roll-dialog label {
+  font-size: 10px !important;
+  margin-bottom: 2px !important;
+  text-transform: uppercase;
+  color: #ddd;
+  font-weight: bold;
+}
+.blue-planet-enhanced-roll-dialog select,
+.blue-planet-enhanced-roll-dialog input[type="number"] {
+  font-size: 11px !important;
+  padding: 4px !important;
+  height: 24px;
+  line-height: 1.2;
+}
+
+.blue-planet-enhanced-roll-dialog .final-target {
+  margin-top: 2px !important;
+  margin-bottom: 2px !important;
+  padding: 4px !important;
+}
+
+.blue-planet-enhanced-roll-dialog .final-target h4 {
+  font-size: 14px !important;
+}
+
+.blue-planet-enhanced-roll-dialog .final-target div {
+  font-size: 20px !important;
+}
+
+/* Full content visible for strain-enhanced dialog */
+.blue-planet-recontact.sheet.dialog.strain-enhanced .window-content {
+  overflow: visible !important;
+  height: calc(100% - 28px) !important;
+  max-height: none !important;
+  padding-bottom: 2px;
+}
+
+.blue-planet-recontact.sheet.dialog.strain-enhanced .blue-planet-enhanced-roll-dialog {
+  height: auto;
+  max-height: none;
+  overflow: visible;
+  padding-bottom: 2px;
+}
+
+
+/* Responsive Design - Compact */
+@media (max-width: 500px) {
+  .blue-planet-recontact.sheet.dialog {
+    width: 95% !important;
+    height: auto !important;
+    max-height: 90vh !important;
+  }
+  
+  .blue-planet-roll-dialog .main-content {
+    padding: 6px 8px;
+  }
+  
+  .blue-planet-roll-dialog .sheet-header {
+    padding: 6px 8px;
+  }
+  
+  .blue-planet-roll-dialog .character-name {
+    font-size: 14px;
+  }
+  
+  .calculation-display {
+    font-size: 10px;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+  
+  .strain-type {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  
+  .strain-controls input[type="number"] {
+    width: 30px;
+  }
+}

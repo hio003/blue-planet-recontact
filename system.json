@@ -1,0 +1,95 @@
+{
+  "id": "blue-planet-recontact",
+  "title": "Blue Planet 3e: Recontact",
+  "description": "A Foundry VTT system for Blue Planet Third Edition: Recontact, featuring hard science fiction roleplaying on the ocean world of Poseidon.",
+  "version": "1.1.1-v13.351",
+  "compatibility": {
+    "minimum": "13.0.0",
+    "verified": "13.351",
+    "maximum": "13"
+  },
+  "authors": [
+    {
+      "name": "Custom System Creator"
+    }
+  ],
+  "esmodules": [
+    "module/blue-planet-recontact.js"
+  ],
+  "styles": [
+    "css/blue-planet-recontact.css",
+    "styles/roll-dialog.css"
+  ],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ],
+  "grid": {
+    "distance": 1,
+    "units": "m"
+  },
+  "primaryTokenAttribute": "attributes.physique",
+  "secondaryTokenAttribute": "strain.physical",
+  "initiative": "attributes.coordination.value",
+  "documentTypes": {
+    "Actor": {
+      "character": {},
+      "npc": {},
+      "cetacean": {},
+      "creature": {}
+    },
+    "Item": {
+      "weapon": {},
+      "equipment": {},
+      "biomod": {},
+      "skill": {},
+      "feature": {},
+      "species": {}
+    }
+  },
+  "packFolders": [
+    {
+      "name": "Blue Planet Content",
+      "sorting": "a",
+      "color": "#1f5582",
+      "packs": [
+        "species",
+        "creatures",
+        "biomods",
+        "equipment",
+        "sample-characters"
+      ]
+    }
+  ],
+  "packs": [
+    {
+      "name": "species",
+      "label": "Species",
+      "type": "Item"
+    },
+    {
+      "name": "creatures",
+      "label": "Poseidon Creatures",
+      "type": "Actor"
+    },
+    {
+      "name": "biomods",
+      "label": "Biomodifications",
+      "type": "Item"
+    },
+    {
+      "name": "equipment",
+      "label": "Equipment",
+      "type": "Item"
+    },
+    {
+      "name": "sample-characters",
+      "label": "Sample Characters",
+      "type": "Actor"
+    }
+  ],
+  "socket": true
+}

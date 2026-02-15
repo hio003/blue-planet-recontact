@@ -1,0 +1,357 @@
+<form class="{{cssClass}} flexcol creature-sheet" autocomplete="off">
+  
+  {{!-- Header --}}
+  <header class="sheet-header">
+    <div class="header-content">
+      {{!-- Portrait Section --}}
+      <div class="portrait-section">
+        <div class="portrait-frame portrait-clickable" data-action="change-portrait">
+          <img src="{{actor.img}}" alt="{{actor.name}}" class="character-portrait" title="Click to change portrait">
+          <div class="portrait-overlay">
+            <i class="fas fa-camera"></i>
+          </div>
+        </div>
+      </div>
+      
+      {{!-- Name and Concept Section --}}
+      <div class="name-section">
+        <input name="name" type="text" value="{{actor.name}}" placeholder="Creature Name" class="character-name"/>
+        <input name="system.biology.description" type="text" value="{{system.biology.description}}" placeholder="Species/Type Description" class="character-concept"/>
+      </div>
+      
+      {{!-- Right Stats Section --}}
+      <div class="header-stats">
+        <div class="stat-row">
+          <label>Threat Level:</label>
+          <select name="system.biology.threat_level" class="tier-select threat-select">
+            <option value="low" {{#if (eq system.biology.threat_level "low")}}selected{{/if}}>Low Threat</option>
+            <option value="medium" {{#if (eq system.biology.threat_level "medium")}}selected{{/if}}>Medium Threat</option>
+            <option value="high" {{#if (eq system.biology.threat_level "high")}}selected{{/if}}>High Threat</option>
+          </select>
+        </div>
+        
+        <div class="stat-row">
+          <label>Resource Value:</label>
+          <select name="system.biology.resource_value" class="tier-select resource-select">
+            <option value="low" {{#if (eq system.biology.resource_value "low")}}selected{{/if}}>Low Value</option>
+            <option value="medium" {{#if (eq system.biology.resource_value "medium")}}selected{{/if}}>Medium Value</option>
+            <option value="high" {{#if (eq system.biology.resource_value "high")}}selected{{/if}}>High Value</option>
+          </select>
+        </div>
+        
+        <div class="stat-row">
+          <label>Size Category:</label>
+          <select name="system.biology.size_category" class="tier-select">
+            <option value="tiny" {{#if (eq system.biology.size_category "tiny")}}selected{{/if}}>Tiny</option>
+            <option value="small" {{#if (eq system.biology.size_category "small")}}selected{{/if}}>Small</option>
+            <option value="medium" {{#if (eq system.biology.size_category "medium")}}selected{{/if}}>Medium</option>
+            <option value="large" {{#if (eq system.biology.size_category "large")}}selected{{/if}}>Large</option>
+            <option value="huge" {{#if (eq system.biology.size_category "huge")}}selected{{/if}}>Huge</option>
+            <option value="massive" {{#if (eq system.biology.size_category "massive")}}selected{{/if}}>Massive</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+  <div class="sheet-main">
+    {{!-- Left Sidebar --}}
+    <aside class="sidebar">
+      {{!-- Creature Attributes --}}
+      <section class="attributes">
+        <h3>ATTRIBUTES</h3>
+        <div class="creature-attributes">
+          {{!-- Awareness Attribute --}}
+          <div class="creature-attribute-group">
+            <div class="attribute-header">
+              <label class="attribute-name">AWARENESS</label>
+              <input type="number" name="system.attributes.awareness" value="{{system.attributes.awareness}}" class="attribute-value" min="0" max="10">
+              <i class="fas fa-dice-d10 attribute-roll rollable" data-attribute="awareness" title="Roll Awareness"></i>
+            </div>
+            <div class="attribute-description">
+              <small>Sensing, tracking, finding food, caring for young</small>
+            </div>
+          </div>
+
+          {{!-- Coordination Attribute --}}
+          <div class="creature-attribute-group">
+            <div class="attribute-header">
+              <label class="attribute-name">COORDINATION</label>
+              {{#if system.attributes.coordination_dual}}
+                <div class="dual-values">
+                  <input type="number" name="system.attributes.coordination.general" value="{{system.attributes.coordination.general}}" class="attribute-value dual" min="0" max="15">
+                  <span class="dual-separator">/</span>
+                  <input type="number" name="system.attributes.coordination.fine" value="{{system.attributes.coordination.fine}}" class="attribute-value dual" min="0" max="15">
+                </div>
+              {{else}}
+                <input type="number" name="system.attributes.coordination" value="{{system.attributes.coordination}}" class="attribute-value" min="0" max="15">
+              {{/if}}
+              <i class="fas fa-dice-d10 attribute-roll rollable" data-attribute="coordination" title="Roll Coordination"></i>
+            </div>
+            <div class="attribute-description">
+              <small>Stealth, speed, pouncing, stinging, escaping</small>
+            </div>
+          </div>
+
+          {{!-- Physique Attribute --}}
+          <div class="creature-attribute-group">
+            <div class="attribute-header">
+              <label class="attribute-name">PHYSIQUE</label>
+              {{#if system.attributes.physique_dual}}
+                <div class="dual-values">
+                  <input type="number" name="system.attributes.physique.size" value="{{system.attributes.physique.size}}" class="attribute-value dual" min="0" max="20">
+                  <span class="dual-separator">/</span>
+                  <input type="number" name="system.attributes.physique.physiology" value="{{system.attributes.physique.physiology}}" class="attribute-value dual" min="0" max="20">
+                </div>
+              {{else}}
+                <input type="number" name="system.attributes.physique" value="{{system.attributes.physique}}" class="attribute-value" min="0" max="20">
+              {{/if}}
+              <i class="fas fa-dice-d10 attribute-roll rollable" data-attribute="physique" title="Roll Physique"></i>
+            </div>
+            <div class="attribute-description">
+              <small>Strength, force, mass, crushing, dragging</small>
+            </div>
+          </div>
+
+          <div class="dual-attribute-toggle">
+            <label>
+              <input type="checkbox" name="system.attributes.coordination_dual" {{#if system.attributes.coordination_dual}}checked{{/if}}>
+              Use Dual Coordination
+            </label>
+            <label>
+              <input type="checkbox" name="system.attributes.physique_dual" {{#if system.attributes.physique_dual}}checked{{/if}}>
+              Use Dual Physique
+            </label>
+          </div>
+        </div>
+        
+        <div class="attribute-note">
+          <small>Target Number = 5 + Attribute Rank</small>
+        </div>
+      </section>
+
+      {{!-- Combat Stats --}}
+      <section class="combat-stats">
+        <h3>COMBAT</h3>
+        <div class="combat-type">
+          <label>Natural Attack:</label>
+          <div class="attack-display">
+            <input type="text" name="system.attack.type" value="{{system.attack.type}}" placeholder="Attack type" class="attack-input">
+            <span class="damage-value">DR {{system.attack.damage}}</span>
+          </div>
+        </div>
+        
+        {{#if system.attack.venom.effect}}
+        <div class="venom-type">
+          <label>Venom/Toxin:</label>
+          <div class="venom-display">
+            <span class="venom-effect">{{system.attack.venom.effect}}</span>
+            <span class="venom-damage">DR {{system.attack.venom.damage}}</span>
+          </div>
+        </div>
+        {{/if}}
+      </section>
+
+      {{!-- Physical Stats --}}
+      <section class="physical-stats">
+        <h3>PHYSICAL DATA</h3>
+        <div class="physical-type">
+          <label>Length:</label>
+          <div class="size-display">
+            <input type="number" name="system.biology.size.length" value="{{system.biology.size.length}}" step="0.1" min="0" class="size-input">
+            <span class="size-unit">m</span>
+          </div>
+        </div>
+        
+        <div class="physical-type">
+          <label>Mass:</label>
+          <div class="size-display">
+            <input type="number" name="system.biology.size.mass" value="{{system.biology.size.mass}}" min="0" class="size-input">
+            <span class="size-unit">kg</span>
+          </div>
+        </div>
+        
+        <div class="physical-type">
+          <label>Encounter Rate:</label>
+          <input type="text" name="system.biology.encounter_rate" value="{{system.biology.encounter_rate}}" placeholder="e.g., 2d6 per day" class="encounter-input">
+        </div>
+      </section>
+
+      {{!-- Status --}}
+      <section class="status">
+        <h3>ESTADO</h3>
+        <div class="status-condition">
+          <input name="system.status.condition" type="text" value="{{system.status.condition}}" placeholder="Current Status"/>
+        </div>
+      </section>
+    </aside>
+
+    {{!-- Main Content --}}
+    <section class="main-content creature-content">
+      {{!-- Navigation Tabs --}}
+      <nav class="sheet-tabs" data-group="primary">
+        <a class="item active" data-tab="biology">BIOLOGY</a>
+        <a class="item" data-tab="combat">COMBAT</a>
+      </nav>
+
+      {{!-- Tab Content --}}
+      <section class="sheet-body">
+        
+        {{!-- Biology Tab --}}
+        <div class="tab biology active" data-group="primary" data-tab="biology">
+          <div class="biology-section">
+            
+            <div class="bio-field">
+              <label>Description:</label>
+              <textarea name="system.biology.description" placeholder="Physical characteristics and appearance">{{system.biology.description}}</textarea>
+            </div>
+            
+            <div class="bio-field">
+              <label>Behavior:</label>
+              <textarea name="system.biology.behavior" placeholder="Typical behavior patterns and life cycle">{{system.biology.behavior}}</textarea>
+            </div>
+            
+            <div class="bio-field">
+              <label>Distribution:</label>
+              <textarea name="system.biology.distribution" placeholder="Global range and habitat preferences">{{system.biology.distribution}}</textarea>
+            </div>
+            
+            <div class="bio-stats">
+              <div class="stat-row">
+                <div class="stat-field">
+                  <label>Threat Level:</label>
+                  <select name="system.biology.threat_level">
+                    {{#each threatLevels as |level|}}
+                      <option value="{{level.value}}" {{#if (eq ../system.biology.threat_level level.value)}}selected{{/if}}>{{level.label}}</option>
+                    {{/each}}
+                  </select>
+                </div>
+                
+                <div class="stat-field">
+                  <label>Resource Value:</label>
+                  <select name="system.biology.resource_value">
+                    {{#each resourceValues as |value|}}
+                      <option value="{{value.value}}" {{#if (eq ../system.biology.resource_value value.value)}}selected{{/if}}>{{value.label}}</option>
+                    {{/each}}
+                  </select>
+                </div>
+              </div>
+              
+              <div class="stat-row">
+                <div class="stat-field">
+                  <label>Encounter Rate:</label>
+                  <input type="text" name="system.biology.encounter_rate" value="{{system.biology.encounter_rate}}" placeholder="e.g., 15% per local day">
+                </div>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+
+        {{!-- Combat Tab --}}
+        <div class="tab combat" data-group="primary" data-tab="combat">
+          <div class="combat-section">
+            
+            <h3>Natural Attacks</h3>
+            
+            <div class="attack-details">
+              <div class="attack-row">
+                <div class="attack-field wide">
+                  <label>Attack Type:</label>
+                  <input type="text" name="system.attack.type" value="{{system.attack.type}}" placeholder="Describe the type of natural attack">
+                </div>
+                
+                <div class="attack-field">
+                  <label>Damage Rating:</label>
+                  <input type="number" name="system.attack.damage" value="{{system.attack.damage}}" min="0" max="25">
+                </div>
+              </div>
+              
+              <div class="attack-note">
+                <p><strong>Damage Tests:</strong> Roll 3d10 vs Damage Rating. Success = 1 wound level per successful die.</p>
+                <p><strong>Target Number Modifiers:</strong> Target's Physique and armor reduce damage rating.</p>
+              </div>
+            </div>
+            
+            <h3>Venom & Toxins</h3>
+            
+            <div class="venom-details">
+              <div class="venom-row">
+                <div class="venom-field">
+                  <label>Effect:</label>
+                  <input type="text" name="system.attack.venom.effect" value="{{system.attack.venom.effect}}" placeholder="Paralysis, Poison, etc.">
+                </div>
+                
+                <div class="venom-field">
+                  <label>Onset Time:</label>
+                  <input type="text" name="system.attack.venom.onset" value="{{system.attack.venom.onset}}" placeholder="Immediate, 1 round, etc.">
+                </div>
+                
+                <div class="venom-field">
+                  <label>Venom Damage:</label>
+                  <input type="number" name="system.attack.venom.damage" value="{{system.attack.venom.damage}}" min="0" max="20">
+                </div>
+              </div>
+              
+              <div class="venom-note">
+                <p><strong>Venom Application:</strong> If physical attack causes wound, roll separate damage test for venom after onset time.</p>
+                <p><strong>Treatment:</strong> Antivenom or medical care can stop onset and mitigate effects.</p>
+              </div>
+            </div>
+            
+            <h3>Combat Actions</h3>
+            
+            <div class="combat-actions">
+              <button type="button" class="action-button attack-roll rollable" data-tooltip="Roll creature attack damage">
+                <i class="fas fa-dice-d10"></i>
+                <span>Roll Attack</span>
+              </button>
+              
+              <button type="button" class="action-button attribute-roll rollable" data-attribute="awareness" data-tooltip="Roll Awareness test">
+                <i class="fas fa-eye"></i>
+                <span>Awareness</span>
+              </button>
+              
+              <button type="button" class="action-button attribute-roll rollable" data-attribute="coordination" data-tooltip="Roll Coordination test">
+                <i class="fas fa-running"></i>
+                <span>Coordination</span>
+              </button>
+              
+              <button type="button" class="action-button attribute-roll rollable" data-attribute="physique" data-tooltip="Roll Physique test">
+                <i class="fas fa-fist-raised"></i>
+                <span>Physique</span>
+              </button>
+            </div>
+            
+            <h3>Creature Combat Rules</h3>
+            
+            <div class="combat-rules">
+              <div class="rule-section">
+                <h4>Innate Survival Abilities</h4>
+                <p>Creatures have natural abilities for: <strong>sensing, tracking, attacking, defending, hiding, feeding, finding mates</strong></p>
+                <p>No specific skillsets are used - all actions use appropriate attribute tests.</p>
+              </div>
+              
+              <div class="rule-section">
+                <h4>Attribute Tests</h4>
+                <p><strong>Target Number:</strong> 5 + Attribute Rank</p>
+                <p><strong>Roll:</strong> 1d10 vs Target Number</p>
+                <p><strong>Success/Failure:</strong> Same as NPCs</p>
+              </div>
+              
+              <div class="rule-section">
+                <h4>Action Values & Opposed Rolls</h4>
+                <p>Action values, opposed rolls, and injury tests work the same as for NPCs.</p>
+                <p><strong>Injury Tests:</strong> Use Physique attribute for trauma resistance.</p>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+
+      </section>
+    </section>
+  </div>
+
+</form>

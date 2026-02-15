@@ -1,0 +1,483 @@
+<form class="{{cssClass}} flexcol" autocomplete="off">
+  
+  {{!-- Header --}}
+  <header class="sheet-header">
+    <div class="header-content">
+      {{!-- Portrait Section --}}
+      <div class="portrait-section">
+        <div class="portrait-frame portrait-clickable" data-action="change-portrait">
+          <img src="{{actor.img}}" alt="{{actor.name}}" class="character-portrait" title="Click to change portrait">
+          <div class="portrait-overlay">
+            <i class="fas fa-camera"></i>
+          </div>
+        </div>
+      </div>
+      
+      {{!-- Name and Concept Section --}}
+      <div class="name-section">
+        <input name="name" type="text" value="{{actor.name}}" placeholder="Character Name" class="character-name"/>
+        <input name="system.profile.concept" type="text" value="{{system.profile.concept}}" placeholder="Concept" class="character-concept"/>
+      </div>
+      
+      {{!-- Right Stats Section --}}
+      <div class="header-stats">
+        <div class="stat-row">
+          <label>Tier:</label>
+          <select name="system.tier" class="tier-select">
+            <option value="everyday">Everyday</option>
+            <option value="exceptional">Exceptional</option>
+            <option value="elite">Elite</option>
+          </select>
+        </div>
+        
+        <div class="stat-row">
+          <label>C.H.I.P.S:</label>
+          <div class="pip-track chips-track">
+            {{#each (range 20) as |i|}}
+              <div class="pip chip-pip {{#if (gte system.advancement.chips (add i 1))}}filled{{/if}}" data-value="{{add i 1}}"></div>
+            {{/each}}
+            <span class="pip-value">{{system.advancement.chips}}</span>
+          </div>
+        </div>
+        
+        <div class="stat-row">
+          <label>Reputation:</label>
+          <div class="pip-track reputation-track">
+            {{#each (range 25) as |i|}}
+              <div class="pip reputation-pip {{#if (gte system.profile.reputation.level (add i 1))}}filled{{/if}}" data-value="{{add i 1}}"></div>
+            {{/each}}
+            <span class="pip-value">{{system.profile.reputation.level}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+  <div class="sheet-main">
+    {{!-- Left Sidebar --}}
+    <aside class="sidebar">
+      {{!-- Strain --}}
+      <section class="strain">
+        <h3>STRAIN</h3>
+        <div class="strain-type">
+          <label>Mental:</label>
+          <div class="pip-track strain-track">
+            {{#each (range system.strain.mental.max) as |i|}}
+              <div class="pip strain-pip mental-strain {{#if (gte system.strain.mental.value (add i 1))}}filled{{/if}}" data-value="{{add i 1}}" data-type="mental"></div>
+            {{/each}}
+            <span class="pip-value">{{system.strain.mental.value}}/{{system.strain.mental.max}}</span>
+          </div>
+        </div>
+        
+        <div class="strain-type">
+          <label>Physical:</label>
+          <div class="pip-track strain-track">
+            {{#each (range system.strain.physical.max) as |i|}}
+              <div class="pip strain-pip physical-strain {{#if (gte system.strain.physical.value (add i 1))}}filled{{/if}}" data-value="{{add i 1}}" data-type="physical"></div>
+            {{/each}}
+            <span class="pip-value">{{system.strain.physical.value}}/{{system.strain.physical.max}}</span>
+          </div>
+        </div>
+        
+        {{!-- Strain Recovery Buttons --}}
+        <div class="strain-recovery">
+          <button type="button" class="strain-recover" title="Partial Recovery - Rest and medical attention">
+            <i class="fas fa-heart"></i> Recover
+          </button>
+          <button type="button" class="strain-recover-all" title="Full Recovery - Extended rest with proper care">
+            <i class="fas fa-spa"></i> Full Rest
+          </button>
+        </div>
+      </section>
+
+      {{!-- Wounds --}}
+      <section class="wounds">
+        <h3>HERIDAS</h3>
+        <div class="wound-type">
+          <label>Minor (-1 each):</label>
+          <div class="pip-track wound-track">
+            {{#each (range 5) as |i|}}
+              <div class="pip wound-pip minor-wound {{#if (gte system.wounds.minor (add i 1))}}filled{{/if}}" data-value="{{add i 1}}" data-type="minor"></div>
+            {{/each}}
+            <span class="wound-penalty">(-{{system.wounds.minor}})</span>
+          </div>
+        </div>
+        
+        <div class="wound-type">
+          <label>Major (-2 each):</label>
+          <div class="pip-track wound-track">
+            {{#each (range 4) as |i|}}
+              <div class="pip wound-pip major-wound {{#if (gte system.wounds.major (add i 1))}}filled{{/if}}" data-value="{{add i 1}}" data-type="major"></div>
+            {{/each}}
+            <span class="wound-penalty">(-{{multiply system.wounds.major 2}})</span>
+          </div>
+        </div>
+        
+        <div class="wound-type">
+          <label>Mortal (-3 each):</label>
+          <div class="pip-track wound-track">
+            {{#each (range 3) as |i|}}
+              <div class="pip wound-pip mortal-wound {{#if (gte system.wounds.mortal (add i 1))}}filled{{/if}}" data-value="{{add i 1}}" data-type="mortal"></div>
+            {{/each}}
+            <span class="wound-penalty">(-{{multiply system.wounds.mortal 3}})</span>
+          </div>
+        </div>
+        
+        <div class="total-penalty">
+          <strong>Total Penalty: {{system.totalWoundPenalty}}</strong>
+        </div>
+      </section>
+
+      {{!-- Status --}}
+      <section class="status">
+        <h3>ESTADO</h3>
+        <div class="status-condition">
+          <input name="system.status.condition" type="text" value="{{system.status.condition}}" placeholder="Current Status"/>
+        </div>
+      </section>
+    </aside>
+
+    {{!-- Main Content --}}
+    <section class="main-content">
+      {{!-- Navigation Tabs --}}
+      <nav class="sheet-tabs" data-group="primary">
+        <a class="item active" data-tab="abilities">ABILITIES</a>
+        <a class="item" data-tab="items">ITEMS</a>
+        <a class="item" data-tab="profile">PROFILE</a>
+      </nav>
+
+      {{!-- Tab Content --}}
+      <section class="sheet-body">
+        
+        {{!-- Abilities Tab (Attributes + Skills) --}}
+        <div class="tab abilities active" data-group="primary" data-tab="abilities">
+          <div class="abilities-layout">
+            {{!-- Left Side: Attributes --}}
+            <div class="attributes-section">
+              <div class="attributes-grid">
+                {{#each system.attributes as |attr key|}}
+                <div class="attribute-group expanded">
+                  <div class="attribute-header">
+                    <i class="fas fa-dice-d10 attribute-roll rollable" data-attribute="{{key}}" title="Roll {{capitalize key}}"></i>
+                    <label class="attribute-name rollable attribute-roll" data-attribute="{{key}}" title="Click to roll {{capitalize key}}">{{uppercase key}}</label>
+                    <input type="number" name="system.attributes.{{key}}.value" value="{{attr.value}}" class="attribute-value">
+                  </div>
+                  
+                  {{#if attr.focus}}
+                  <div class="focus-attributes">
+                    <div class="focus-item">
+                      <i class="fas fa-dice-d10 attribute-roll rollable" data-attribute="{{key}}" data-focus="primary" title="Roll Focus"></i>
+                      <input type="text" name="system.attributes.{{key}}.focus.primary.name" value="{{attr.focus.primary.name}}" 
+                             placeholder="Focus 1" class="focus-name rollable attribute-roll" data-attribute="{{key}}" data-focus="primary" title="Click to roll focus">
+                      <span class="focus-value">({{attr.focus.primary.value}})</span>
+                    </div>
+                    
+                    <div class="focus-item">
+                      <i class="fas fa-dice-d10 attribute-roll rollable" data-attribute="{{key}}" data-focus="secondary" title="Roll Focus"></i>
+                      <input type="text" name="system.attributes.{{key}}.focus.secondary.name" value="{{attr.focus.secondary.name}}" 
+                             placeholder="Focus 2" class="focus-name rollable attribute-roll" data-attribute="{{key}}" data-focus="secondary" title="Click to roll focus">
+                      <span class="focus-value">({{attr.focus.secondary.value}})</span>
+                    </div>
+                  </div>
+                  {{/if}}
+                  
+                  {{#if attr.dual}}
+                  <div class="dual-attribute">
+                    <label>Dual:</label>
+                    <input type="number" name="system.attributes.{{key}}.dual" value="{{attr.dual}}" class="dual-value">
+                  </div>
+                  {{/if}}
+                </div>
+                {{/each}}
+              </div>
+            </div>
+            
+            {{!-- Right Side: Skills --}}
+            <div class="skills-section">
+              <h3>Skill Sets</h3>
+              
+              <div class="skill-list">
+                {{!-- Specialty Skills Group --}}
+                {{#if skillsByLevel.specialty.length}}
+                <div class="skill-level-group specialty-group">
+                  <h4 class="skill-level-header"><i class="fas fa-star"></i> Specialty Skills (3d10kl)</h4>
+                  {{#each skillsByLevel.specialty as |skill|}}
+                  {{> skillItem skill=skill}}
+                  {{/each}}
+                </div>
+                {{/if}}
+                
+                {{!-- Core Skills Group --}}
+                {{#if skillsByLevel.core.length}}
+                <div class="skill-level-group core-group">
+                  <h4 class="skill-level-header"><i class="fas fa-certificate"></i> Core Skills (2d10kl)</h4>
+                  {{#each skillsByLevel.core as |skill|}}
+                  {{> skillItem skill=skill}}
+                  {{/each}}
+                </div>
+                {{/if}}
+                
+                {{!-- General Skills Group --}}
+                {{#if skillsByLevel.general.length}}
+                <div class="skill-level-group general-group">
+                  <h4 class="skill-level-header"><i class="fas fa-circle"></i> General Skills (1d10)</h4>
+                  {{#each skillsByLevel.general as |skill|}}
+                  {{> skillItem skill=skill}}
+                  {{/each}}
+                </div>
+                {{/if}}
+                
+                {{!-- No Skills Message --}}
+                {{#unless skillSets.length}}
+                <div class="no-skills-message">
+                  <p><em>No skills created yet. Click "Add Skill Set" to create your first skill.</em></p>
+                </div>
+                {{/unless}}
+                
+                <div class="skill-controls">
+                  <a class="item-control item-create" data-type="skill" title="Create Skill"><i class="fas fa-plus"></i> Add Skill Set</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {{!-- Profile Tab --}}
+        <div class="tab profile" data-group="primary" data-tab="profile">
+          <div class="profile-content">
+            <div class="profile-grid">
+              {{!-- Left Column --}}
+              <div class="profile-left">
+                <section class="profile-section">
+                  <h3>Motivation</h3>
+                  <textarea name="system.profile.motivation" class="profile-textarea" placeholder="What drives this character?">{{system.profile.motivation}}</textarea>
+                </section>
+                
+                <section class="profile-section">
+                  <h3>Attitude</h3>
+                  <textarea name="system.profile.attitude" class="profile-textarea" placeholder="How does this character approach life?">{{system.profile.attitude}}</textarea>
+                </section>
+                
+                <section class="profile-section">
+                  <h3>Goal</h3>
+                  <textarea name="system.profile.goal" class="profile-textarea" placeholder="What is this character trying to achieve?">{{system.profile.goal}}</textarea>
+                </section>
+                
+                <section class="profile-section">
+                  <h3>Especies (Species)</h3>
+                  <input type="text" name="system.species" value="{{system.species}}" placeholder="Human, Modified Human, Cetacean, etc." class="profile-input">
+                </section>
+              </div>
+              
+              {{!-- Right Column --}}
+              <div class="profile-right">
+                <section class="profile-section">
+                  <h3>Tags</h3>
+                  <div class="tags-container">
+                    {{#each system.tags as |tag|}}
+                    <div class="tag-item">
+                      <input type="text" name="system.tags.{{@index}}" value="{{tag}}" placeholder="Tag" class="tag-input">
+                      <button type="button" class="tag-delete" data-index="{{@index}}">×</button>
+                    </div>
+                    {{/each}}
+                    <button type="button" class="add-tag-btn"><i class="fas fa-plus"></i> Add Tag</button>
+                  </div>
+                </section>
+                
+                <section class="profile-section">
+                  <h3>Tracks</h3>
+                  <div class="tracks-container">
+                    {{#each system.tracks as |track key|}}
+                    <div class="track-item">
+                      <input type="text" name="system.tracks.{{key}}.name" value="{{track.name}}" placeholder="Track Name" class="track-name">
+                      <input type="number" name="system.tracks.{{key}}.value" value="{{track.value}}" min="0" max="10" class="track-value">
+                      <button type="button" class="track-delete" data-key="{{key}}">×</button>
+                    </div>
+                    {{/each}}
+                    <button type="button" class="add-track-btn"><i class="fas fa-plus"></i> Add Track</button>
+                  </div>
+                </section>
+                
+                <section class="profile-section">
+                  <h3>Ties</h3>
+                  <div class="ties-container">
+                    {{#each system.ties as |tie|}}
+                    <div class="tie-item">
+                      <input type="text" name="system.ties.{{@index}}.name" value="{{tie.name}}" placeholder="Person/Organization" class="tie-name">
+                      <select name="system.ties.{{@index}}.relationship" class="tie-relationship">
+                        <option value="ally" {{#if (eq tie.relationship "ally")}}selected{{/if}}>Ally</option>
+                        <option value="contact" {{#if (eq tie.relationship "contact")}}selected{{/if}}>Contact</option>
+                        <option value="rival" {{#if (eq tie.relationship "rival")}}selected{{/if}}>Rival</option>
+                        <option value="enemy" {{#if (eq tie.relationship "enemy")}}selected{{/if}}>Enemy</option>
+                        <option value="family" {{#if (eq tie.relationship "family")}}selected{{/if}}>Family</option>
+                        <option value="friend" {{#if (eq tie.relationship "friend")}}selected{{/if}}>Friend</option>
+                      </select>
+                      <textarea name="system.ties.{{@index}}.description" class="tie-description" placeholder="Relationship details">{{tie.description}}</textarea>
+                      <button type="button" class="tie-delete" data-index="{{@index}}">×</button>
+                    </div>
+                    {{/each}}
+                    <button type="button" class="add-tie-btn"><i class="fas fa-plus"></i> Add Tie</button>
+                  </div>
+                </section>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {{!-- Items Tab --}}
+        <div class="tab items" data-group="primary" data-tab="items">
+          <div class="items-section">
+            <h3>Weapons</h3>
+            <ol class="item-list weapon-list">
+              {{#each weapons as |item id|}}
+              <li class="item flexrow weapon-item {{#unless item.system.equipped}}unequipped{{/unless}}" data-item-id="{{item._id}}">
+                <div class="weapon-info-row">
+                  <div class="weapon-basic">
+                    {{#if (and item.system.damage item.system.equipped)}}
+                    <a class="weapon-damage-roll" data-item-id="{{item._id}}" title="Roll Damage"><i class="fas fa-dice-d10"></i></a>
+                    {{else if item.system.damage}}
+                    <span class="weapon-damage-roll-disabled" title="Weapon not equipped"><i class="fas fa-dice-d10"></i></span>
+                    {{/if}}
+                    <div class="item-image"><img src="{{item.img}}" title="{{item.name}}" width="20" height="20"/></div>
+                    <h4 class="weapon-name">{{item.name}}</h4>
+                  </div>
+                  
+                  <div class="weapon-stats-compact">
+                    <span class="weapon-type">{{capitalize item.system.weapon_type}}</span>
+                    {{#if item.system.damage}}
+                    <span class="weapon-damage">DR {{item.system.damage}}</span>
+                    {{/if}}
+                    {{#if (and item.system.effective_range (ne item.system.weapon_type "melee"))}}
+                    <span class="weapon-range">{{item.system.effective_range}}m</span>
+                    {{/if}}
+                    {{#if item.system.cost}}
+                    <span class="weapon-cost">¤{{item.system.cost}}</span>
+                    {{/if}}
+                  </div>
+                  
+                  <div class="item-controls">
+                    {{#if item.system.equipped}}
+                    <a class="item-control item-unequip" data-item-id="{{item._id}}" title="Unequip Weapon"><i class="fas fa-toggle-on"></i></a>
+                    {{else}}
+                    <a class="item-control item-equip" data-item-id="{{item._id}}" title="Equip Weapon"><i class="fas fa-toggle-off"></i></a>
+                    {{/if}}
+                    <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                    <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+                  </div>
+                </div>
+              </li>
+              {{/each}}
+            </ol>
+            <div class="item-controls">
+              <a class="item-control item-create item-create-button" data-type="weapon" title="Create Weapon"><i class="fas fa-plus"></i> Add Weapon</a>
+            </div>
+          </div>
+
+          <div class="items-section">
+            <h3>Equipment</h3>
+            <ol class="item-list equipment-list">
+              {{#each equipment as |item id|}}
+              <li class="item flexrow equipment-item {{#unless item.system.equipped}}unequipped{{/unless}}" data-item-id="{{item._id}}">
+                <div class="equipment-info-row">
+                  <div class="equipment-basic">
+                    <div class="item-image"><img src="{{item.img}}" title="{{item.name}}" width="20" height="20"/></div>
+                    <h4 class="equipment-name">{{item.name}}</h4>
+                  </div>
+                  
+                  <div class="equipment-stats-compact">
+                    {{#if item.system.type}}
+                    <span class="equipment-type">{{capitalize item.system.type}}</span>
+                    {{/if}}
+                    {{#if item.system.cost}}
+                    <span class="equipment-cost">¤{{item.system.cost}}</span>
+                    {{/if}}
+                    {{#if item.system.weight}}
+                    <span class="equipment-weight">{{item.system.weight}}kg</span>
+                    {{/if}}
+                  </div>
+                  
+                  <div class="item-controls">
+                    {{#if item.system.equipped}}
+                    <a class="item-control item-unequip" data-item-id="{{item._id}}" title="Unequip Equipment"><i class="fas fa-toggle-on"></i></a>
+                    {{else}}
+                    <a class="item-control item-equip" data-item-id="{{item._id}}" title="Equip Equipment"><i class="fas fa-toggle-off"></i></a>
+                    {{/if}}
+                    <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                    <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+                  </div>
+                </div>
+              </li>
+              {{/each}}
+            </ol>
+            <div class="item-controls">
+              <a class="item-control item-create item-create-button" data-type="equipment" title="Create Equipment"><i class="fas fa-plus"></i> Add Equipment</a>
+            </div>
+          </div>
+
+          <div class="items-section">
+            <h3>Biomods</h3>
+            <ol class="item-list biomod-list">
+              {{#each biomods as |item id|}}
+              <li class="item flexrow biomod-item {{#unless item.system.active}}inactive{{/unless}}" data-item-id="{{item._id}}">
+                <div class="biomod-info-row">
+                  <div class="biomod-basic">
+                    <div class="item-image"><img src="{{item.img}}" title="{{item.name}}" width="20" height="20"/></div>
+                    <h4 class="biomod-name">{{item.name}}</h4>
+                  </div>
+                  
+                  <div class="biomod-stats-compact">
+                    {{#if item.system.type}}
+                    <span class="biomod-type">{{capitalize item.system.type}}</span>
+                    {{/if}}
+                    {{#if item.system.strain_cost}}
+                    <span class="biomod-strain">{{item.system.strain_cost}} Strain</span>
+                    {{/if}}
+                    {{#if item.system.cost}}
+                    <span class="biomod-cost">¤{{item.system.cost}}</span>
+                    {{/if}}
+                  </div>
+                  
+                  <div class="item-controls">
+                    {{#if item.system.active}}
+                    <a class="item-control item-deactivate" data-item-id="{{item._id}}" title="Deactivate Biomod"><i class="fas fa-toggle-on"></i></a>
+                    {{else}}
+                    <a class="item-control item-activate" data-item-id="{{item._id}}" title="Activate Biomod"><i class="fas fa-toggle-off"></i></a>
+                    {{/if}}
+                    <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                    <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+                  </div>
+                </div>
+              </li>
+              {{/each}}
+            </ol>
+            <div class="item-controls">
+              <a class="item-control item-create item-create-button" data-type="biomod" title="Create Biomod"><i class="fas fa-plus"></i> Add Biomod</a>
+            </div>
+          </div>
+        </div>
+
+
+      </section>
+    </section>
+  </div>
+
+</form>
+
+{{!-- Compact Skill Item Partial --}}
+{{#*inline "skillItem"}}
+<div class="skill-item" data-skill-id="{{skill.id}}">
+  <div class="skill-header">
+    <div class="skill-main-info">
+      <i class="fas fa-dice-d10 skill-roll rollable" data-skill="{{skill.id}}" title="Roll {{skill.label}}"></i>
+      <span class="skill-name rollable skill-roll" data-skill="{{skill.id}}" title="Click to roll {{skill.label}}">{{skill.label}}</span>
+      <span class="skill-aspect aspect-{{skill.aspect}}" title="{{capitalize skill.aspect}} skill">{{capitalize skill.aspect}}</span>
+      <span class="skill-rank" title="Skill Rank">(Rank <input type="number" name="system.skills.{{skill.id}}.rank" value="{{skill.rank}}" min="1" max="6" class="skill-rank-input">)</span>
+    </div>
+    <div class="skill-actions">
+      <i class="fas fa-edit skill-edit" data-skill-id="{{skill.id}}" title="Edit {{skill.label}}"></i>
+      <i class="fas fa-trash skill-delete" data-skill-id="{{skill.id}}" title="Delete {{skill.label}}"></i>
+    </div>
+  </div>
+</div>
+{{/inline}}

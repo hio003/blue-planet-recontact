@@ -1,0 +1,310 @@
+<div class="roll-card-content">
+    
+    <!-- Tabs -->
+    <nav class="sheet-tabs tabs" data-group="primary">
+        <a class="item" data-tab="mechanics">
+            <i class="fas fa-dice"></i> Roll Mechanics
+        </a>
+        <a class="item" data-tab="character">
+            <i class="fas fa-user"></i> Character
+        </a>
+        <a class="item" data-tab="quick-rolls">
+            <i class="fas fa-bolt"></i> Quick Rolls
+        </a>
+    </nav>
+
+    <!-- Tab Content -->
+    <div class="content">
+        
+        <!-- Roll Mechanics Tab -->
+        <div class="tab mechanics" data-group="primary" data-tab="mechanics">
+            
+            <!-- Basic Roll Mechanics -->
+            <div class="section">
+                <h3><i class="fas fa-dice-d10"></i> Basic Roll Mechanics</h3>
+                <div class="rule-box">
+                    <p><strong>Target Success:</strong> Roll <span class="success">equal to or lower</span> than target number</p>
+                    <p><strong>Dice Used:</strong> {{system.rollMechanics.diceUsed}}</p>
+                    <div class="formula">{{system.rollMechanics.targetFormula}}</div>
+                </div>
+            </div>
+            
+            <!-- Test Types -->
+            <div class="section">
+                <h3><i class="fas fa-cogs"></i> Test Types & Dice</h3>
+                <div class="dice-grid">
+                    
+                    <!-- Skill Set Tests -->
+                    <div class="dice-type">
+                        <h4>Skill Set Tests</h4>
+                        <div class="skill-levels">
+                            <div class="skill-level">
+                                <strong>General:</strong> {{system.diceTypes.skillSet.general.dice}}
+                            </div>
+                            <div class="skill-level">
+                                <strong>Core:</strong> {{system.diceTypes.skillSet.core.dice}}
+                            </div>
+                            <div class="skill-level">
+                                <strong>Specialty:</strong> {{system.diceTypes.skillSet.specialty.dice}}
+                            </div>
+                        </div>
+                        <p class="description">{{system.diceTypes.skillSet.general.description}}</p>
+                    </div>
+                    
+                    <!-- Attribute Tests -->
+                    <div class="dice-type">
+                        <h4>Attribute Tests</h4>
+                        <div class="attribute-info">
+                            <p><strong>Dice:</strong> {{system.diceTypes.attribute.dice}}</p>
+                            <p><strong>Target:</strong> {{system.diceTypes.attribute.target}}</p>
+                        </div>
+                        <p class="description">{{system.diceTypes.attribute.description}}</p>
+                    </div>
+                    
+                    <!-- Damage Tests -->
+                    <div class="dice-type">
+                        <h4>Damage Tests</h4>
+                        <div class="damage-info">
+                            <p><strong>Dice:</strong> {{system.diceTypes.damage.dice}}</p>
+                            <p><strong>Target:</strong> {{system.diceTypes.damage.target}}</p>
+                        </div>
+                        <p class="description">{{system.diceTypes.damage.description}}</p>
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <!-- Success & Failure -->
+            <div class="section">
+                <h3><i class="fas fa-check-circle"></i> Success & Failure</h3>
+                <table class="results-table">
+                    <thead>
+                        <tr>
+                            <th>Roll Result</th>
+                            <th>Outcome</th>
+                            <th>Effect</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="success-row">
+                            <td>≤ Target Number</td>
+                            <td class="success">SUCCESS</td>
+                            <td>Task accomplished</td>
+                        </tr>
+                        <tr class="failure-row">
+                            <td>> Target Number</td>
+                            <td class="failure">FAILURE</td>
+                            <td>Task failed</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Action Values -->
+            <div class="section">
+                <h3><i class="fas fa-chart-line"></i> Action Values & Special Results</h3>
+                <div class="formula">Action Value = Target Number - Best (Lowest) Die</div>
+                <table class="results-table">
+                    <thead>
+                        <tr>
+                            <th>Action Value</th>
+                            <th>Result</th>
+                            <th>Effect</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each system.actionValueEffects}}
+                        <tr class="{{type}}-row">
+                            <td>{{value}}</td>
+                            <td class="{{type}}">{{result}}</td>
+                            <td>{{effect}}</td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Damage Table -->
+            <div class="section damage-section">
+                <h3><i class="fas fa-heart-broken"></i> Damage Tests (3d10)</h3>
+                <table class="results-table">
+                    <thead>
+                        <tr>
+                            <th>Successes</th>
+                            <th>Wound Level</th>
+                            <th>Penalty</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each system.damageTable}}
+                        <tr class="{{type}}-row">
+                            <td>{{successes}}</td>
+                            <td class="{{type}}">{{woundLevel}}</td>
+                            <td>{{penalty}}</td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Strain Usage -->
+            <div class="section">
+                <h3><i class="fas fa-bolt"></i> Strain Usage</h3>
+                <div class="strain-rules">
+                    <p><strong>Before Roll:</strong> {{system.strainRules.beforeRoll}}</p>
+                    <p><strong>After Failed Roll:</strong> {{system.strainRules.afterFailedRoll}}</p>
+                    <ul>
+                        <li>If reroll succeeds: {{system.strainRules.rerollSuccess}}</li>
+                        <li>If reroll fails: {{system.strainRules.rerollFailure}}</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Opposed Tests -->
+            <div class="section">
+                <h3><i class="fas fa-balance-scale"></i> Opposed Tests</h3>
+                <div class="opposed-rules">
+                    <p>Both sides roll and compare <strong>Action Values</strong></p>
+                    <p><strong>Higher Action Value wins</strong> (even if negative)</p>
+                    <p>Tied results = stalemate, continue contest</p>
+                </div>
+            </div>
+            
+            <!-- Hard Limits -->
+            <div class="section">
+                <h3><i class="fas fa-exclamation-triangle"></i> Hard Limits</h3>
+                <div class="limits">
+                    <p><strong>{{system.hardLimits.impossible}}</strong></p>
+                    <p><strong>{{system.hardLimits.automatic}}</strong></p>
+                </div>
+            </div>
+            
+        </div>
+        
+        <!-- Character Tab -->
+        <div class="tab character" data-group="primary" data-tab="character">
+            {{#if actor}}
+            
+            <div class="section">
+                <h3><i class="fas fa-user"></i> {{actor.name}}</h3>
+                
+                <!-- Roll Actions -->
+                <div class="roll-actions">
+                    <button type="button" class="roll-skill">
+                        <i class="fas fa-dice"></i> Roll Skill Test
+                    </button>
+                    <button type="button" class="roll-attribute">
+                        <i class="fas fa-dice-d10"></i> Roll Attribute Test
+                    </button>
+                    <button type="button" class="roll-damage">
+                        <i class="fas fa-heart-broken"></i> Roll Damage Test
+                    </button>
+                </div>
+                
+            </div>
+            
+            <!-- Character Sheet Integration -->
+            <div class="section">
+                <h3><i class="fas fa-clipboard"></i> Character Sheet Integration</h3>
+                
+                <div class="drag-drop-zone">
+                    <p><i class="fas fa-hand-paper"></i> Drag and drop character elements here!</p>
+                    <p>This area allows you to organize character sheet components</p>
+                    <div class="character-sheet-items">
+                        <!-- Items will be added here via drag and drop -->
+                    </div>
+                </div>
+                
+                <div class="character-elements">
+                    <h4>Available Character Elements:</h4>
+                    <div class="elements-grid">
+                        {{#each characterElements}}
+                        <div class="draggable" draggable="true" data-item="{{type}}">
+                            {{label}}
+                        </div>
+                        {{/each}}
+                    </div>
+                </div>
+                
+            </div>
+            
+            {{else}}
+            
+            <div class="section">
+                <h3><i class="fas fa-info-circle"></i> No Character Selected</h3>
+                <p>Select a token to enable character-specific features</p>
+            </div>
+            
+            {{/if}}
+        </div>
+        
+        <!-- Quick Rolls Tab -->
+        <div class="tab quick-rolls" data-group="primary" data-tab="quick-rolls">
+            
+            <div class="section">
+                <h3><i class="fas fa-bolt"></i> Quick Roll Buttons</h3>
+                <div class="quick-roll-grid">
+                    
+                    <div class="quick-roll-group">
+                        <h4>Skill Set Tests</h4>
+                        <button type="button" class="quick-roll" data-roll-type="general">
+                            <i class="fas fa-dice-d10"></i>
+                            <span>General (1d10)</span>
+                        </button>
+                        <button type="button" class="quick-roll" data-roll-type="core">
+                            <i class="fas fa-dice-d10"></i>
+                            <span>Core (2d10)</span>
+                        </button>
+                        <button type="button" class="quick-roll" data-roll-type="specialty">
+                            <i class="fas fa-dice-d10"></i>
+                            <span>Specialty (3d10)</span>
+                        </button>
+                    </div>
+                    
+                    <div class="quick-roll-group">
+                        <h4>Other Tests</h4>
+                        <button type="button" class="quick-roll" data-roll-type="attribute">
+                            <i class="fas fa-dice-d10"></i>
+                            <span>Attribute (1d10)</span>
+                        </button>
+                        <button type="button" class="quick-roll" data-roll-type="damage">
+                            <i class="fas fa-heart-broken"></i>
+                            <span>Damage (3d10)</span>
+                        </button>
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <!-- Probability Table -->
+            <div class="section">
+                <h3><i class="fas fa-calculator"></i> Success Probabilities</h3>
+                <table class="probability-table">
+                    <thead>
+                        <tr>
+                            <th>Target Number</th>
+                            <th>1 Die</th>
+                            <th>2 Dice</th>
+                            <th>3 Dice</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>1</td><td>10%</td><td>19%</td><td>27.1%</td></tr>
+                        <tr><td>2</td><td>20%</td><td>36%</td><td>48.8%</td></tr>
+                        <tr><td>3</td><td>30%</td><td>51%</td><td>65.7%</td></tr>
+                        <tr><td>4</td><td>40%</td><td>64%</td><td>78.4%</td></tr>
+                        <tr><td>5</td><td>50%</td><td>75%</td><td>87.5%</td></tr>
+                        <tr><td>6</td><td>60%</td><td>84%</td><td>93.6%</td></tr>
+                        <tr><td>7</td><td>70%</td><td>91%</td><td>97.3%</td></tr>
+                        <tr><td>8</td><td>80%</td><td>96%</td><td>99.2%</td></tr>
+                        <tr><td>9</td><td>90%</td><td>99%</td><td>99.9%</td></tr>
+                        <tr><td>10</td><td>100%</td><td>100%</td><td>100%</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            
+        </div>
+        
+    </div>
+    
+</div>
