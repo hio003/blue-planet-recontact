@@ -1,0 +1,38 @@
+<div class="wound-tracker">
+  <h3>Wounds & Damage</h3>
+  
+  <div class="wound-levels">
+    <div class="wound-type">
+      <label for="wounds-minor">Minor Wounds (-1 each):</label>
+      <input type="number" name="system.wounds.minor" value="{{system.wounds.minor}}" data-dtype="Number" min="0" max="10"/>
+    </div>
+    
+    <div class="wound-type">
+      <label for="wounds-major">Major Wounds (-2 each):</label>
+      <input type="number" name="system.wounds.major" value="{{system.wounds.major}}" data-dtype="Number" min="0" max="5"/>
+    </div>
+    
+    <div class="wound-type">
+      <label for="wounds-mortal">Mortal Wounds (-3 each):</label>
+      <input type="number" name="system.wounds.mortal" value="{{system.wounds.mortal}}" data-dtype="Number" min="0" max="3"/>
+    </div>
+  </div>
+  
+  <div class="wound-summary">
+    <div class="total-penalty">
+      <strong>Total Wound Penalty: {{system.woundPenalty}}</strong>
+    </div>
+  </div>
+  
+  <div class="wound-descriptions">
+    <div class="wound-desc">
+      <strong>Minor:</strong> Superficial cuts, bruises, minor strain
+    </div>
+    <div class="wound-desc">
+      <strong>Major:</strong> Serious injuries, broken bones, major bleeding
+    </div>
+    <div class="wound-desc">
+      <strong>Mortal:</strong> Life-threatening injuries, critical damage
+    </div>
+  </div>
+</div>

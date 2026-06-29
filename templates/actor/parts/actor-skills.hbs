@@ -1,0 +1,22 @@
+{{!-- Skills Section --}}
+<div class="skills">
+  <h3>SKILLS</h3>
+  <div class="skill-list">
+    {{#each skillSets as |skill|}}
+    <div class="skill-item">
+      <div class="skill-name">
+        <input type="text" name="system.skills.{{skill.id}}.name" value="{{skill.label}}">
+      </div>
+      <div class="skill-details">
+        <span class="skill-rank">{{skill.rank}}</span>
+        <span class="skill-arrow">→</span>
+        <span class="skill-level">{{skill.level}}</span>
+        <span class="skill-dice">{{skill.dice}}</span>
+      </div>
+      <div class="skill-controls">
+        <i class="fas fa-dice-d10 skill-roll rollable" data-skill="{{skill.id}}" title="Roll {{skill.label}}"></i>
+      </div>
+    </div>
+    {{/each}}
+  </div>
+</div>

@@ -1,0 +1,147 @@
+/**
+ * Items Tab Scrollbar and Layout Improvements
+ * Fixes scrolling issues when too many items are present in actor sheets
+ */
+
+/* Items Tab Scrolling - Apply to all actor sheet types */
+.blue-planet-recontact .sheet .tab[data-tab="items"] {
+  overflow-y: auto;
+  max-height: 500px; /* Adjust based on typical sheet height */
+  padding-right: 5px; /* Space for scrollbar */
+}
+
+/* Items section styling */
+.blue-planet-recontact .sheet .tab[data-tab="items"] .items {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Individual items sections */
+.blue-planet-recontact .sheet .items-section {
+  flex-shrink: 0; /* Prevent shrinking */
+}
+
+.blue-planet-recontact .sheet .items-section h3 {
+  position: sticky;
+  top: 0;
+  background-color: var(--color-bg-dark, #2a2a2a);
+  z-index: 2;
+  margin-bottom: 8px;
+  padding: 5px 0;
+  border-bottom: 1px solid var(--color-border-light, #666);
+}
+
+/* Item list styling */
+.blue-planet-recontact .sheet .item-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: none; /* Remove any height restrictions */
+}
+
+.blue-planet-recontact .sheet .item-list .item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px;
+  margin-bottom: 2px;
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.blue-planet-recontact .sheet .item-list .item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Compact item display for better space usage */
+.blue-planet-recontact .sheet .item-name h4 {
+  margin: 0 0 3px 0;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.blue-planet-recontact .sheet .item-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.blue-planet-recontact .sheet .item-details span {
+  background-color: rgba(0, 0, 0, 0.3);
+  padding: 2px 6px;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+
+/* Item controls styling */
+.blue-planet-recontact .sheet .item-controls {
+  display: flex;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.blue-planet-recontact .sheet .item-controls .item-control {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ccc;
+  transition: all 0.2s ease;
+}
+
+.blue-planet-recontact .sheet .item-controls .item-control:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+/* Weapon-specific damage roll button */
+.blue-planet-recontact .sheet .weapon-damage-roll:hover {
+  background-color: #dc3545;
+  color: white;
+}
+
+/* Responsive adjustments */
+@media (max-height: 800px) {
+  .blue-planet-recontact .sheet .tab[data-tab="items"] {
+    max-height: 400px;
+  }
+}
+
+@media (max-height: 600px) {
+  .blue-planet-recontact .sheet .tab[data-tab="items"] {
+    max-height: 300px;
+  }
+}
+
+/* Custom scrollbar styling */
+.blue-planet-recontact .sheet .tab[data-tab="items"]::-webkit-scrollbar {
+  width: 8px;
+}
+
+.blue-planet-recontact .sheet .tab[data-tab="items"]::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.blue-planet-recontact .sheet .tab[data-tab="items"]::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+.blue-planet-recontact .sheet .tab[data-tab="items"]::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.5);
+}
+
+/* Firefox scrollbar styling */
+.blue-planet-recontact .sheet .tab[data-tab="items"] {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) rgba(255, 255, 255, 0.1);
+}

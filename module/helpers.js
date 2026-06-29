@@ -64,27 +64,77 @@ export function registerHandlebarsHelpers() {
     return a !== b;
   });
 
+  // Alias 'ne' for 'neq' — used in actor templates
+  Handlebars.registerHelper('ne', function(a, b) {
+    return a !== b;
+  });
+
   // Title case a string
   Handlebars.registerHelper('titleCase', function(str) {
-    if (!str) return '';
+    if (!str || typeof str !== 'string') return '';
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
   });
 
   // Capitalize a string
   Handlebars.registerHelper('capitalize', function(str) {
-    if (!str) return '';
-    return str.charAt(0).toUpperCase() + str.slice(1);
+    if (!str || typeof str !== 'string') return '';
+    const cleanStr = String(str).trim();
+    if (!cleanStr) return '';
+    return cleanStr.charAt(0).toUpperCase() + cleanStr.slice(1);
+  });
+  
+  // Safe capitalize that handles all types of input
+  Handlebars.registerHelper('safeCapitalize', function(str) {
+    try {
+      if (!str) return '';
+      if (typeof str === 'string') {
+        const cleanStr = str.trim();
+        return cleanStr ? cleanStr.charAt(0).toUpperCase() + cleanStr.slice(1) : '';
+      }
+      // Convert to string and then capitalize
+      const convertedStr = String(str).trim();
+      return convertedStr ? convertedStr.charAt(0).toUpperCase() + convertedStr.slice(1) : '';
+    } catch (error) {
+      console.warn('BluePlanet: Error in safeCapitalize helper:', error);
+      return '';
+    }
+  });
+  
+  // Helper to check if mechanics object exists and has valid properties
+  Handlebars.registerHelper('hasMechanics', function(item) {
+    if (!item || !item.system) return false;
+    const mechanics = item.system.mechanics;
+    if (!mechanics || typeof mechanics !== 'object') return false;
+    
+    // Check if it has any non-zero values
+    const hasInitBonus = mechanics.initiative_bonus && mechanics.initiative_bonus > 0;
+    const hasArmor = mechanics.natural_armor && mechanics.natural_armor > 0;
+    const hasDamageBonus = mechanics.unarmed_damage_bonus && mechanics.unarmed_damage_bonus > 0;
+    const hasMajorReduction = mechanics.wound_penalty_reduction?.major && mechanics.wound_penalty_reduction.major > 0;
+    const hasMortalReduction = mechanics.wound_penalty_reduction?.mortal && mechanics.wound_penalty_reduction.mortal > 0;
+    
+    return hasInitBonus || hasArmor || hasDamageBonus || hasMajorReduction || hasMortalReduction;
+  });
+  
+  // Helper to safely get nested properties
+  Handlebars.registerHelper('safeGet', function(obj, path) {
+    if (!obj || !path) return null;
+    try {
+      return path.split('.').reduce((current, key) => current?.[key], obj);
+    } catch (error) {
+      return null;
+    }
   });
 
   // Lowercase a string
   Handlebars.registerHelper('lowercase', function(str) {
-    if (!str) return '';
+    if (!str || typeof str !== 'string') return '';
     return str.toLowerCase();
   });
 
   // Uppercase a string
   Handlebars.registerHelper('uppercase', function(str) {
-    if (!str) return '';
+    if (!str || typeof str !== 'string') return '';
     return str.toUpperCase();
   });
 
@@ -144,6 +194,46 @@ export function registerHandlebarsHelpers() {
   Handlebars.registerHelper('at', function(array, index) {
     if (!Array.isArray(array)) return null;
     return array[parseInt(index)] || null;
+  });
+
+  // Includes helper: works with arrays, strings, and simple objects
+  Handlebars.registerHelper('includes', function(container, value) {
+    if (Array.isArray(container)) {
+      return container.includes(value);
+    }
+    if (typeof container === 'string') {
+      // direct substring or comma-separated list
+      if (container === value) return true;
+      const parts = container.split(',').map(s => s.trim());
+      return parts.includes(value);
+    }
+    if (container && typeof container === 'object') {
+      const vals = Object.values(container);
+      if (vals.includes(value)) return true;
+      const keys = Object.keys(container);
+      return keys.includes(value);
+    }
+    return false;
+  });
+
+  // Contains helper: alias for includes (commonly used in templates)
+  Handlebars.registerHelper('contains', function(container, value) {
+    if (Array.isArray(container)) {
+      return container.includes(value);
+    }
+    if (typeof container === 'string') {
+      // direct substring or comma-separated list
+      if (container === value) return true;
+      const parts = container.split(',').map(s => s.trim());
+      return parts.includes(value);
+    }
+    if (container && typeof container === 'object') {
+      const vals = Object.values(container);
+      if (vals.includes(value)) return true;
+      const keys = Object.keys(container);
+      return keys.includes(value);
+    }
+    return false;
   });
 
   // Join array with separator
@@ -286,5 +376,49 @@ export function registerHandlebarsHelpers() {
     }
     
     return current !== undefined ? current : defaultValue;
+  });
+
+  // Check if a bonus value should be displayed (not null, undefined, or 0)
+  Handlebars.registerHelper('hasBonus', function(value) {
+    return value !== null && value !== undefined && value !== 0;
+  });
+  
+  // Check if ammunition is compatible with a weapon
+  Handlebars.registerHelper('isCompatibleAmmo', function(ammo, weapon) {
+    if (!ammo || !weapon) return false;
+    if (!weapon.system || weapon.type !== 'weapon') return false;
+    if (!ammo.system || ammo.type !== 'ammunition') return false;
+    
+    // If weapon doesn't use ammunition (melee weapons), return false
+    if (weapon.system.weapon_type === 'melee') return false;
+    
+    // If ammunition has no restrictions (empty compatible_weapons array), it's universal
+    const compatibleWeapons = ammo.system.compatible_weapons || [];
+    if (compatibleWeapons.length === 0) return true;
+    
+    // Check if this weapon is in the compatible weapons list
+    return compatibleWeapons.some(compatWeapon => {
+      // Handle weapon item references (objects with id and name)
+      if (compatWeapon.id && compatWeapon.id === weapon._id) {
+        return true;
+      }
+      // Handle text-based compatibility (weapon name or type matching)
+      if (typeof compatWeapon === 'string') {
+        const weaponName = weapon.name.toLowerCase();
+        const weaponType = weapon.system.weapon_type ? weapon.system.weapon_type.toLowerCase() : '';
+        const compatName = compatWeapon.toLowerCase();
+        
+        return weaponName.includes(compatName) || 
+               compatName.includes(weaponName) ||
+               weaponType.includes(compatName) ||
+               compatName.includes(compatName);
+      }
+      // Handle object compatibility (name matching)
+      if (compatWeapon.name) {
+        return compatWeapon.name.toLowerCase() === weapon.name.toLowerCase();
+      }
+      
+      return false;
+    });
   });
 }

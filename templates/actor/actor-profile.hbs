@@ -1,0 +1,260 @@
+{{!-- Blue Planet Actor Profile Popout Template --}}
+<form class="{{cssClass}} flexcol" autocomplete="off">
+  
+  {{!-- Profile Header --}}
+  <header class="profile-header">
+    <div class="profile-portrait">
+      <img src="{{actor.img}}" alt="{{actor.name}}" class="profile-image" title="Click to change portrait">
+      <div class="portrait-overlay">
+        <i class="fas fa-camera"></i>
+      </div>
+    </div>
+    
+    <div class="profile-title">
+      <h2 class="character-name">{{actor.name}}</h2>
+      <div class="character-concept">{{system.profile.concept}}</div>
+      <div class="character-species-tier">
+        <span class="species">{{speciesText}}</span>
+        <span class="separator">•</span>
+        <span class="tier">{{tierText}}</span>
+      </div>
+    </div>
+  </header>
+
+  {{!-- Profile Tabs --}}
+  <nav class="profile-tabs" data-group="profile">
+    <a class="item active" data-tab="identity">
+      <i class="fas fa-user"></i>
+      Identity
+    </a>
+    <a class="item" data-tab="background">
+      <i class="fas fa-book"></i>  
+      Background
+    </a>
+    <a class="item" data-tab="advancement">
+      <i class="fas fa-star"></i>
+      Advancement
+    </a>
+  </nav>
+
+  {{!-- Profile Content --}}
+  <section class="profile-content">
+    
+    {{!-- Identity Tab --}}
+    <div class="tab identity active" data-group="profile" data-tab="identity">
+      
+      {{!-- Basic Information --}}
+      <div class="profile-section">
+        <h3>
+          <i class="fas fa-id-card"></i>
+          Basic Information
+        </h3>
+        
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Pronouns:</label>
+            <input type="text" name="system.features.pronouns" value="{{features.pronouns}}" placeholder="they/them"/>
+          </div>
+          
+          <div class="form-group">
+            <label>Species:</label>
+            <select name="system.species" class="species-select">
+              <option value="human" {{#if (eq system.species "human")}}selected{{/if}}>Human</option>
+              <option value="hybrid" {{#if (eq system.species "hybrid")}}selected{{/if}}>Hybrid</option>
+              <option value="modified" {{#if (eq system.species "modified")}}selected{{/if}}>Modified</option>
+              <option value="splice" {{#if (eq system.species "splice")}}selected{{/if}}>Splice</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label>Tier:</label>
+            <select name="system.tier" class="tier-select">
+              <option value="everyday" {{#if (eq system.tier "everyday")}}selected{{/if}}>Everyday</option>
+              <option value="exceptional" {{#if (eq system.tier "exceptional")}}selected{{/if}}>Exceptional</option>
+              <option value="elite" {{#if (eq system.tier "elite")}}selected{{/if}}>Elite</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      {{!-- Age Information --}}
+      <div class="profile-section">
+        <h3>
+          <i class="fas fa-calendar"></i>
+          Age Information
+        </h3>
+        
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Apparent Age:</label>
+            <input type="number" name="system.features.age.apparent" value="{{features.age.apparent}}" min="0" max="200"/>
+          </div>
+          
+          <div class="form-group">
+            <label>Actual Age:</label>
+            <input type="number" name="system.features.age.actual" value="{{features.age.actual}}" min="0" max="200"/>
+          </div>
+          
+          {{#if ageDifference}}
+          <div class="form-group age-difference">
+            <label>Age Difference:</label>
+            <span class="difference-value">{{#if (gt ageDifference 0)}}+{{/if}}{{ageDifference}} years</span>
+          </div>
+          {{/if}}
+        </div>
+      </div>
+
+      {{!-- Physical Features --}}
+      <div class="profile-section">
+        <h3>
+          <i class="fas fa-eye"></i>
+          Physical Features
+        </h3>
+        
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Height:</label>
+            <input type="text" name="system.features.height" value="{{features.height}}" placeholder="e.g., 1.75m"/>
+          </div>
+          
+          <div class="form-group">
+            <label>Stature:</label>
+            <input type="text" name="system.features.stature" value="{{features.stature}}" placeholder="e.g., Athletic"/>
+          </div>
+          
+          <div class="form-group">
+            <label>Eyes:</label>
+            <input type="text" name="system.features.eyes" value="{{features.eyes}}" placeholder="e.g., Brown"/>
+          </div>
+          
+          <div class="form-group">
+            <label>Hair:</label>
+            <input type="text" name="system.features.hair" value="{{features.hair}}" placeholder="e.g., Black, short"/>
+          </div>
+          
+          <div class="form-group">
+            <label>Complexion:</label>
+            <input type="text" name="system.features.complexion" value="{{features.complexion}}" placeholder="e.g., Olive"/>
+          </div>
+          
+          <div class="form-group">
+            <label>Style:</label>
+            <input type="text" name="system.features.style" value="{{features.style}}" placeholder="e.g., Professional"/>
+          </div>
+        </div>
+        
+        <div class="form-group full-width">
+          <label>Clothing & Appearance:</label>
+          <textarea name="system.features.clothing" placeholder="Describe typical clothing, accessories, and general appearance...">{{features.clothing}}</textarea>
+        </div>
+        
+        <div class="form-group full-width">
+          <label>Visible Biomods:</label>
+          <textarea name="system.features.biomods" placeholder="Describe any visible biomodifications...">{{features.biomods}}</textarea>
+        </div>
+      </div>
+    </div>
+
+    {{!-- Background Tab --}}
+    <div class="tab background" data-group="profile" data-tab="background">
+      
+      {{!-- Personality --}}
+      <div class="profile-section">
+        <h3>
+          <i class="fas fa-brain"></i>
+          Personality
+        </h3>
+        
+        <div class="form-group">
+          <label>Attitude:</label>
+          <textarea name="system.profile.attitude" placeholder="How does your character generally approach life and other people?">{{profile.attitude}}</textarea>
+        </div>
+        
+        <div class="form-group">
+          <label>Motivation:</label>
+          <textarea name="system.profile.motivation" placeholder="What drives your character? What are their core motivations?">{{profile.motivation}}</textarea>
+        </div>
+        
+        <div class="form-group">
+          <label>Goal:</label>
+          <textarea name="system.profile.goal" placeholder="What is your character trying to achieve?">{{profile.goal}}</textarea>
+        </div>
+      </div>
+
+      {{!-- Reputation --}}
+      <div class="profile-section">
+        <h3>
+          <i class="fas fa-star"></i>
+          Reputation
+        </h3>
+        
+        <div class="reputation-info">
+          <div class="reputation-level">
+            <label>Current Level: <strong>{{reputationText}}</strong> ({{profile.reputation.level}}/25)</label>
+          </div>
+          
+          <div class="reputation-pips">
+            {{#each (range 25) as |i|}}
+              <input type="checkbox" class="reputation-pip" data-level="{{add i 1}}" 
+                     {{#if (gte profile.reputation.level (add i 1))}}checked{{/if}}>
+            {{/each}}
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Reputation Type:</label>
+          <input type="text" name="system.profile.reputation.type" value="{{profile.reputation.type}}" 
+                 placeholder="e.g., Dangerous Criminal, Respected Scientist"/>
+        </div>
+      </div>
+    </div>
+
+    {{!-- Advancement Tab --}}
+    <div class="tab advancement" data-group="profile" data-tab="advancement">
+      
+      {{!-- Character Points --}}
+      <div class="profile-section">
+        <h3>
+          <i class="fas fa-coins"></i>
+          Character Advancement
+        </h3>
+        
+        <div class="chips-info">
+          <div class="chips-level">
+            <label>C.H.I.P.S: <strong>{{advancement.chips}}</strong>/20</label>
+          </div>
+          
+          <div class="chips-pips">
+            {{#each (range 20) as |i|}}
+              <input type="checkbox" class="chips-pip" data-level="{{add i 1}}" 
+                     {{#if (gte advancement.chips (add i 1))}}checked{{/if}}>
+            {{/each}}
+          </div>
+          
+          <div class="chips-help">
+            <small>C.H.I.P.S (Character Improvement Points) are earned through play and spent to advance your character.</small>
+          </div>
+        </div>
+      </div>
+
+      {{!-- Experience Notes --}}
+      <div class="profile-section">
+        <h3>
+          <i class="fas fa-graduation-cap"></i>
+          Experience & Growth
+        </h3>
+        
+        <div class="form-group">
+          <label>Experience Notes:</label>
+          <textarea name="system.advancement.notes" placeholder="Track your character's growth, lessons learned, and advancement plans...">{{advancement.notes}}</textarea>
+        </div>
+        
+        <div class="form-group">
+          <label>Campaign Notes:</label>
+          <textarea name="system.advancement.campaign" placeholder="Important events, relationships, and developments in the current campaign...">{{advancement.campaign}}</textarea>
+        </div>
+      </div>
+    </div>
+
+  </section>
+</form>

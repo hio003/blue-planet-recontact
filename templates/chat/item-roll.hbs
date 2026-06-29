@@ -1,0 +1,212 @@
+{{!-- Blue Planet Item Roll Chat Message Template --}}
+<div class="blue-planet-roll-message item-roll">
+  <div class="roll-header">
+    <h4 class="roll-title">
+      <i class="fas fa-cube"></i>
+      {{#if item}}
+        {{item.name}}
+      {{else}}
+        Item Roll
+      {{/if}}
+    </h4>
+    <div class="item-type">
+      {{#if item.type}}
+        {{titleCase item.type}}
+        {{#if item.system.category}}
+          - {{item.system.category}}
+        {{/if}}
+      {{/if}}
+    </div>
+  </div>
+  
+  <div class="item-details">
+    {{#if item.img}}
+      <div class="item-image">
+        <img src="{{item.img}}" alt="{{item.name}}" width="32" height="32">
+      </div>
+    {{/if}}
+    
+    <div class="item-description">
+      {{#if item.system.description}}
+        <div class="description-text">
+          {{item.system.description}}
+        </div>
+      {{/if}}
+      
+      {{#if roll}}
+        <div class="roll-details">
+          <div class="dice-result">
+            <span class="roll-formula">{{roll.formula}}</span>
+            <span class="roll-total {{#if success}}success{{else}}failure{{/if}}">
+              = {{roll.total}}
+            </span>
+          </div>
+          
+          {{#if success}}
+            <div class="result success">
+              <i class="fas fa-check-circle"></i>
+              Success{{#if criticalSuccess}} - Critical!{{/if}}
+            </div>
+          {{else}}
+            <div class="result failure">
+              <i class="fas fa-times-circle"></i>
+              Failure{{#if criticalFailure}} - Critical!{{/if}}
+            </div>
+          {{/if}}
+        </div>
+      {{/if}}
+      
+      {{#if item.system.features}}
+        <div class="item-features">
+          <h5>Features:</h5>
+          <ul class="features-list">
+            {{#each item.system.features as |feature|}}
+              <li>{{feature}}</li>
+            {{/each}}
+          </ul>
+        </div>
+      {{/if}}
+      
+      {{#if item.system.effects}}
+        <div class="item-effects">
+          <h5>Effects:</h5>
+          <div class="effects-list">
+            {{#each item.system.effects as |effect|}}
+              <div class="effect-item">
+                {{effect.description}}
+              </div>
+            {{/each}}
+          </div>
+        </div>
+      {{/if}}
+    </div>
+  </div>
+  
+  {{#if flavor}}
+    <div class="flavor-text">
+      {{flavor}}
+    </div>
+  {{/if}}
+</div>
+
+<style>
+.blue-planet-roll-message.item-roll {
+  background: linear-gradient(135deg, rgba(75, 0, 130, 0.8) 0%, rgba(138, 43, 226, 0.8) 100%);
+  border: 2px solid #9370db;
+}
+
+.blue-planet-roll-message.item-roll .roll-title {
+  color: #dda0dd;
+}
+
+.blue-planet-roll-message.item-roll .roll-title i {
+  color: #9370db;
+}
+
+.blue-planet-roll-message .item-type {
+  font-size: 12px;
+  color: #e6e6fa;
+  font-weight: bold;
+  font-style: italic;
+}
+
+.blue-planet-roll-message .item-details {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin: 10px 0;
+}
+
+.blue-planet-roll-message .item-image {
+  flex-shrink: 0;
+  border: 2px solid rgba(147, 112, 219, 0.5);
+  border-radius: 4px;
+  padding: 2px;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.blue-planet-roll-message .item-image img {
+  display: block;
+  border-radius: 2px;
+}
+
+.blue-planet-roll-message .item-description {
+  flex: 1;
+  min-width: 0;
+}
+
+.blue-planet-roll-message .description-text {
+  font-size: 13px;
+  color: #e6e6fa;
+  line-height: 1.4;
+  margin-bottom: 8px;
+  font-style: italic;
+}
+
+.blue-planet-roll-message .roll-details {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(147, 112, 219, 0.3);
+  border-radius: 4px;
+  padding: 8px;
+  margin: 8px 0;
+}
+
+.blue-planet-roll-message .item-features,
+.blue-planet-roll-message .item-effects {
+  margin: 8px 0;
+  font-size: 12px;
+}
+
+.blue-planet-roll-message .item-features h5,
+.blue-planet-roll-message .item-effects h5 {
+  margin: 0 0 4px 0;
+  color: #dda0dd;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.blue-planet-roll-message .features-list {
+  margin: 0;
+  padding-left: 16px;
+  color: #e6e6fa;
+}
+
+.blue-planet-roll-message .features-list li {
+  margin: 2px 0;
+}
+
+.blue-planet-roll-message .effects-list {
+  color: #e6e6fa;
+}
+
+.blue-planet-roll-message .effect-item {
+  background: rgba(147, 112, 219, 0.1);
+  border-left: 3px solid #9370db;
+  padding: 4px 8px;
+  margin: 4px 0;
+  border-radius: 2px;
+  font-size: 11px;
+}
+
+/* Override roll result colors for item theme */
+.blue-planet-roll-message.item-roll .roll-total.success {
+  color: #98fb98;
+}
+
+.blue-planet-roll-message.item-roll .roll-total.failure {
+  color: #ffa07a;
+}
+
+.blue-planet-roll-message.item-roll .result.success {
+  background: rgba(152, 251, 152, 0.2);
+  border: 1px solid #98fb98;
+  color: #98fb98;
+}
+
+.blue-planet-roll-message.item-roll .result.failure {
+  background: rgba(255, 160, 122, 0.2);
+  border: 1px solid #ffa07a;
+  color: #ffa07a;
+}
+</style>

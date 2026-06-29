@@ -1,0 +1,49 @@
+{{!-- Creature Biology Partial Template --}}
+<div class="creature-biology">
+  <h3 class="section-title">Biology</h3>
+  
+  <div class="biology-stats flexrow">
+    <div class="flexcol">
+      <label for="system.biology.size.length">Length (m):</label>
+      <input type="number" name="system.biology.size.length" value="{{system.biology.size.length}}" 
+             data-dtype="Number" step="0.1" min="0"/>
+    </div>
+    <div class="flexcol">
+      <label for="system.biology.size.mass">Mass (kg):</label>
+      <input type="number" name="system.biology.size.mass" value="{{system.biology.size.mass}}" 
+             data-dtype="Number" step="0.1" min="0"/>
+    </div>
+  </div>
+
+  <div class="biology-details flexrow">
+    <div class="flexcol">
+      <label for="system.biology.habitat">Habitat:</label>
+      <select name="system.biology.habitat" data-dtype="String">
+        <option value="aquatic" {{#eq system.biology.habitat "aquatic"}}selected{{/eq}}>Aquatic</option>
+        <option value="terrestrial" {{#eq system.biology.habitat "terrestrial"}}selected{{/eq}}>Terrestrial</option>
+        <option value="amphibious" {{#eq system.biology.habitat "amphibious"}}selected{{/eq}}>Amphibious</option>
+        <option value="aerial" {{#eq system.biology.habitat "aerial"}}selected{{/eq}}>Aerial</option>
+      </select>
+    </div>
+    <div class="flexcol">
+      <label for="system.biology.diet">Diet:</label>
+      <select name="system.biology.diet" data-dtype="String">
+        <option value="carnivore" {{#eq system.biology.diet "carnivore"}}selected{{/eq}}>Carnivore</option>
+        <option value="herbivore" {{#eq system.biology.diet "herbivore"}}selected{{/eq}}>Herbivore</option>
+        <option value="omnivore" {{#eq system.biology.diet "omnivore"}}selected{{/eq}}>Omnivore</option>
+        <option value="filter-feeder" {{#eq system.biology.diet "filter-feeder"}}selected{{/eq}}>Filter Feeder</option>
+        <option value="scavenger" {{#eq system.biology.diet "scavenger"}}selected{{/eq}}>Scavenger</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="biology-features">
+    <label for="system.biology.features">Special Features:</label>
+    <textarea name="system.biology.features" rows="3" data-dtype="String">{{system.biology.features}}</textarea>
+  </div>
+
+  <div class="biology-notes">
+    <label for="system.biology.notes">Biological Notes:</label>
+    <textarea name="system.biology.notes" rows="4" data-dtype="String">{{system.biology.notes}}</textarea>
+  </div>
+</div>

@@ -1,0 +1,130 @@
+/**
+ * Blue Planet - Ensure all floating controls are in bottom-left corner
+ * Override any existing positioning to guarantee bottom-left placement
+ */
+
+/* Floating combat controls - Bottom Left positioning */
+/* Note: Encounter controls will be positioned dynamically in bottom-right */
+.bp-floating-controls:not(.encounter-controls),
+#bp-floating-combat-controls:not(.encounter-controls),
+.bp-combat-controls-float:not(.encounter-controls) {
+  position: fixed !important;
+  bottom: 20px !important;
+  left: 20px !important;
+  right: auto !important;
+  top: auto !important;
+  z-index: 9999 !important;
+}
+
+/* Let encounter controls be positioned dynamically */
+.encounter-controls.combat {
+  /* Position will be set by JavaScript */
+  z-index: 9999 !important;
+}
+
+/* Combat tracker controls - Restore original positioning but allow override */
+body .sidebar .sidebar-tab[data-tab="combat"] .combat-controls,
+body #combat .combat-controls,
+body #combat-tracker .combat-controls,
+body .combat-tracker .combat-controls,
+body .app.sidebar-tab .combat-controls,
+.combat-controls.bp-floating {
+  /* Let them render normally - other CSS will position them */
+}
+
+/* Ensure no conflicts with other positioning - but not for encounter controls */
+.bp-floating-controls:not(.bp-floating-combat-window):not(.encounter-controls) {
+  left: 20px !important;
+  right: auto !important;
+}
+
+/* Animation for bottom-left appearance */
+@keyframes slideInFromBottomLeft {
+  from {
+    transform: translateX(-100%) translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0) translateY(0);
+    opacity: 1;
+  }
+}
+
+.bp-floating-controls,
+#bp-floating-combat-controls {
+  animation: slideInFromBottomLeft 0.4s ease-out;
+}
+
+/* Responsive adjustments for bottom-left positioning */
+@media (max-width: 768px) {
+  .bp-floating-controls,
+  #bp-floating-combat-controls,
+  body .combat-controls {
+    bottom: 10px !important;
+    left: 10px !important;
+    right: auto !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .bp-floating-controls,
+  #bp-floating-combat-controls,
+  body .combat-controls {
+    bottom: 5px !important;
+    left: 5px !important;
+    right: auto !important;
+    min-width: 100px !important;
+  }
+}
+
+/* Ensure good spacing between floating window and controls */
+.bp-floating-combat-window {
+  /* Window is in top-left */
+  top: 20px !important;
+  left: 20px !important;
+}
+
+/* Visual separation - add subtle glow to distinguish from combat window */
+.bp-floating-controls,
+#bp-floating-combat-controls {
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.5),
+    0 0 20px rgba(255, 100, 0, 0.3) !important;
+}
+
+.bp-floating-controls:hover,
+#bp-floating-combat-controls:hover {
+  box-shadow: 
+    0 6px 16px rgba(0, 0, 0, 0.6),
+    0 0 30px rgba(255, 100, 0, 0.5) !important;
+}
+
+/* Draggable controls styling */
+.bp-floating-controls,
+#bp-floating-combat-controls {
+  cursor: move !important;
+  user-select: none !important;
+  transition: all 0.3s ease !important;
+}
+
+.bp-floating-controls:active,
+#bp-floating-combat-controls:active {
+  cursor: grabbing !important;
+  transform: scale(1.02) !important;
+  box-shadow: 
+    0 8px 20px rgba(0, 0, 0, 0.8),
+    0 0 40px rgba(255, 100, 0, 0.7) !important;
+}
+
+/* Individual control buttons - prevent drag conflicts */
+.bp-floating-controls .combat-control,
+#bp-floating-combat-controls .combat-control {
+  cursor: pointer !important;
+  position: relative !important;
+  z-index: 1 !important;
+}
+
+.bp-floating-controls .combat-control:hover,
+#bp-floating-combat-controls .combat-control:hover {
+  cursor: pointer !important;
+}

@@ -1,0 +1,58 @@
+/* =====================================================
+   CHAT LAYOUT — Foundry VTT v13
+   DO NOT use !important here — the JS in chat-layout-fixer.js
+   sets the pixel heights at runtime and must be able to override.
+   ===================================================== */
+
+/* Chat tab — flex column, full height */
+#chat {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+/* v13 scroll area (.chat-scroll replaces #chat-log).
+   JS sets the explicit height; CSS just provides the base. */
+#chat .chat-scroll {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-height: 200px;
+  scroll-behavior: smooth;
+}
+
+/* Messages list — must not restrict height */
+#chat .chat-scroll ol,
+#chat .chat-scroll ul,
+#chat .chat-scroll ol.chat-messages,
+#chat .chat-scroll .chat-messages {
+  height: auto;
+  max-height: none;
+  overflow: visible;
+}
+
+/* Form — JS sets position:absolute at runtime */
+#chat .chat-form,
+#chat-form {
+  flex-shrink: 0;
+  box-sizing: border-box;
+  background: var(--color-bg, #1a1a1a);
+  z-index: 100;
+}
+
+/* Controls row */
+#chat #chat-controls,
+#chat .chat-controls {
+  flex-shrink: 0;
+  position: relative;
+  z-index: 99;
+}
+
+/* Dice tray */
+#chat .dice-tray {
+  flex-shrink: 0;
+  position: relative;
+  z-index: 98;
+}

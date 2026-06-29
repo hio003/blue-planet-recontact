@@ -1,0 +1,159 @@
+<form class="{{cssClass}} flexcol" autocomplete="off">
+  
+  {{!-- Header Simplificado --}}
+  <header class="sheet-header" style="padding: 10px; background: #2a2a2a; border-bottom: 2px solid #007cad;">
+    <div style="display: flex; align-items: center; gap: 20px;">
+      {{!-- Retrato --}}
+      <div style="width: 64px; height: 64px; border: 2px solid #007cad; border-radius: 50%; overflow: hidden;">
+        <img src="{{actor.img}}" alt="{{actor.name}}" style="width: 100%; height: 100%; object-fit: cover;">
+      </div>
+      
+      {{!-- Información Básica --}}
+      <div style="flex: 1;">
+        <input name="name" type="text" value="{{actor.name}}" placeholder="Nombre del Personaje" 
+               style="font-size: 18px; font-weight: bold; background: transparent; border: none; color: white; width: 100%;"/>
+        <input name="system.profile.concept" type="text" value="{{system.profile.concept}}" placeholder="Concepto" 
+               style="font-size: 14px; background: transparent; border: none; color: #ccc; width: 100%; margin-top: 5px;"/>
+      </div>
+    </div>
+  </header>
+
+  {{!-- Contenido Principal --}}
+  <div class="sheet-main" style="padding: 20px;">
+    
+    {{!-- Pestañas de Navegación --}}
+    <nav class="sheet-tabs" data-group="primary" style="margin-bottom: 20px; border-bottom: 1px solid #007cad;">
+      <a class="item active" data-tab="test" style="padding: 10px 20px; color: #007cad; text-decoration: none; border-bottom: 2px solid #007cad;">PRUEBA</a>
+    </nav>
+
+    {{!-- Contenido de Prueba --}}
+    <section class="sheet-body">
+      <div class="tab active" data-group="primary" data-tab="test">
+        
+        <h2 style="color: #007cad; margin-bottom: 15px;">Ficha de Personaje - Modo Prueba</h2>
+        
+        <div style="background: #1e1e1e; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+          <h3 style="color: white; margin-bottom: 10px;">Estado del Sistema</h3>
+          <p style="color: #ccc; margin: 5px 0;">Nombre del Actor: {{actor.name}}</p>
+          <p style="color: #ccc; margin: 5px 0;">Tipo: {{actor.type}}</p>
+          <p style="color: #ccc; margin: 5px 0;">ID: {{actor._id}}</p>
+        </div>
+
+        {{!-- Test de Datos del Sistema --}}
+        {{#if system}}
+        <div style="background: #1e1e1e; padding: 15px; border-radius: 5px; margin-bottom: 20px;">
+          <h3 style="color: white; margin-bottom: 10px;">Datos del Sistema</h3>
+          <p style="color: #90ee90;">✅ system existe</p>
+          
+          {{!-- Test de Atributos --}}
+          {{#if system.attributes}}
+          <p style="color: #90ee90;">✅ system.attributes existe</p>
+          <div style="margin-left: 20px;">
+            {{#each system.attributes as |attr key|}}
+            <p style="color: #add8e6; margin: 2px 0;">• {{key}}: {{attr.value}}</p>
+            {{/each}}
+          </div>
+          {{else}}
+          <p style="color: #ffa500;">⚠️ system.attributes NO existe - Inicializando...</p>
+          <button type="button" onclick="initializeAttributes()" style="background: #007cad; color: white; padding: 5px 10px; border: none; border-radius: 3px;">Inicializar Atributos</button>
+          {{/if}}
+
+          {{!-- Test de Strain --}}
+          {{#if system.strain}}
+          <p style="color: #90ee90;">✅ system.strain existe</p>
+          {{else}}
+          <p style="color: #ffa500;">⚠️ system.strain NO existe</p>
+          {{/if}}
+
+          {{!-- Test de Heridas --}}
+          {{#if system.wounds}}
+          <p style="color: #90ee90;">✅ system.wounds existe</p>
+          {{else}}
+          <p style="color: #ffa500;">⚠️ system.wounds NO existe</p>
+          {{/if}}
+        </div>
+        {{else}}
+        <div style="background: #2d1b1b; padding: 15px; border-radius: 5px; margin-bottom: 20px; border: 1px solid #ff6b6b;">
+          <h3 style="color: #ff6b6b; margin-bottom: 10px;">❌ Error Crítico</h3>
+          <p style="color: #ffa500;">Los datos del sistema (system) no existen. Este es el problema principal.</p>
+          <button type="button" onclick="initializeSystemData()" style="background: #dc3545; color: white; padding: 10px 15px; border: none; border-radius: 3px; margin-top: 10px;">Inicializar Datos del Sistema</button>
+        </div>
+        {{/if}}
+
+        {{!-- Test de Items --}}
+        <div style="background: #1e1e1e; padding: 15px; border-radius: 5px;">
+          <h3 style="color: white; margin-bottom: 10px;">Items del Personaje</h3>
+          {{#if items}}
+          <p style="color: #90ee90;">✅ Items encontrados: {{items.length}}</p>
+          {{#each items}}
+          <p style="color: #add8e6; margin: 2px 0;">• {{this.name}} ({{this.type}})</p>
+          {{/each}}
+          {{else}}
+          <p style="color: #ffa500;">⚠️ No hay items o items no cargado</p>
+          {{/if}}
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+</form>
+
+<script>
+// Funciones de ayuda para inicializar datos
+function initializeAttributes() {
+  const actor = game.actors.get("{{actor._id}}");
+  if (actor) {
+    actor.update({
+      "system.attributes": {
+        "cognition": { "value": 1, "focus": { "primary": { "name": "", "value": 2 }, "secondary": { "name": "", "value": 2 } } },
+        "coordination": { "value": 1, "focus": { "primary": { "name": "", "value": 2 }, "secondary": { "name": "", "value": 2 } } },
+        "physique": { "value": 1, "focus": { "primary": { "name": "", "value": 2 }, "secondary": { "name": "", "value": 2 } } },
+        "psyche": { "value": 1, "focus": { "primary": { "name": "", "value": 2 }, "secondary": { "name": "", "value": 2 } } }
+      }
+    }).then(() => {
+      ui.notifications.info("Atributos inicializados");
+      actor.sheet.render(true);
+    });
+  }
+}
+
+function initializeSystemData() {
+  const actor = game.actors.get("{{actor._id}}");
+  if (actor) {
+    actor.update({
+      "system": {
+        "attributes": {
+          "cognition": { "value": 1, "focus": { "primary": { "name": "", "value": 2 }, "secondary": { "name": "", "value": 2 } } },
+          "coordination": { "value": 1, "focus": { "primary": { "name": "", "value": 2 }, "secondary": { "name": "", "value": 2 } } },
+          "physique": { "value": 1, "focus": { "primary": { "name": "", "value": 2 }, "secondary": { "name": "", "value": 2 } } },
+          "psyche": { "value": 1, "focus": { "primary": { "name": "", "value": 2 }, "secondary": { "name": "", "value": 2 } } }
+        },
+        "strain": {
+          "mental": { "value": 0, "max": 3 },
+          "physical": { "value": 0, "max": 3 }
+        },
+        "wounds": {
+          "minor": 0,
+          "major": 0,
+          "mortal": 0
+        },
+        "profile": {
+          "concept": "",
+          "reputation": { "level": 0, "type": "" }
+        },
+        "advancement": {
+          "chips": 0
+        },
+        "status": {
+          "condition": ""
+        },
+        "tier": "everyday"
+      }
+    }).then(() => {
+      ui.notifications.info("Sistema inicializado completamente");
+      actor.sheet.render(true);
+    });
+  }
+}
+</script>

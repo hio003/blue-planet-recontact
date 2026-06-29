@@ -1,0 +1,29 @@
+{{!-- Attribute Section --}}
+<div class="attributes">
+  <h3>ATTRIBUTES</h3>
+  {{#each system.attributes as |attr key|}}
+  <div class="attribute-group">
+    <div class="attribute-main">
+      <label class="attribute-name">{{titleCase key}}</label>
+      <input type="number" name="system.attributes.{{key}}.value" value="{{attr.value}}" class="attribute-value">
+      {{#if (hasDual attr)}}
+        <span class="dual-separator">/</span>
+        <input type="number" name="system.attributes.{{key}}.dual" value="{{attr.dual}}" class="attribute-value dual">
+      {{/if}}
+      <i class="fas fa-dice-d10 attribute-roll rollable" data-attribute="{{key}}" title="Roll {{titleCase key}}"></i>
+    </div>
+    
+    {{#if attr.focus}}
+    <div class="focus-attributes">
+      <label>Primary:</label>
+      <input type="text" name="system.attributes.{{key}}.focus.primary.name" value="{{attr.focus.primary.name}}" class="focus-name">
+      <span class="focus-value">{{attr.focus.primary.value}}</span>
+      
+      <label>Secondary:</label>
+      <input type="text" name="system.attributes.{{key}}.focus.secondary.name" value="{{attr.focus.secondary.name}}" class="focus-name">
+      <span class="focus-value">{{attr.focus.secondary.value}}</span>
+    </div>
+    {{/if}}
+  </div>
+  {{/each}}
+</div>

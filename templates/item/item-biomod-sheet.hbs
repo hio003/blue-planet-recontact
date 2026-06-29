@@ -1,0 +1,446 @@
+<form class="{{cssClass}} flexcol biomod-sheet" autocomplete="off">
+
+  {{!-- Header --}}
+  <header class="sheet-header">
+    <div class="header-fields">
+      <div class="name-section">
+        <input name="name" type="text" value="{{item.name}}" placeholder="Biomod Name" class="item-name"/>
+        <div class="biomod-type-line">
+          <select name="system.type">
+            {{#each biomodTypes as |label key|}}
+              <option value="{{key}}" {{#if (eq ../system.type key)}}selected{{/if}}>{{label}}</option>
+            {{/each}}
+          </select>
+        </div>
+      </div>
+      
+      <div class="biomod-summary">
+        <div class="attribute-bonuses">
+          <label>Attribute Bonuses:</label>
+          <div class="bonus-display">
+            {{#if attributeBonuses.length}}
+              {{#each attributeBonuses as |bonus|}}
+                <span class="bonus-item">{{bonus.name}} {{bonus.value}}</span>
+              {{/each}}
+            {{else}}
+              <span class="no-bonuses">None</span>
+            {{/if}}
+          </div>
+        </div>
+        
+        <div class="total-bonus">
+          <label>Total Bonus:</label>
+          <span class="total-value {{#if (gt totalAttributeBonus 0)}}positive{{else if (lt totalAttributeBonus 0)}}negative{{/if}}">
+            {{#if (gt totalAttributeBonus 0)}}+{{/if}}{{totalAttributeBonus}}
+          </span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  {{!-- Main Content --}}
+  <section class="sheet-main">
+    
+    {{!-- Navigation Tabs --}}
+    <nav class="sheet-tabs" data-group="primary">
+      <a class="item active" data-tab="description">DESCRIPTION</a>
+      <a class="item" data-tab="attributes">ATTRIBUTES</a>
+      <a class="item" data-tab="effects">EFFECTS</a>
+      <a class="item" data-tab="installation">INSTALLATION</a>
+      <a class="item" data-tab="mechanics">MECHANICS</a>
+      <a class="item" data-tab="properties">PROPERTIES</a>
+    </nav>
+
+    {{!-- Tab Content --}}
+    <section class="sheet-body">
+      
+      {{!-- Description Tab --}}
+      <div class="tab description active" data-group="primary" data-tab="description">
+        <div class="description-section">
+          <label>Description:</label>
+          <textarea name="system.description" placeholder="Biomodification description, appearance changes, and functionality">{{system.description}}</textarea>
+        </div>
+        
+        {{#if installationWarnings.length}}
+        <div class="installation-warnings">
+          <h4><i class="fas fa-exclamation-triangle"></i> Installation Requirements:</h4>
+          <ul>
+            {{#each installationWarnings as |warning|}}
+            <li>{{warning}}</li>
+            {{/each}}
+          </ul>
+        </div>
+        {{/if}}
+      </div>
+
+      {{!-- Attributes Tab --}}
+      <div class="tab attributes" data-group="primary" data-tab="attributes">
+        <div class="attributes-section">
+          
+          <div class="attribute-controls">
+            <h3>Attribute Modifications</h3>
+            <p class="attribute-help">Biomods can provide bonuses or penalties to attributes. Positive values enhance attributes, negative values impose penalties.</p>
+            
+            <div class="attribute-list">
+              
+              <div class="attribute-mod">
+                <label>Cognition:</label>
+                <div class="attribute-controls">
+                  <button type="button" class="attribute-decrease" data-attribute="cognition" title="Decrease bonus">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                  <input type="number" name="system.attributes.cognition" value="{{attributes.cognition}}" min="-3" max="5" class="attribute-input">
+                  <button type="button" class="attribute-increase" data-attribute="cognition" title="Increase bonus">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                </div>
+              </div>
+              
+              <div class="attribute-mod">
+                <label>Psyche:</label>
+                <div class="attribute-controls">
+                  <button type="button" class="attribute-decrease" data-attribute="psyche" title="Decrease bonus">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                  <input type="number" name="system.attributes.psyche" value="{{attributes.psyche}}" min="-3" max="5" class="attribute-input">
+                  <button type="button" class="attribute-increase" data-attribute="psyche" title="Increase bonus">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                </div>
+              </div>
+              
+              <div class="attribute-mod">
+                <label>Coordination:</label>
+                <div class="attribute-controls">
+                  <button type="button" class="attribute-decrease" data-attribute="coordination" title="Decrease bonus">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                  <input type="number" name="system.attributes.coordination" value="{{attributes.coordination}}" min="-3" max="5" class="attribute-input">
+                  <button type="button" class="attribute-increase" data-attribute="coordination" title="Increase bonus">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                </div>
+              </div>
+              
+              <div class="attribute-mod">
+                <label>Physique:</label>
+                <div class="attribute-controls">
+                  <button type="button" class="attribute-decrease" data-attribute="physique" title="Decrease bonus">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                  <input type="number" name="system.attributes.physique" value="{{attributes.physique}}" min="-3" max="5" class="attribute-input">
+                  <button type="button" class="attribute-increase" data-attribute="physique" title="Increase bonus">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                </div>
+              </div>
+              
+            </div>
+            
+            <div class="attribute-notes">
+              <h4>Attribute Guidelines:</h4>
+              <ul>
+                <li><strong>+1 to +2:</strong> Minor enhancement (common)</li>
+                <li><strong>+3 to +4:</strong> Significant enhancement (uncommon)</li>
+                <li><strong>+5:</strong> Maximum enhancement (rare/experimental)</li>
+                <li><strong>-1 to -2:</strong> Minor side effect or trade-off</li>
+                <li><strong>-3:</strong> Significant penalty (experimental risks)</li>
+              </ul>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+
+      {{!-- Effects Tab --}}
+      <div class="tab effects" data-group="primary" data-tab="effects">
+        <div class="features-section scrollable-content">
+          
+          <div class="features-header">
+            <h3>Biomod Effects</h3>
+            <p class="features-description">Define special properties and mechanical effects for this biomod. Drag Feature items here or add them manually.</p>
+          </div>
+
+          <div class="features-list">
+            {{#if biomodEffects.length}}
+            {{!-- Effects list when there are effects --}}
+            <div class="features-display-area drop-zone" data-drop="effects">
+              <div class="features-header-info">
+                <div class="features-status">
+                  <p class="features-count"><i class="fas fa-list"></i> {{biomodEffects.length}} effect{{#unless (eq biomodEffects.length 1)}}s{{/unless}} defined</p>
+                </div>
+                <div class="drop-hint">
+                  <i class="fas fa-download"></i>
+                  <span>Drop additional features here</span>
+                </div>
+              </div>
+              
+              <div class="features-items-list">
+                {{#each biomodEffects as |effect index|}}
+                <div class="feature-item-compact" data-index="{{index}}">
+                  <div class="feature-header-row">
+                    <div class="feature-name-section">
+                      <input type="text" name="system.effects.{{index}}.name" value="{{#if effect.name}}{{effect.name}}{{else}}{{effect}}{{/if}}" placeholder="Feature name" class="feature-name-input">
+                    </div>
+                    <div class="feature-actions">
+                      <button type="button" class="feature-expand-btn" data-index="{{index}}" title="Expand/Collapse details">
+                        <i class="fas fa-chevron-down"></i>
+                      </button>
+                      <button type="button" class="effect-edit compact-btn" data-index="{{index}}" title="Edit Feature">
+                        <i class="fas fa-edit"></i>
+                      </button>
+                      <button type="button" class="effect-delete compact-btn" data-index="{{index}}" title="Delete Effect">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="feature-details-section" style="display: none;">
+                    <textarea name="system.effects.{{index}}.summary" placeholder="Brief description of this feature's effect..." class="feature-summary-input">{{#if effect.summary}}{{effect.summary}}{{/if}}</textarea>
+                  </div>
+                </div>
+                {{/each}}
+              </div>
+            </div>
+            {{else}}
+            {{!-- Empty state with drop zone --}}
+            <div class="no-features drop-zone" data-drop="effects">
+              <div class="no-features-content">
+                <i class="fas fa-download features-drop-icon"></i>
+                <h4>No biomod effects defined</h4>
+                <p><em>Drag Feature items from your compendium or inventory here</em></p>
+                <p class="no-features-hint">Effects represent mechanical advantages like "Pain Inhibitor", "Neural Jack", or "Subdermal Plates".</p>
+                <div class="drop-indicators">
+                  <div class="drop-indicator">
+                    <i class="fas fa-mouse-pointer"></i>
+                    <span>Drag & Drop</span>
+                  </div>
+                  <div class="drop-separator">or</div>
+                  <div class="drop-indicator">
+                    <i class="fas fa-plus"></i>
+                    <span>Add Manually</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {{/if}}
+            
+            {{!-- Add Effect button --}}
+            <div class="features-controls">
+              <button type="button" class="feature-add-button effect-add">
+                <i class="fas fa-plus"></i>
+                <span class="add-text">Add Effect Manually</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="feature-examples">
+            <h4><i class="fas fa-lightbulb"></i> Example Effects:</h4>
+            <div class="examples-grid">
+              <div class="example-item"><strong>Pain Inhibitor:</strong> Reduce wound penalties for major/mortal wounds</div>
+              <div class="example-item"><strong>Neural Jack:</strong> +2 initiative and +2 to tests when directly interfacing</div>
+              <div class="example-item"><strong>Rib Covers:</strong> +1 natural armor to torso</div>
+              <div class="example-item"><strong>Subdermal Plates:</strong> +1 unarmed damage or +1 protect HtH</div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+
+      {{!-- Installation Tab --}}
+      <div class="tab installation" data-group="primary" data-tab="installation">
+        <div class="installation-section">
+          
+          <div class="technical-row">
+            <div class="property-group">
+              <label>Durability:</label>
+              <input type="number" name="system.durability" value="{{system.durability}}" min="-10" max="10" step="1">
+              <span class="help-text">Equipment durability rating (-10 to +10)</span>
+            </div>
+            
+            <div class="property-group">
+              <label>Dimensions:</label>
+              <select name="system.dimensions">
+                <option value="" {{#unless system.dimensions}}selected{{/unless}}>Select Size...</option>
+                {{#each dimensionsOptions as |label key|}}
+                  <option value="{{key}}" {{#if (eq ../system.dimensions key)}}selected{{/if}}>{{label}}</option>
+                {{/each}}
+              </select>
+            </div>
+          </div>
+          
+          <div class="time-requirements">
+            <div class="property-group">
+              <label>Transformation Time:</label>
+              <select name="system.transformation_time">
+                <option value="" {{#unless system.transformation_time}}selected{{/unless}}>Select Duration...</option>
+                {{#each predefinedTransformationTimes as |time|}}
+                  <option value="{{time}}" {{#if (eq time ../system.transformation_time)}}selected{{/if}}>{{time}}</option>
+                {{/each}}
+                <option value="custom" {{#if (and system.transformation_time (not (contains predefinedTransformationTimes system.transformation_time)))}}selected{{/if}}>Custom...</option>
+              </select>
+              {{#if (and system.transformation_time (not (contains predefinedTransformationTimes system.transformation_time)))}}
+                <input type="text" name="system.transformation_time" value="{{system.transformation_time}}" placeholder="e.g., 3 months">
+              {{/if}}
+            </div>
+            
+            <div class="property-group">
+              <label>Healing Time:</label>
+              <select name="system.healing_time">
+                <option value="" {{#unless system.healing_time}}selected{{/unless}}>Select Duration...</option>
+                {{#each predefinedHealingTimes as |time|}}
+                  <option value="{{time}}" {{#if (eq time ../system.healing_time)}}selected{{/if}}>{{time}}</option>
+                {{/each}}
+                <option value="custom" {{#if (and system.healing_time (not (contains predefinedHealingTimes system.healing_time)))}}selected{{/if}}>Custom...</option>
+              </select>
+              {{#if (and system.healing_time (not (contains predefinedHealingTimes system.healing_time)))}}
+                <input type="text" name="system.healing_time" value="{{system.healing_time}}" placeholder="e.g., 2 weeks">
+              {{/if}}
+            </div>
+          </div>
+          
+          <div class="strain-modifiers">
+            <h4>Strain Modifiers:</h4>
+            <div class="strain-row">
+              <div class="property-group">
+                <label>Mental Strain Modifier:</label>
+                <input type="number" name="system.strain_modifiers.mental" value="{{system.strain_modifiers.mental}}" min="-5" max="5" step="1">
+                <span class="help-text">Modifier to mental strain capacity</span>
+              </div>
+              
+              <div class="property-group">
+                <label>Physical Strain Modifier:</label>
+                <input type="number" name="system.strain_modifiers.physical" value="{{system.strain_modifiers.physical}}" min="-5" max="5" step="1">
+                <span class="help-text">Modifier to physical strain capacity</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="special-rules-section">
+            <h4>Special Rules & Limitations:</h4>
+            <div class="special-rules-list">
+              {{#each system.special_rules as |rule index|}}
+              <div class="special-rule-item">
+                <textarea name="system.special_rules.{{index}}" placeholder="Describe special rules, limitations, or side effects">{{rule}}</textarea>
+                <button type="button" class="special-rule-delete" data-index="{{index}}"><i class="fas fa-trash"></i></button>
+              </div>
+              {{/each}}
+            </div>
+            <button type="button" class="special-rule-add"><i class="fas fa-plus"></i> Add Special Rule</button>
+          </div>
+          
+          <div class="models-section">
+            <div class="property-group">
+              <label>Manufacturers/Models:</label>
+              <textarea name="system.models" placeholder="List specific biomod models and manufacturers (e.g., Lavender Organics Sleight, Hanover Industries Manos v4.5)">{{system.models}}</textarea>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+
+      {{!-- Mechanics Tab --}}
+      <div class="tab mechanics" data-group="primary" data-tab="mechanics">
+        <div class="mechanics-section scrollable-content">
+          <h3>Mechanical Effects</h3>
+          <div class="mechanics-grid">
+            <div class="property-group">
+              <label>Initiative Bonus:</label>
+              <input type="number" name="system.mechanics.initiative_bonus" value="{{system.mechanics.initiative_bonus}}" min="-5" max="10" step="1">
+              <span class="help-text">e.g., Neural Jack: +2</span>
+            </div>
+            <div class="property-group">
+              <label>Wound Penalty Reduction (Major):</label>
+              <input type="number" name="system.mechanics.wound_penalty_reduction.major" value="{{system.mechanics.wound_penalty_reduction.major}}" min="0" max="3" step="1">
+              <span class="help-text">e.g., Pain Inhibitor: 1</span>
+            </div>
+            <div class="property-group">
+              <label>Wound Penalty Reduction (Mortal):</label>
+              <input type="number" name="system.mechanics.wound_penalty_reduction.mortal" value="{{system.mechanics.wound_penalty_reduction.mortal}}" min="0" max="3" step="1">
+              <span class="help-text">e.g., Pain Inhibitor: 1</span>
+            </div>
+            <div class="property-group">
+              <label>Natural Armor:</label>
+              <input type="number" name="system.mechanics.natural_armor" value="{{system.mechanics.natural_armor}}" min="0" max="5" step="1">
+              <span class="help-text">e.g., Rib Covers: +1</span>
+            </div>
+            <div class="property-group">
+              <label>Unarmed Damage Bonus:</label>
+              <input type="number" name="system.mechanics.unarmed_damage_bonus" value="{{system.mechanics.unarmed_damage_bonus}}" min="0" max="5" step="1">
+              <span class="help-text">e.g., Subdermal Plates (offensive): +1</span>
+            </div>
+          </div>
+          <div class="mechanics-notes">
+            <h4>Guidance:</h4>
+            <ul>
+              <li>Neural Jacks: set Initiative Bonus a +2 (direct jack).</li>
+              <li>Pain Inhibitor: set Major=1 y Mortal=1.</li>
+              <li>Rib Covers: set Natural Armor a +1.</li>
+              <li>Subdermal Plates (ofensivo): set Unarmed Damage Bonus a +1.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      {{!-- Properties Tab --}}
+      <div class="tab properties" data-group="primary" data-tab="properties">
+        <div class="properties-section">
+          
+          <div class="property-group">
+            <label>Biomod Type:</label>
+            <select name="system.type">
+              {{#each biomodTypes as |label key|}}
+                <option value="{{key}}" {{#if (eq ../system.type key)}}selected{{/if}}>{{label}}</option>
+              {{/each}}
+            </select>
+          </div>
+          
+          <div class="property-group">
+            <label>Cost:</label>
+            <div class="cost-input">
+              <input type="number" name="system.cost" value="{{system.cost}}" min="0" step="0.01">
+              <span class="unit">credits</span>
+            </div>
+          </div>
+          
+          <div class="property-group">
+            <label>Availability:</label>
+            <select name="system.availability">
+              {{#each availabilityOptions as |label key|}}
+                <option value="{{key}}" {{#if (eq ../system.availability key)}}selected{{/if}}>{{label}}</option>
+              {{/each}}
+            </select>
+          </div>
+          
+          <div class="property-group">
+            <label>Legality:</label>
+            <select name="system.legality">
+              {{#each legalityOptions as |label key|}}
+                <option value="{{key}}" {{#if (eq ../system.legality key)}}selected{{/if}}>{{label}}</option>
+              {{/each}}
+            </select>
+          </div>
+          
+          <div class="biomod-info">
+            <h4>Biomod Types:</h4>
+            <div class="type-descriptions">
+              <p><strong>Genetic Enhancement:</strong> DNA modifications that alter base capabilities</p>
+              <p><strong>Cybernetic Implant:</strong> Mechanical/electronic augmentations</p>
+              <p><strong>Therapeutic Modification:</strong> Medical treatments for health conditions</p>
+              <p><strong>Cosmetic Enhancement:</strong> Appearance modifications and aesthetic changes</p>
+              <p><strong>Experimental Treatment:</strong> Cutting-edge modifications with unknown risks</p>
+            </div>
+            
+            <h4>Installation Process:</h4>
+            <div class="installation-info">
+              <p>Most biomods require professional installation by qualified geneticists, surgeons, or biomodification specialists. The process can take anywhere from hours to weeks depending on complexity.</p>
+              <p><strong>Risks:</strong> All biomod installations carry risks including rejection, infection, neural damage, or unintended side effects.</p>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+
+    </section>
+  </section>
+
+</form>

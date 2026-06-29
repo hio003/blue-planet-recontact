@@ -1,0 +1,167 @@
+/**
+ * Blue Planet - Draggable Elements Improvements
+ * Enhanced styling and behavior for draggable elements
+ */
+
+/* Floating Combat Window - Draggable enhancements */
+.bp-floating-combat-window {
+  cursor: move !important;
+  user-select: none !important;
+}
+
+/* Don't allow dragging on interactive elements */
+.bp-floating-combat-window button,
+.bp-floating-combat-window .bp-action-btn,
+.bp-floating-combat-window .bp-window-controls,
+.bp-floating-combat-window .bp-combatants-list,
+.bp-floating-combat-window input,
+.bp-floating-combat-window select {
+  cursor: pointer !important;
+  user-select: auto !important;
+}
+
+/* Visual feedback when dragging */
+.bp-floating-combat-window:active,
+.bp-floating-combat-window.dragging {
+  cursor: grabbing !important;
+  transform: scale(1.02) !important;
+  z-index: 10001 !important;
+  box-shadow: 
+    0 0 60px rgba(255, 100, 0, 1),
+    inset 0 0 40px rgba(255, 100, 0, 0.3),
+    0 15px 50px rgba(0, 0, 0, 1) !important;
+}
+
+/* Combat Controls - Enhanced drag behavior */
+.bp-floating-controls,
+#bp-floating-combat-controls {
+  cursor: move !important;
+  user-select: none !important;
+  position: fixed !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.bp-floating-controls:hover,
+#bp-floating-combat-controls:hover {
+  box-shadow: 0 0 25px rgba(255, 100, 0, 0.7) !important;
+}
+
+.bp-floating-controls.dragging,
+#bp-floating-combat-controls.dragging,
+.bp-floating-controls:active,
+#bp-floating-combat-controls:active {
+  cursor: grabbing !important;
+  transform: scale(1.05) !important;
+  z-index: 10001 !important;
+  box-shadow: 0 0 40px rgba(255, 100, 0, 1) !important;
+}
+
+/* Combat Control buttons should not interfere with dragging */
+.bp-floating-controls .combat-control,
+#bp-floating-combat-controls .combat-control,
+.bp-floating-controls button,
+#bp-floating-combat-controls button {
+  cursor: pointer !important;
+  user-select: none !important;
+  pointer-events: auto !important;
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+.bp-floating-controls .combat-control:hover,
+#bp-floating-combat-controls .combat-control:hover {
+  cursor: pointer !important;
+}
+
+/* Ensure parent container allows dragging */
+.bp-floating-controls,
+#bp-floating-combat-controls {
+  pointer-events: auto !important;
+}
+
+/* Prevent text selection during drag */
+.bp-floating-combat-window *,
+.bp-floating-controls *,
+#bp-floating-combat-controls * {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Allow text selection only in specific areas */
+.bp-floating-combat-window .bp-combatant-name,
+.bp-floating-combat-window input,
+.bp-floating-combat-window textarea {
+  -webkit-user-select: auto;
+  -moz-user-select: auto;
+  -ms-user-select: auto;
+  user-select: auto;
+}
+
+/* Enhanced visual feedback for draggable areas */
+.bp-floating-combat-window .bp-window-header,
+.bp-floating-controls,
+#bp-floating-combat-controls {
+  transition: all 0.2s ease !important;
+}
+
+.bp-floating-combat-window .bp-window-header:hover {
+  background: linear-gradient(90deg, rgba(255, 100, 0, 0.4) 0%, rgba(255, 133, 51, 0.3) 100%) !important;
+}
+
+/* Scrollable areas should not prevent dragging parent */
+.bp-floating-combat-window .bp-combatants-list {
+  pointer-events: auto !important;
+  cursor: auto !important;
+}
+
+/* Fix for horizontal layout in floating window */
+.bp-floating-combat-window .bp-combat-controls {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 12px 16px !important;
+}
+
+/* Ensure buttons in floating window are properly sized */
+.bp-floating-combat-window .bp-control-btn {
+  flex: none !important;
+  min-width: 100px !important;
+  max-width: 120px !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis !important;
+  overflow: hidden !important;
+}
+
+/* Responsive adjustments for draggable elements */
+@media (max-width: 768px) {
+  .bp-floating-combat-window .bp-control-btn {
+    min-width: 80px !important;
+    font-size: 10px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .bp-floating-combat-window .bp-control-btn {
+    min-width: 60px !important;
+    padding: 4px 6px !important;
+  }
+  
+  .bp-floating-combat-window .bp-btn-text {
+    display: none !important;
+  }
+}
+
+/* Debug helpers - remove in production */
+.bp-floating-combat-window.debug {
+  border: 3px dashed red !important;
+}
+
+.bp-floating-controls.debug,
+#bp-floating-combat-controls.debug {
+  border: 3px dashed blue !important;
+}

@@ -1,0 +1,407 @@
+<form class="{{cssClass}} flexcol equipment-sheet" autocomplete="off">
+
+  {{!-- Header --}}
+  <header class="sheet-header">
+    <div class="header-fields">
+      <div class="name-section">
+        <input name="name" type="text" value="{{item.name}}" placeholder="Equipment Name" class="item-name"/>
+        <div class="equipment-type-line">
+          <select name="system.category">
+            {{#each equipmentCategories as |label key|}}
+              <option value="{{key}}" {{#if (eq ../system.category key)}}selected{{/if}}>{{label}}</option>
+            {{/each}}
+          </select>
+        </div>
+      </div>
+      
+      <div class="equipment-stats">
+        <div class="stat-group">
+          <label>Quantity:</label>
+          <input type="number" name="system.quantity" value="{{system.quantity}}" min="1" class="quantity-input">
+        </div>
+        
+        <div class="stat-group">
+          <label>Weight:</label>
+          <div class="weight-display">
+            <input type="number" name="system.weight" value="{{system.weight}}" min="0" step="0.1" class="weight-input">
+            <span class="unit">kg</span>
+          </div>
+        </div>
+        
+        <div class="stat-group">
+          <label>Total:</label>
+          <span class="total-weight">{{totalWeight}} kg</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  {{!-- Main Content --}}
+  <section class="sheet-main">
+    
+    {{!-- Navigation Tabs --}}
+    <nav class="sheet-tabs" data-group="primary">
+      <a class="item active" data-tab="description">DESCRIPTION</a>
+      <a class="item" data-tab="technical">TECHNICAL</a>
+      <a class="item" data-tab="durability">DURABILITY</a>
+      <a class="item" data-tab="mechanics">MECHANICS</a>
+      <a class="item" data-tab="properties">PROPERTIES</a>
+    </nav>
+
+    {{!-- Tab Content --}}
+    <section class="sheet-body">
+      
+      {{!-- Description Tab --}}
+      <div class="tab description active" data-group="primary" data-tab="description">
+        <div class="description-section">
+          <label>Description:</label>
+          <textarea name="system.description" placeholder="Equipment description, appearance, and usage notes">{{system.description}}</textarea>
+        </div>
+        
+        <div class="features-section">
+          <div class="features-header">
+            <h3>Equipment Features</h3>
+            <p class="features-description">Special properties and characteristics that modify how this equipment functions.</p>
+          </div>
+          
+          {{#if equipmentFeatures.length}}
+          {{!-- Features List when there are features --}}
+          <div class="features-display-area feature-drop-zone" data-drop="features">
+            <div class="features-header-info">
+              <div class="features-status">
+                <p class="features-count"><i class="fas fa-cogs"></i> {{equipmentFeatures.length}} feature{{#unless (eq equipmentFeatures.length 1)}}s{{/unless}} defined</p>
+              </div>
+              <div class="drop-hint">
+                <i class="fas fa-download"></i>
+                <span>Drop additional features here</span>
+              </div>
+            </div>
+            
+            <div class="features-items-list">
+              {{#each equipmentFeatures as |feature index|}}
+              <div class="feature-item">
+                <div class="feature-input-group">
+                  <input type="text" name="system.features.{{index}}" value="{{feature}}" placeholder="Feature name or description" class="feature-input">
+                  <button type="button" class="feature-delete" data-index="{{index}}" title="Delete Feature"><i class="fas fa-trash"></i></button>
+                </div>
+              </div>
+              {{/each}}
+            </div>
+          </div>
+          {{else}}
+          {{!-- Empty state with drop zone --}}
+          <div class="no-features feature-drop-zone" data-drop="features">
+            <div class="no-features-content">
+              <i class="fas fa-download features-drop-icon"></i>
+              <h4>No special features defined</h4>
+              <p><em>Drag technology features from your compendium or inventory here</em></p>
+              <p class="no-features-hint">Features modify equipment behavior, such as "Concealable", "Hardened", or "Sealed".</p>
+              <div class="drop-indicators">
+                <div class="drop-indicator">
+                  <i class="fas fa-mouse-pointer"></i>
+                  <span>Drag & Drop</span>
+                </div>
+                <div class="drop-separator">or</div>
+                <div class="drop-indicator">
+                  <i class="fas fa-plus"></i>
+                  <span>Add Manually</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          {{/if}}
+          
+          {{!-- Add Feature button --}}
+          <div class="features-controls">
+            <button type="button" class="feature-add">
+              <i class="fas fa-plus"></i>
+              <span class="add-text">Add Feature Manually</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {{!-- Technical Tab --}}
+      <div class="tab technical" data-group="primary" data-tab="technical">
+        <div class="technical-section scrollable-content">
+          
+          <div class="technical-row">
+            <div class="property-group">
+              <label>Dimensions:</label>
+              <select name="system.dimensions">
+                <option value="" {{#unless system.dimensions}}selected{{/unless}}>Select Size...</option>
+                {{#each dimensionsOptions as |label key|}}
+                  <option value="{{key}}" {{#if (eq ../system.dimensions key)}}selected{{/if}}>{{label}}</option>
+                {{/each}}
+              </select>
+            </div>
+            
+            <div class="property-group">
+              <label>Power Type:</label>
+              <select name="system.power_type">
+                {{#each powerTypeOptions as |label key|}}
+                  <option value="{{key}}" {{#if (eq ../system.power_type key)}}selected{{/if}}>{{label}}</option>
+                {{/each}}
+              </select>
+            </div>
+          </div>
+          
+          <div class="technical-row">
+            <div class="property-group">
+              <label>Interfacing Type:</label>
+              <select name="system.interfacing">
+                {{#each interfacingOptions as |label key|}}
+                  <option value="{{key}}" {{#if (eq ../system.interfacing key)}}selected{{/if}}>{{label}}</option>
+                {{/each}}
+              </select>
+            </div>
+            
+            <div class="property-group">
+              <label>Autonomy (Cognition/Coordination):</label>
+              <input type="text" name="system.autonomy" value="{{system.autonomy}}" placeholder="e.g., 2/2 or 4/5">
+              <span class="help-text">Format: Cognition/Coordination (leave empty if not applicable)</span>
+            </div>
+          </div>
+          
+          <div class="technical-capabilities">
+            <div class="capabilities-row">
+              <div class="capability-checkbox">
+                <label>
+                  <input type="checkbox" name="system.manipulators" {{#if system.manipulators}}checked{{/if}}>
+                  <span>Manipulators</span>
+                </label>
+                <small>Mechanical appendages for physical interaction</small>
+              </div>
+              
+              <div class="capability-checkbox">
+                <label>
+                  <input type="checkbox" name="system.sealed" {{#if system.sealed}}checked{{/if}}>
+                  <span>Sealed</span>
+                </label>
+                <small>Protected against environmental hazards</small>
+              </div>
+              
+              <div class="capability-checkbox">
+                <label>
+                  <input type="checkbox" name="system.hardened" {{#if system.hardened}}checked{{/if}}>
+                  <span>Hardened</span>
+                </label>
+                <small>Reinforced against damage</small>
+              </div>
+            </div>
+          </div>
+          
+          <div class="sensors-section">
+            <div class="sensors-header">
+              <h4>Integrated Sensors:</h4>
+              <p class="sensors-description">Specify sensors integrated into this equipment. Drag sensor items here or add manually.</p>
+            </div>
+            
+            {{#if system.sensors.length}}
+            {{!-- Sensors list when there are sensors --}}
+            <div class="sensors-display-area sensor-drop-zone" data-drop="sensors">
+              <div class="sensors-header-info">
+                <div class="sensors-status">
+                  <p class="sensors-count"><i class="fas fa-search"></i> {{system.sensors.length}} sensor{{#unless (eq system.sensors.length 1)}}s{{/unless}} integrated</p>
+                </div>
+                <div class="drop-hint">
+                  <i class="fas fa-download"></i>
+                  <span>Drop additional sensors here</span>
+                </div>
+              </div>
+              
+              <div class="sensors-items-list">
+                {{#each system.sensors as |sensor index|}}
+                <div class="sensor-item">
+                  <div class="sensor-input-group">
+                    <select name="system.sensors.{{index}}">
+                      <option value="">Select sensor type...</option>
+                      {{#each ../predefinedSensors as |predefinedSensor|}}
+                        <option value="{{predefinedSensor}}" {{#if (eq predefinedSensor sensor)}}selected{{/if}}>{{predefinedSensor}}</option>
+                      {{/each}}
+                    </select>
+                    <button type="button" class="sensor-delete" data-index="{{index}}" title="Delete Sensor"><i class="fas fa-trash"></i></button>
+                  </div>
+                </div>
+                {{/each}}
+              </div>
+            </div>
+            {{else}}
+            {{!-- Empty state with drop zone --}}
+            <div class="no-sensors sensor-drop-zone" data-drop="sensors">
+              <div class="no-sensors-content">
+                <i class="fas fa-download sensor-drop-icon"></i>
+                <h4>No sensors integrated</h4>
+                <p><em>Drag sensor items from your compendium or inventory here</em></p>
+                <p class="no-sensors-hint">Add sensors like "Visual Sensors", "Radar", or "Motion Detection" to this equipment.</p>
+                <div class="drop-indicators">
+                  <div class="drop-indicator">
+                    <i class="fas fa-mouse-pointer"></i>
+                    <span>Drag & Drop</span>
+                  </div>
+                  <div class="drop-separator">or</div>
+                  <div class="drop-indicator">
+                    <i class="fas fa-plus"></i>
+                    <span>Add Manually</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {{/if}}
+            
+            <div class="sensors-controls">
+              <button type="button" class="sensor-add">
+                <i class="fas fa-plus"></i>
+                <span class="add-text">Add Sensor Manually</span>
+              </button>
+            </div>
+          </div>
+          
+          <div class="models-section">
+            <div class="property-group">
+              <label>Manufacturers/Models:</label>
+              <textarea name="system.models" placeholder="List specific equipment models and manufacturers (e.g., Atlas Materials Pro Line, Hanover Industries Uhrwerk v4)">{{system.models}}</textarea>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+
+      {{!-- Durability Tab --}}
+      <div class="tab durability" data-group="primary" data-tab="durability">
+        <div class="durability-section">
+          
+          <div class="durability-status">
+            <h3>Durability Status</h3>
+            <div class="durability-bar">
+              <div class="durability-fill" style="width: {{durabilityStatus.percent}}%"></div>
+              <span class="durability-text">{{durabilityStatus.label}} ({{durabilityStatus.percent}}%)</span>
+            </div>
+          </div>
+          
+          <div class="durability-controls">
+            <div class="durability-fields">
+              <div class="field-group">
+                <label>Current Durability:</label>
+                <div class="durability-input-group">
+                  <button type="button" class="durability-damage" title="Reduce durability">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                  <input type="number" name="system.durability" value="{{system.durability}}" min="0" class="durability-current">
+                  <button type="button" class="durability-repair" title="Increase durability">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                </div>
+              </div>
+              
+              <div class="field-group">
+                <label>Maximum Durability:</label>
+                <input type="number" name="system.max_durability" value="{{system.max_durability}}" min="1" class="durability-max">
+              </div>
+            </div>
+          </div>
+          
+          <div class="durability-notes">
+            <h4>Durability Guidelines:</h4>
+            <ul>
+              <li><strong>Excellent (75-100%):</strong> Item functions perfectly</li>
+              <li><strong>Good (50-74%):</strong> Minor wear but fully functional</li>
+              <li><strong>Worn (25-49%):</strong> Noticeable wear, may have minor issues</li>
+              <li><strong>Damaged (1-24%):</strong> Significant damage, unreliable function</li>
+              <li><strong>Broken (0%):</strong> Non-functional, requires major repair</li>
+            </ul>
+          </div>
+          
+        </div>
+      </div>
+
+      {{!-- Mechanics Tab --}}
+      <div class="tab mechanics" data-group="primary" data-tab="mechanics">
+        <div class="mechanics-section">
+          <h3>Mechanical Effects</h3>
+          <div class="mechanics-grid">
+            <div class="property-group">
+              <label>Initiative Bonus:</label>
+              <input type="number" name="system.mechanics.initiative_bonus" value="{{system.mechanics.initiative_bonus}}" min="-5" max="10" step="1">
+              <span class="help-text">Use for devices that quicken reaction when equipped</span>
+            </div>
+            <div class="property-group">
+              <label>Wound Penalty Reduction (Major):</label>
+              <input type="number" name="system.mechanics.wound_penalty_reduction.major" value="{{system.mechanics.wound_penalty_reduction.major}}" min="0" max="3" step="1">
+            </div>
+            <div class="property-group">
+              <label>Wound Penalty Reduction (Mortal):</label>
+              <input type="number" name="system.mechanics.wound_penalty_reduction.mortal" value="{{system.mechanics.wound_penalty_reduction.mortal}}" min="0" max="3" step="1">
+            </div>
+            <div class="property-group">
+              <label>Natural Armor:</label>
+              <input type="number" name="system.mechanics.natural_armor" value="{{system.mechanics.natural_armor}}" min="0" max="5" step="1">
+              <span class="help-text">Adds to organic/dermal protection when equipped</span>
+            </div>
+            <div class="property-group">
+              <label>Unarmed Damage Bonus:</label>
+              <input type="number" name="system.mechanics.unarmed_damage_bonus" value="{{system.mechanics.unarmed_damage_bonus}}" min="0" max="5" step="1">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {{!-- Properties Tab --}}
+      <div class="tab properties" data-group="primary" data-tab="properties">
+        <div class="properties-section">
+          
+          <div class="property-group">
+            <label>Cost:</label>
+            <div class="cost-input">
+              <input type="number" name="system.cost" value="{{system.cost}}" min="0" step="0.01">
+              <span class="unit">credits</span>
+            </div>
+          </div>
+          
+          <div class="property-group">
+            <label>Availability:</label>
+            <select name="system.availability">
+              {{#each availabilityOptions as |label key|}}
+                <option value="{{key}}" {{#if (eq ../system.availability key)}}selected{{/if}}>{{label}}</option>
+              {{/each}}
+            </select>
+          </div>
+          
+          <div class="property-group">
+            <label>Legality:</label>
+            <select name="system.legality">
+              {{#each legalityOptions as |label key|}}
+                <option value="{{key}}" {{#if (eq ../system.legality key)}}selected{{/if}}>{{label}}</option>
+              {{/each}}
+            </select>
+          </div>
+          
+          <div class="property-group">
+            <label>Category:</label>
+            <select name="system.category">
+              {{#each equipmentCategories as |label key|}}
+                <option value="{{key}}" {{#if (eq ../system.category key)}}selected{{/if}}>{{label}}</option>
+              {{/each}}
+            </select>
+          </div>
+          
+          <div class="equipment-notes">
+            <h4>Equipment Categories:</h4>
+            <div class="category-descriptions">
+              <p><strong>Armor & Protection:</strong> Suits, helmets, protective gear</p>
+              <p><strong>Tools & Utilities:</strong> General purpose tools and equipment</p>
+              <p><strong>Electronics:</strong> Computers, sensors, communication devices</p>
+              <p><strong>Medical Equipment:</strong> First aid, surgical tools, pharmaceuticals</p>
+              <p><strong>Diving & Aquatic:</strong> Underwater equipment, breathing apparatus</p>
+              <p><strong>Survival Gear:</strong> Emergency equipment, shelter, provisions</p>
+              <p><strong>Consumables:</strong> Expendable items, ammunition, supplies</p>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+
+    </section>
+  </section>
+
+</form>

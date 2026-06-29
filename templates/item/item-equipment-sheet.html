@@ -1,0 +1,188 @@
+<form class="{{cssClass}} flexcol equipment-sheet" autocomplete="off">
+
+  {{!-- Header --}}
+  <header class="sheet-header">
+    <div class="header-fields">
+      <div class="name-section">
+        <input name="name" type="text" value="{{item.name}}" placeholder="Equipment Name" class="item-name"/>
+        <div class="equipment-type-line">
+          <select name="system.category">
+            {{#each equipmentCategories as |label key|}}
+              <option value="{{key}}" {{#if (eq ../system.category key)}}selected{{/if}}>{{label}}</option>
+            {{/each}}
+          </select>
+        </div>
+      </div>
+      
+      <div class="equipment-stats">
+        <div class="stat-group">
+          <label>Quantity:</label>
+          <input type="number" name="system.quantity" value="{{system.quantity}}" min="1" class="quantity-input">
+        </div>
+        
+        <div class="stat-group">
+          <label>Weight:</label>
+          <div class="weight-display">
+            <input type="number" name="system.weight" value="{{system.weight}}" min="0" step="0.1" class="weight-input">
+            <span class="unit">kg</span>
+          </div>
+        </div>
+        
+        <div class="stat-group">
+          <label>Total:</label>
+          <span class="total-weight">{{totalWeight}} kg</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  {{!-- Main Content --}}
+  <section class="sheet-main">
+    
+    {{!-- Navigation Tabs --}}
+    <nav class="sheet-tabs" data-group="primary">
+      <a class="item active" data-tab="description">DESCRIPTION</a>
+      <a class="item" data-tab="durability">DURABILITY</a>
+      <a class="item" data-tab="properties">PROPERTIES</a>
+    </nav>
+
+    {{!-- Tab Content --}}
+    <section class="sheet-body">
+      
+      {{!-- Description Tab --}}
+      <div class="tab description active" data-group="primary" data-tab="description">
+        <div class="description-section">
+          <label>Description:</label>
+          <textarea name="system.description" placeholder="Equipment description, appearance, and usage notes">{{system.description}}</textarea>
+        </div>
+        
+        <div class="features-section">
+          <div class="features-header">
+            <h3>Equipment Features</h3>
+            <button type="button" class="feature-add"><i class="fas fa-plus"></i> Add Feature</button>
+          </div>
+          
+          <div class="features-list">
+            {{#each equipmentFeatures as |feature index|}}
+            <div class="feature-item">
+              <input type="text" name="system.features.{{index}}" value="{{feature}}" placeholder="Special feature or capability">
+              <button type="button" class="feature-delete" data-index="{{index}}"><i class="fas fa-trash"></i></button>
+            </div>
+            {{/each}}
+            
+            {{#unless equipmentFeatures.length}}
+            <div class="no-features">
+              <p><em>No special features defined.</em></p>
+            </div>
+            {{/unless}}
+          </div>
+        </div>
+      </div>
+
+      {{!-- Durability Tab --}}
+      <div class="tab durability" data-group="primary" data-tab="durability">
+        <div class="durability-section">
+          
+          <div class="durability-status">
+            <h3>Durability Status</h3>
+            <div class="durability-bar">
+              <div class="durability-fill" style="width: {{durabilityStatus.percent}}%"></div>
+              <span class="durability-text">{{durabilityStatus.label}} ({{durabilityStatus.percent}}%)</span>
+            </div>
+          </div>
+          
+          <div class="durability-controls">
+            <div class="durability-fields">
+              <div class="field-group">
+                <label>Current Durability:</label>
+                <div class="durability-input-group">
+                  <button type="button" class="durability-damage" title="Reduce durability">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                  <input type="number" name="system.durability" value="{{system.durability}}" min="0" class="durability-current">
+                  <button type="button" class="durability-repair" title="Increase durability">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                </div>
+              </div>
+              
+              <div class="field-group">
+                <label>Maximum Durability:</label>
+                <input type="number" name="system.max_durability" value="{{system.max_durability}}" min="1" class="durability-max">
+              </div>
+            </div>
+          </div>
+          
+          <div class="durability-notes">
+            <h4>Durability Guidelines:</h4>
+            <ul>
+              <li><strong>Excellent (75-100%):</strong> Item functions perfectly</li>
+              <li><strong>Good (50-74%):</strong> Minor wear but fully functional</li>
+              <li><strong>Worn (25-49%):</strong> Noticeable wear, may have minor issues</li>
+              <li><strong>Damaged (1-24%):</strong> Significant damage, unreliable function</li>
+              <li><strong>Broken (0%):</strong> Non-functional, requires major repair</li>
+            </ul>
+          </div>
+          
+        </div>
+      </div>
+
+      {{!-- Properties Tab --}}
+      <div class="tab properties" data-group="primary" data-tab="properties">
+        <div class="properties-section">
+          
+          <div class="property-group">
+            <label>Cost:</label>
+            <div class="cost-input">
+              <input type="number" name="system.cost" value="{{system.cost}}" min="0" step="0.01">
+              <span class="unit">credits</span>
+            </div>
+          </div>
+          
+          <div class="property-group">
+            <label>Availability:</label>
+            <select name="system.availability">
+              {{#each availabilityOptions as |label key|}}
+                <option value="{{key}}" {{#if (eq ../system.availability key)}}selected{{/if}}>{{label}}</option>
+              {{/each}}
+            </select>
+          </div>
+          
+          <div class="property-group">
+            <label>Legality:</label>
+            <select name="system.legality">
+              {{#each legalityOptions as |label key|}}
+                <option value="{{key}}" {{#if (eq ../system.legality key)}}selected{{/if}}>{{label}}</option>
+              {{/each}}
+            </select>
+          </div>
+          
+          <div class="property-group">
+            <label>Category:</label>
+            <select name="system.category">
+              {{#each equipmentCategories as |label key|}}
+                <option value="{{key}}" {{#if (eq ../system.category key)}}selected{{/if}}>{{label}}</option>
+              {{/each}}
+            </select>
+          </div>
+          
+          <div class="equipment-notes">
+            <h4>Equipment Categories:</h4>
+            <div class="category-descriptions">
+              <p><strong>Armor & Protection:</strong> Suits, helmets, protective gear</p>
+              <p><strong>Tools & Utilities:</strong> General purpose tools and equipment</p>
+              <p><strong>Electronics:</strong> Computers, sensors, communication devices</p>
+              <p><strong>Medical Equipment:</strong> First aid, surgical tools, pharmaceuticals</p>
+              <p><strong>Diving & Aquatic:</strong> Underwater equipment, breathing apparatus</p>
+              <p><strong>Survival Gear:</strong> Emergency equipment, shelter, provisions</p>
+              <p><strong>Consumables:</strong> Expendable items, ammunition, supplies</p>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+
+    </section>
+  </section>
+
+</form>

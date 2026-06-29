@@ -1,0 +1,223 @@
+/**
+ * Blue Planet Combat Tracker - Fixed Controls Layout
+ * Fixes combat controls in bottom-right corner, allows scroll only for combatants
+ * Updated with Foundry VTT specific selectors
+ */
+
+/* Combat Tracker Container - More specific selectors */
+.sidebar-tab[data-tab="combat"],
+#combat,
+#combat-tracker,
+.combat-tracker {
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+  overflow: hidden !important;
+}
+
+/* Additional sidebar specific styling */
+.sidebar .sidebar-tab[data-tab="combat"] {
+  position: relative !important;
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+/* Header with title - stays at top */
+.sidebar-tab[data-tab="combat"] .combat-tracker-header,
+#combat .combat-tracker-header,
+#combat-tracker .combat-tracker-header,
+.combat-tracker .combat-tracker-header {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 100 !important;
+  background: var(--color-bg-primary, #1a1a1a) !important;
+  border-bottom: 2px solid var(--color-border-dark, #666) !important;
+  padding: 8px !important;
+  flex-shrink: 0 !important;
+}
+
+/* Los controles de encounter/combat nativos ahora funcionan sin modificaciones */
+
+/* Combat Controls Buttons */
+#combat-tracker .combat-controls .combat-control {
+  background: var(--color-button-bg, #333);
+  border: 1px solid var(--color-border-dark, #666);
+  color: var(--color-text-primary, #fff);
+  padding: 6px 12px;
+  border-radius: 4px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 12px;
+  text-decoration: none;
+  display: block;
+}
+
+#combat-tracker .combat-controls .combat-control:hover {
+  background: var(--color-button-hover, #555);
+  border-color: var(--color-border-highlight, #ff6400);
+  transform: translateY(-1px);
+}
+
+#combat-tracker .combat-controls .combat-control i {
+  margin-right: 4px;
+}
+
+/* Blue Planet Initiative Buttons - Special styling */
+#combat-tracker .combat-controls #bp-roll-initiative,
+#combat-tracker .combat-controls #bp-new-round-initiative {
+  background: linear-gradient(135deg, #ff6400, #ff8533);
+  border-color: #ff6400;
+  font-weight: bold;
+}
+
+#combat-tracker .combat-controls #bp-roll-initiative:hover,
+#combat-tracker .combat-controls #bp-new-round-initiative:hover {
+  background: linear-gradient(135deg, #ff8533, #ffaa66);
+  box-shadow: 0 2px 6px rgba(255, 100, 0, 0.4);
+}
+
+/* Combatants List - Scrollable area - Maximum specificity */
+body .sidebar .sidebar-tab[data-tab="combat"] .combatant-list,
+body .sidebar .sidebar-tab[data-tab="combat"] .combat-tracker-list,
+body #combat .combatant-list,
+body #combat .combat-tracker-list,
+body #combat-tracker .combatant-list,
+body #combat-tracker .combat-tracker-list,
+body .combat-tracker .combatant-list,
+body .combat-tracker .combat-tracker-list {
+  flex: 1 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  padding: 0 8px !important;
+  margin-bottom: 160px !important; /* Space for fixed controls */
+  height: auto !important;
+  max-height: none !important;
+  position: relative !important;
+}
+
+/* Combatant Items */
+#combat-tracker .combatant {
+  background: var(--color-bg-secondary, #2a2a2a);
+  border: 1px solid var(--color-border-dark, #555);
+  margin-bottom: 4px;
+  padding: 8px;
+  border-radius: 4px;
+  position: relative;
+  transition: background-color 0.2s ease;
+}
+
+#combat-tracker .combatant:hover {
+  background: var(--color-bg-hover, #333);
+}
+
+#combat-tracker .combatant.active {
+  background: var(--color-bg-active, #1a4a1a);
+  border-color: var(--color-border-highlight, #ff6400);
+  box-shadow: 0 0 8px rgba(255, 100, 0, 0.3);
+}
+
+/* Individual Initiative Buttons on Combatants */
+#combat-tracker .combatant .bp-individual-initiative {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(255, 100, 0, 0.8);
+  border: 1px solid #ff6400;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 3px;
+  font-size: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+#combat-tracker .combatant .bp-individual-initiative:hover {
+  background: rgba(255, 100, 0, 1);
+  transform: translateY(-50%) scale(1.1);
+}
+
+/* Combat Tracker Scrollbar Styling */
+#combat-tracker .combat-tracker-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+#combat-tracker .combat-tracker-list::-webkit-scrollbar-track {
+  background: var(--color-bg-primary, #1a1a1a);
+  border-radius: 4px;
+}
+
+#combat-tracker .combat-tracker-list::-webkit-scrollbar-thumb {
+  background: var(--color-border-highlight, #ff6400);
+  border-radius: 4px;
+}
+
+#combat-tracker .combat-tracker-list::-webkit-scrollbar-thumb:hover {
+  background: #ff8533;
+}
+
+/* Round/Turn Display - Part of fixed controls */
+#combat-tracker .combat-controls::before {
+  content: "Round " attr(data-round) " | Turn " attr(data-turn);
+  background: var(--color-bg-secondary, #2a2a2a);
+  border: 1px solid var(--color-border-dark, #666);
+  padding: 6px;
+  border-radius: 4px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--color-text-secondary, #ccc);
+  order: -1; /* Show at top of controls */
+}
+
+/* Ensure fixed controls don't interfere with other UI elements */
+#combat-tracker .combat-controls {
+  pointer-events: auto;
+}
+
+#combat-tracker .combat-controls * {
+  pointer-events: auto;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 768px) {
+  body .sidebar .sidebar-tab[data-tab="combat"] .combat-controls,
+  body #combat .combat-controls,
+  body #combat-tracker .combat-controls,
+  body .combat-tracker .combat-controls {
+    bottom: 10px !important;
+    left: 10px !important;
+    right: auto !important;
+    min-width: 100px !important;
+    padding: 8px !important;
+  }
+  
+  #combat-tracker .combat-tracker-list {
+    margin-bottom: 140px;
+  }
+}
+
+/* Animation for controls appearance */
+@keyframes slideInFromBottom {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+#combat-tracker .combat-controls {
+  animation: slideInFromBottom 0.3s ease-out;
+}
+
+/* Ensure controls stay on top of everything */
+#combat-tracker .combat-controls {
+  z-index: 9999 !important;
+}
+
+/* Los controles de encounter nativos ahora funcionan normalmente sin modificaciones */

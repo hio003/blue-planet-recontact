@@ -1,0 +1,401 @@
+<!-- Roll Card Controls Partial Template -->
+<div class="roll-card-controls">
+  <div class="roll-card-section">
+    <h4><i class="fas fa-dice"></i> Roll Card</h4>
+    
+    <div class="roll-card-buttons">
+      <button type="button" class="roll-card-open" data-tooltip="Open Roll Card">
+        <i class="fas fa-dice-d10"></i>
+        Open Roll Card
+      </button>
+      
+      <button type="button" class="quick-roll-menu" data-tooltip="Quick Roll Menu">
+        <i class="fas fa-bolt"></i>
+        Quick Rolls
+        <i class="fas fa-chevron-down"></i>
+      </button>
+    </div>
+    
+    <!-- Quick Roll Dropdown -->
+    <div class="quick-roll-dropdown" style="display: none;">
+      <div class="quick-roll-item" data-roll="skill">
+        <i class="fas fa-dice"></i>
+        <span>Roll Skill Test</span>
+      </div>
+      <div class="quick-roll-item" data-roll="attribute">
+        <i class="fas fa-dice-d10"></i>
+        <span>Roll Attribute Test</span>
+      </div>
+      <div class="quick-roll-item" data-roll="damage">
+        <i class="fas fa-heart-broken"></i>
+        <span>Roll Damage Test</span>
+      </div>
+      <hr>
+      <div class="quick-roll-item" data-roll="general">
+        <i class="fas fa-dice-one"></i>
+        <span>General (1d10)</span>
+      </div>
+      <div class="quick-roll-item" data-roll="core">
+        <i class="fas fa-dice-two"></i>
+        <span>Core (2d10)</span>
+      </div>
+      <div class="quick-roll-item" data-roll="specialty">
+        <i class="fas fa-dice-three"></i>
+        <span>Specialty (3d10)</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+.roll-card-controls {
+  background: rgba(74, 144, 226, 0.1);
+  border: 1px solid #4a90e2;
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 15px;
+}
+
+.roll-card-controls h4 {
+  color: #4a90e2;
+  margin: 0 0 10px 0;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.roll-card-controls h4 i {
+  margin-right: 6px;
+}
+
+.roll-card-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.roll-card-open,
+.quick-roll-menu {
+  background: linear-gradient(135deg, #4a90e2, #357abd);
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.3s ease;
+  min-width: 120px;
+  justify-content: center;
+}
+
+.roll-card-open:hover,
+.quick-roll-menu:hover {
+  background: linear-gradient(135deg, #357abd, #4a90e2);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.quick-roll-menu {
+  position: relative;
+}
+
+.quick-roll-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #2a2a2a;
+  border: 1px solid #555;
+  border-radius: 4px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.quick-roll-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-size: 12px;
+  color: #e0e0e0;
+}
+
+.quick-roll-item:hover {
+  background: rgba(74, 144, 226, 0.2);
+}
+
+.quick-roll-item i {
+  width: 16px;
+  text-align: center;
+  color: #4a90e2;
+}
+
+.quick-roll-dropdown hr {
+  margin: 5px 0;
+  border: none;
+  border-top: 1px solid #555;
+}
+</style>
+
+<script>
+// Roll Card Controls Script
+(function() {
+  // Initialize roll card controls when the template is loaded
+  document.addEventListener('DOMContentLoaded', function() {
+    initializeRollCardControls();
+  });
+  
+  // Also initialize if the element is already in DOM
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    initializeRollCardControls();
+  }
+  
+  function initializeRollCardControls() {
+    // Find all roll card control elements
+    const rollCardButtons = document.querySelectorAll('.roll-card-open');
+    const quickRollMenus = document.querySelectorAll('.quick-roll-menu');
+    const quickRollItems = document.querySelectorAll('.quick-roll-item');
+    
+    // Bind roll card open buttons
+    rollCardButtons.forEach(button => {
+      button.addEventListener('click', function(event) {
+        event.preventDefault();
+        const actorId = this.closest('.sheet')?.dataset.documentId;
+        const actor = actorId ? game.actors.get(actorId) : null;
+        
+        if (typeof showBluePlanetRollCard === 'function') {
+          showBluePlanetRollCard(actor);
+        } else if (game.blueplanet?.showRollCard) {
+          game.blueplanet.showRollCard(actor);
+        } else {
+          ui.notifications.warn('Roll Card not available');
+        }
+      });
+    });
+    
+    // Bind quick roll menu toggles
+    quickRollMenus.forEach(menu => {
+      menu.addEventListener('click', function(event) {
+        event.preventDefault();
+        const dropdown = this.parentNode.querySelector('.quick-roll-dropdown');
+        if (dropdown) {
+          const isVisible = dropdown.style.display !== 'none';
+          dropdown.style.display = isVisible ? 'none' : 'block';
+        }
+      });
+    });
+    
+    // Bind quick roll items
+    quickRollItems.forEach(item => {
+      item.addEventListener('click', function(event) {
+        event.preventDefault();
+        const rollType = this.dataset.roll;
+        const actorId = this.closest('.sheet')?.dataset.documentId;
+        const actor = actorId ? game.actors.get(actorId) : null;
+        
+        // Hide dropdown
+        const dropdown = this.closest('.quick-roll-dropdown');
+        if (dropdown) {
+          dropdown.style.display = 'none';
+        }
+        
+        // Execute the roll
+        executeQuickRoll(rollType, actor);
+      });
+    });
+    
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(event) {
+      if (!event.target.closest('.roll-card-controls')) {
+        document.querySelectorAll('.quick-roll-dropdown').forEach(dropdown => {
+          dropdown.style.display = 'none';
+        });
+      }
+    });
+  }
+  
+  function executeQuickRoll(rollType, actor) {
+    if (!actor) {
+      ui.notifications.warn('No character available for rolling');
+      return;
+    }
+    
+    switch(rollType) {
+      case 'skill':
+        openSkillDialog(actor);
+        break;
+      case 'attribute':
+        openAttributeDialog(actor);
+        break;
+      case 'damage':
+        openDamageDialog(actor);
+        break;
+      case 'general':
+        executeSimpleRoll('1d10', 'General Skill Test', actor);
+        break;
+      case 'core':
+        executeSimpleRoll('2d10kl', 'Core Skill Test', actor);
+        break;
+      case 'specialty':
+        executeSimpleRoll('3d10kl', 'Specialty Skill Test', actor);
+        break;
+      default:
+        ui.notifications.warn('Unknown roll type: ' + rollType);
+    }
+  }
+  
+  function openSkillDialog(actor) {
+    const skills = Object.keys(actor.system.skills || {});
+    const attributes = ['cognition', 'psyche', 'coordination', 'physique'];
+    
+    if (skills.length === 0) {
+      ui.notifications.warn('Character has no skills to roll');
+      return;
+    }
+    
+    const content = `
+      <form>
+        <div class="form-group">
+          <label>Skill:</label>
+          <select name="skill">
+            ${skills.map(skill => `<option value="${skill}">${skill}</option>`).join('')}
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Attribute:</label>
+          <select name="attribute">
+            ${attributes.map(attr => `<option value="${attr}">${attr.charAt(0).toUpperCase() + attr.slice(1)}</option>`).join('')}
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Modifiers:</label>
+          <input type="number" name="modifiers" value="0" step="1" />
+        </div>
+      </form>
+    `;
+    
+    new Dialog({
+      title: "Roll Skill Test",
+      content: content,
+      buttons: {
+        roll: {
+          label: "Roll",
+          callback: html => {
+            const form = html[0].querySelector("form");
+            const skillName = form.skill.value;
+            const attributeName = form.attribute.value;
+            const modifiers = parseInt(form.modifiers.value) || 0;
+            
+            if (globalThis.blueplanet?.rollSkillTest) {
+              globalThis.blueplanet.rollSkillTest(actor, skillName, attributeName, { modifiers });
+            } else {
+              ui.notifications.error("Roll system not available");
+            }
+          }
+        },
+        cancel: { label: "Cancel" }
+      },
+      default: "roll"
+    }).render(true);
+  }
+  
+  function openAttributeDialog(actor) {
+    const attributes = ['cognition', 'psyche', 'coordination', 'physique'];
+    
+    const content = `
+      <form>
+        <div class="form-group">
+          <label>Attribute:</label>
+          <select name="attribute">
+            ${attributes.map(attr => `<option value="${attr}">${attr.charAt(0).toUpperCase() + attr.slice(1)}</option>`).join('')}
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Modifiers:</label>
+          <input type="number" name="modifiers" value="0" step="1" />
+        </div>
+      </form>
+    `;
+    
+    new Dialog({
+      title: "Roll Attribute Test",
+      content: content,
+      buttons: {
+        roll: {
+          label: "Roll",
+          callback: html => {
+            const form = html[0].querySelector("form");
+            const attributeName = form.attribute.value;
+            const modifiers = parseInt(form.modifiers.value) || 0;
+            
+            if (globalThis.blueplanet?.rollAttributeTest) {
+              globalThis.blueplanet.rollAttributeTest(actor, attributeName, { modifiers });
+            } else {
+              ui.notifications.error("Roll system not available");
+            }
+          }
+        },
+        cancel: { label: "Cancel" }
+      },
+      default: "roll"
+    }).render(true);
+  }
+  
+  function openDamageDialog(actor) {
+    const content = `
+      <form>
+        <div class="form-group">
+          <label>Damage Rating:</label>
+          <input type="number" name="damage-rating" value="6" min="1" max="20" />
+        </div>
+        <div class="form-group">
+          <label>Modifiers:</label>
+          <input type="number" name="modifiers" value="0" step="1" />
+        </div>
+      </form>
+    `;
+    
+    new Dialog({
+      title: "Roll Damage Test",
+      content: content,
+      buttons: {
+        roll: {
+          label: "Roll",
+          callback: html => {
+            const form = html[0].querySelector("form");
+            const damageRating = parseInt(form['damage-rating'].value) || 6;
+            const modifiers = parseInt(form.modifiers.value) || 0;
+            const finalRating = Math.max(1, damageRating + modifiers);
+            
+            if (globalThis.blueplanet?.rollDamageTest) {
+              globalThis.blueplanet.rollDamageTest(actor, finalRating);
+            } else {
+              ui.notifications.error("Roll system not available");
+            }
+          }
+        },
+        cancel: { label: "Cancel" }
+      },
+      default: "roll"
+    }).render(true);
+  }
+  
+  function executeSimpleRoll(formula, label, actor) {
+    const roll = new Roll(formula);
+    roll.evaluate();
+    
+    roll.toMessage({
+      speaker: ChatMessage.getSpeaker({actor: actor}),
+      flavor: label,
+      rollMode: game.settings.get("core", "rollMode")
+    });
+  }
+})();
+</script>

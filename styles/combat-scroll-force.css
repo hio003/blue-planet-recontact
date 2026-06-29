@@ -1,0 +1,139 @@
+/**
+ * Force scroll behavior for combat tracker combatants list
+ * This CSS ensures the combatants list scrolls independently
+ */
+
+/* Force layout structure for combat tracker */
+.sidebar-tab[data-tab="combat"],
+#combat,
+#combat-tracker,
+.combat-tracker {
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+  max-height: 100% !important;
+  overflow: hidden !important;
+}
+
+/* Ensure combatants container is scrollable */
+.sidebar-tab[data-tab="combat"] ol,
+#combat ol,
+#combat-tracker ol,
+.combat-tracker ol,
+.sidebar-tab[data-tab="combat"] .combatant-list,
+#combat .combatant-list,
+#combat-tracker .combatant-list,
+.combat-tracker .combatant-list,
+.sidebar-tab[data-tab="combat"] .directory-list,
+#combat .directory-list,
+#combat-tracker .directory-list,
+.combat-tracker .directory-list {
+  flex: 1 1 auto !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  max-height: none !important;
+  height: auto !important;
+  margin-bottom: 0 !important;
+  padding-bottom: 180px !important; /* Space for floating controls */
+}
+
+/* Note: Controls visibility handled by other CSS files */
+/* Do not hide controls here - let them render normally */
+
+/* Ensure combatant items don't prevent scrolling */
+.combatant {
+  flex-shrink: 0 !important;
+  min-height: auto !important;
+}
+
+/* Custom scrollbar for combatants list */
+.sidebar-tab[data-tab="combat"] ol::-webkit-scrollbar,
+#combat ol::-webkit-scrollbar,
+.directory-list::-webkit-scrollbar {
+  width: 8px !important;
+}
+
+.sidebar-tab[data-tab="combat"] ol::-webkit-scrollbar-track,
+#combat ol::-webkit-scrollbar-track,
+.directory-list::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.3) !important;
+  border-radius: 4px !important;
+}
+
+.sidebar-tab[data-tab="combat"] ol::-webkit-scrollbar-thumb,
+#combat ol::-webkit-scrollbar-thumb,
+.directory-list::-webkit-scrollbar-thumb {
+  background: var(--color-border-highlight, #ff6400) !important;
+  border-radius: 4px !important;
+}
+
+.sidebar-tab[data-tab="combat"] ol::-webkit-scrollbar-thumb:hover,
+#combat ol::-webkit-scrollbar-thumb:hover,
+.directory-list::-webkit-scrollbar-thumb:hover {
+  background: #ff8533 !important;
+}
+
+/* Floating controls styling (rendered by JavaScript) */
+#bp-floating-combat-controls {
+  position: fixed !important;
+  bottom: 20px !important;
+  left: 20px !important;
+  right: auto !important;
+  z-index: 10000 !important;
+  background: var(--color-bg-primary, #1a1a1a) !important;
+  border: 2px solid var(--color-border-highlight, #ff6400) !important;
+  border-radius: 8px !important;
+  padding: 10px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+  min-width: 120px !important;
+  max-width: 200px !important;
+  pointer-events: all !important;
+}
+
+#bp-floating-combat-controls .combat-control {
+  background: var(--color-button-bg, #333) !important;
+  border: 1px solid var(--color-border-dark, #666) !important;
+  color: var(--color-text-primary, #fff) !important;
+  padding: 6px 12px !important;
+  border-radius: 4px !important;
+  text-align: center !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  font-size: 12px !important;
+  text-decoration: none !important;
+  display: block !important;
+}
+
+#bp-floating-combat-controls .combat-control:hover {
+  background: var(--color-button-hover, #555) !important;
+  border-color: var(--color-border-highlight, #ff6400) !important;
+  transform: translateY(-1px) !important;
+}
+
+#bp-floating-combat-controls #bp-roll-initiative,
+#bp-floating-combat-controls #bp-new-round-initiative {
+  background: linear-gradient(135deg, #ff6400, #ff8533) !important;
+  border-color: #ff6400 !important;
+  font-weight: bold !important;
+}
+
+#bp-floating-combat-controls #bp-roll-initiative:hover,
+#bp-floating-combat-controls #bp-new-round-initiative:hover {
+  background: linear-gradient(135deg, #ff8533, #ffaa66) !important;
+  box-shadow: 0 2px 6px rgba(255, 100, 0, 0.4) !important;
+}
+
+/* Combat info display */
+.bp-combat-info {
+  background: var(--color-bg-secondary, #2a2a2a) !important;
+  border: 1px solid var(--color-border-dark, #666) !important;
+  padding: 6px !important;
+  border-radius: 4px !important;
+  text-align: center !important;
+  font-size: 11px !important;
+  color: var(--color-text-secondary, #ccc) !important;
+  margin-bottom: 8px !important;
+}

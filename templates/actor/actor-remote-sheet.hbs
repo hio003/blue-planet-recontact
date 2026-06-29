@@ -1,0 +1,406 @@
+{{!-- BLUE PLANET RECONTACT — Remote / CICADA Sheet v2 --}}
+<form class="blue-planet-recontact remote-sheet rtype-{{system.remote_type}}" autocomplete="off">
+
+  {{!-- ══ HEADER ═══════════════════════════════════════════════════════════ --}}
+  <header class="remote-header">
+    <div class="remote-portrait-wrap">
+      <img src="{{actor.img}}" alt="{{actor.name}}" data-edit="img" title="Change Image" class="remote-portrait-img"/>
+      <div class="remote-type-badge rbadge-{{system.remote_type}}">
+        {{#if (eq system.remote_type "cetacean")}}CETE
+        {{else if (eq system.remote_type "cicada")}}CICADA
+        {{else if (eq system.remote_type "combat")}}COMBAT
+        {{else if (eq system.remote_type "surveillance")}}SURV
+        {{else if (eq system.remote_type "constellation")}}CONSTEL
+        {{else if (eq system.remote_type "triage")}}TRIAGE
+        {{else if (eq system.remote_type "simulacrum")}}SIMUL
+        {{else if (eq system.remote_type "power_shell")}}SHELL
+        {{else}}REMOTE{{/if}}
+      </div>
+    </div>
+
+    <div class="remote-header-info">
+      <div class="remote-name-row">
+        <input type="text" name="name" value="{{actor.name}}" class="remote-name-input" placeholder="Remote Name"/>
+        <select name="system.remote_type" class="remote-type-select">
+          <option value="cetacean"     {{#if (eq system.remote_type "cetacean")}}selected{{/if}}>Cetacean Hover Remote</option>
+          <option value="cicada"       {{#if (eq system.remote_type "cicada")}}selected{{/if}}>CICADA (Cetacean Aquatic Sled)</option>
+          <option value="combat"       {{#if (eq system.remote_type "combat")}}selected{{/if}}>Combat Remote</option>
+          <option value="surveillance" {{#if (eq system.remote_type "surveillance")}}selected{{/if}}>Surveillance Remote</option>
+          <option value="constellation"{{#if (eq system.remote_type "constellation")}}selected{{/if}}>Remote Constellation (8-12 units)</option>
+          <option value="triage"       {{#if (eq system.remote_type "triage")}}selected{{/if}}>Triage Remote</option>
+          <option value="simulacrum"   {{#if (eq system.remote_type "simulacrum")}}selected{{/if}}>Simulacrum / Analog</option>
+          <option value="power_shell"  {{#if (eq system.remote_type "power_shell")}}selected{{/if}}>Power Shell (cetacean MHD sled)</option>
+          <option value="custom"       {{#if (eq system.remote_type "custom")}}selected{{/if}}>Custom Remote</option>
+        </select>
+      </div>
+
+      <div class="remote-meta-row">
+        <div class="meta-field">
+          <label>MANUFACTURER</label>
+          <input type="text" name="system.manufacturer" value="{{system.manufacturer}}" placeholder="Hydrospan, MacLeod…"/>
+        </div>
+        <div class="meta-field">
+          <label>MODEL</label>
+          <input type="text" name="system.model" value="{{system.model}}" placeholder="Model designation"/>
+        </div>
+        <div class="meta-field">
+          <label>AVAILABILITY</label>
+          <select name="system.availability" class="avail-{{system.availability}}">
+            <option value="common"     {{#if (eq system.availability "common")}}selected{{/if}}>Common</option>
+            <option value="uncommon"   {{#if (eq system.availability "uncommon")}}selected{{/if}}>Uncommon</option>
+            <option value="rare"       {{#if (eq system.availability "rare")}}selected{{/if}}>Rare</option>
+            <option value="restricted" {{#if (eq system.availability "restricted")}}selected{{/if}}>⛔ Restricted</option>
+          </select>
+        </div>
+        <div class="meta-field">
+          <label>COST (cs)</label>
+          <input type="number" name="system.cost" value="{{system.cost}}" min="0"/>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  {{!-- ══ CORE STATS PANEL ═══════════════════════════════════════════════════ --}}
+  <div class="remote-stats-panel">
+
+    {{!-- DURABILITY --}}
+    <div class="rstat-card rdurability-card">
+      <div class="rstat-card-title">DURABILITY</div>
+      <div class="rdur-block">
+        <input type="number" name="system.durability.value" value="{{system.durability.value}}"
+          class="rdur-value {{#if (lt system.durability.value 0)}}fragile{{else if (gt system.durability.value 4)}}reinforced{{/if}}" min="-10" max="15"/>
+        <div class="rdur-hint">
+          {{#if (lt system.durability.value 0)}}⚠ Fragile — survives minor damage
+          {{else if (lt system.durability.value 3)}}Standard bioplastic frame
+          {{else if (lt system.durability.value 6)}}Reinforced housing
+          {{else}}Military-grade armored shell{{/if}}
+        </div>
+        <div class="rdur-rule">DR − Durability = damage roll TN</div>
+      </div>
+    </div>
+
+    {{!-- AUTONOMY --}}
+    <div class="rstat-card rautonomy-card">
+      <div class="rstat-card-title">AUTONOMY</div>
+      <div class="raut-block">
+        <div class="raut-pair">
+          <div class="raut-stat">
+            <label title="Cognition: target ID, sensor acquisition, navigation">COG</label>
+            <input type="number" name="system.autonomy.cognition" value="{{system.autonomy.cognition}}" class="raut-val" min="0" max="10"/>
+          </div>
+          <div class="raut-div">/</div>
+          <div class="raut-stat">
+            <label title="Coordination: attack, chase, dodge when autonomous">COO</label>
+            <input type="number" name="system.autonomy.coordination" value="{{system.autonomy.coordination}}" class="raut-val" min="0" max="10"/>
+          </div>
+        </div>
+        <div class="raut-rule">Operator's skill set replaces autonomy ratings when piloted</div>
+      </div>
+    </div>
+
+    {{!-- LOCOMOTION + PERFORMANCE --}}
+    <div class="rstat-card rperf-card">
+      <div class="rstat-card-title">MOTION</div>
+      <div class="rperf-block">
+        <div class="rperf-item">
+          <label>LOCOMOTION</label>
+          <select name="system.performance.locomotion" class="loco-select">
+            <option value="hover"    {{#if (eq system.performance.locomotion "hover")}}selected{{/if}}>Hover / Lift-Fan</option>
+            <option value="aquatic"  {{#if (eq system.performance.locomotion "aquatic")}}selected{{/if}}>Aquatic / MHD Sled</option>
+            <option value="walker"   {{#if (eq system.performance.locomotion "walker")}}selected{{/if}}>Walker (2-leg)</option>
+            <option value="multi_leg"{{#if (eq system.performance.locomotion "multi_leg")}}selected{{/if}}>Multi-leg Spider</option>
+            <option value="wheeled"  {{#if (eq system.performance.locomotion "wheeled")}}selected{{/if}}>Wheeled</option>
+            <option value="tracked"  {{#if (eq system.performance.locomotion "tracked")}}selected{{/if}}>Tracked</option>
+          </select>
+        </div>
+        <div class="rperf-row">
+          <div class="rperf-stat">
+            <label>SPEED</label>
+            <div class="rperf-input-unit">
+              <input type="number" name="system.performance.speed" value="{{system.performance.speed}}" min="0"/>
+              <span class="punit">m/round</span>
+            </div>
+          </div>
+          <div class="rperf-stat">
+            <label>CTRL RANGE</label>
+            <div class="rperf-input-unit">
+              <input type="number" name="system.performance.range_control" value="{{system.performance.range_control}}" min="0"/>
+              <span class="punit">km</span>
+            </div>
+          </div>
+          <div class="rperf-stat">
+            <label>CARGO</label>
+            <div class="rperf-input-unit">
+              <input type="number" name="system.cargo.capacity" value="{{system.cargo.capacity}}" min="0"/>
+              <select name="system.cargo.unit" class="unit-select">
+                <option value="kg" {{#if (eq system.cargo.unit "kg")}}selected{{/if}}>kg</option>
+                <option value="g"  {{#if (eq system.cargo.unit "g")}}selected{{/if}}>g</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {{!-- CHASE/EVADE + SIZE --}}
+    <div class="rstat-card rchase-card">
+      <div class="rstat-card-title">MANEUVER</div>
+      <div class="rchase-block">
+        <div class="rchase-main">
+          <label>CHASE / EVADE</label>
+          <input type="number" name="system.maneuvers.chase_evade" value="{{system.maneuvers.chase_evade}}"
+            class="rchase-val {{#if (gt system.maneuvers.chase_evade 0)}}positive{{else if (lt system.maneuvers.chase_evade 0)}}negative{{/if}}"/>
+          <div class="rchase-rule">Added to operator's piloting test TN</div>
+        </div>
+        <div class="rdim-block">
+          <div class="rdim-row">
+            <label>SIZE</label>
+            <select name="system.dimensions.size_category">
+              <option value="pocket"   {{#if (eq system.dimensions.size_category "pocket")}}selected{{/if}}>Pocket (≤5cm)</option>
+              <option value="handheld" {{#if (eq system.dimensions.size_category "handheld")}}selected{{/if}}>Handheld</option>
+              <option value="portable" {{#if (eq system.dimensions.size_category "portable")}}selected{{/if}}>Portable</option>
+              <option value="mobile"   {{#if (eq system.dimensions.size_category "mobile")}}selected{{/if}}>Mobile (≥1m)</option>
+            </select>
+          </div>
+          <div class="rdim-row">
+            <label>MASS</label>
+            <div class="dim-input-unit">
+              <input type="number" name="system.dimensions.mass" value="{{system.dimensions.mass}}" step="0.1" min="0"/>
+              <span class="punit">kg</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>{{!-- end stats-panel --}}
+
+  {{!-- ══ INTERFACE BONUSES PANEL ══════════════════════════════════════════ --}}
+  <div class="interface-bonuses-panel">
+    <div class="interface-bonuses-title">INTERFACE BONUSES — Applied to operator's skill tests</div>
+    <div class="interface-table">
+      <div class="iface-row iface-header">
+        <span class="iface-col-link">Link Type</span>
+        <span class="iface-col-jack">Neural Jack</span>
+        <span class="iface-col-trode">Sonic Trodes</span>
+        <span class="iface-col-manual">Manual</span>
+      </div>
+      <div class="iface-row">
+        <span class="iface-col-link">Direct Signal</span>
+        <span class="iface-col-jack bonus-pos">+2 initiative & skill</span>
+        <span class="iface-col-trode bonus-pos">+1 initiative & skill</span>
+        <span class="iface-col-manual bonus-zero">No bonus</span>
+      </div>
+      <div class="iface-row">
+        <span class="iface-col-link">Relay Station</span>
+        <span class="iface-col-jack bonus-pos">+1</span>
+        <span class="iface-col-trode bonus-zero">+0</span>
+        <span class="iface-col-manual bonus-neg">−1</span>
+      </div>
+      <div class="iface-row">
+        <span class="iface-col-link">Satellite Link</span>
+        <span class="iface-col-jack bonus-zero">+0</span>
+        <span class="iface-col-trode bonus-neg">−1</span>
+        <span class="iface-col-manual bonus-neg">−2</span>
+      </div>
+    </div>
+  </div>
+
+  {{!-- ══ CETACEAN BONUSES PANEL (collapsible) ══════════════════════════════ --}}
+  <div class="cetacean-bonuses-panel {{#if system.cetacean_bonuses.active}}cete-active{{/if}}">
+    <div class="cete-bonuses-header">
+      <label class="cete-toggle-label">
+        <input type="checkbox" name="system.cetacean_bonuses.active" {{#if system.cetacean_bonuses.active}}checked{{/if}}/>
+        CETACEAN OPERATOR BONUSES
+      </label>
+      <span class="cete-toggle-hint">Toggle when a cetacean is piloting this remote</span>
+    </div>
+    {{#if system.cetacean_bonuses.active}}
+    <div class="cete-bonus-grid">
+      <div class="cete-bonus-card">
+        <div class="cete-bonus-label">3D / Freefall Maneuvers</div>
+        <div class="cete-bonus-val pos">+2 COO</div>
+        <div class="cete-bonus-base">(humans: +0)</div>
+      </div>
+      <div class="cete-bonus-card">
+        <div class="cete-bonus-label">Dual Remote Ops</div>
+        <div class="cete-bonus-val pos">No penalty</div>
+        <div class="cete-bonus-base">(humans: −2)</div>
+      </div>
+      <div class="cete-bonus-card">
+        <div class="cete-bonus-label">Constellation COG</div>
+        <div class="cete-bonus-val pos">+4 COG</div>
+        <div class="cete-bonus-base">(humans: +2)</div>
+      </div>
+      <div class="cete-bonus-card">
+        <div class="cete-bonus-label">Remote Sonar/Radar</div>
+        <div class="cete-bonus-val pos">+2 COG</div>
+        <div class="cete-bonus-base">Sound-picture output</div>
+      </div>
+      <div class="cete-bonus-card">
+        <div class="cete-bonus-label">RAM kinetic attack</div>
+        <div class="cete-bonus-val neu">Special</div>
+        <div class="cete-bonus-base">&gt;10kph causes DR = speed/10</div>
+      </div>
+      <div class="cete-bonus-card">
+        <div class="cete-bonus-label">CICADA underwater ctrl</div>
+        <div class="cete-bonus-val neu">Echolocation</div>
+        <div class="cete-bonus-base">Range = sonar range (~400m)</div>
+      </div>
+    </div>
+    {{/if}}
+  </div>
+
+  {{!-- ══ TABS ════════════════════════════════════════════════════════════ --}}
+  <nav class="sheet-tabs remote-tabs" data-group="primary">
+    <a class="item active" data-tab="operators">OPERATORS</a>
+    <a class="item" data-tab="systems">⚙ SYSTEMS</a>
+    <a class="item" data-tab="notes">📋 NOTES</a>
+  </nav>
+
+  <section class="sheet-body remote-body">
+
+    {{!-- ── OPERATORS TAB ───────────────────────────────────────────────── --}}
+    <div class="tab operators active" data-group="primary" data-tab="operators">
+
+      <div class="operators-panel">
+        <div class="operators-panel-header">
+          <h3>OPERATORS</h3>
+          <div class="drop-hint-badge">↓ Drop actors from sidebar</div>
+        </div>
+
+        <div class="operator-rule-box">
+          <strong>Remote Operation Rules:</strong>
+          A remote acts on its operator's initiative. Operators use their own mental attributes (Cognition, Coordination) and skill sets — modified by interface bonuses above. The remote uses its own physical stats (Durability, speed, locomotion). Cetacean operators may operate two remotes simultaneously without penalty.
+        </div>
+
+        <div class="operators-roster droppable-operators" data-drop-type="operators">
+          {{#if system.operators_list.length}}
+            {{#each system.operators_list as |op|}}
+            <div class="operator-card" data-actor-id="{{op.actorId}}">
+              <img src="{{op.img}}" alt="{{op.name}}" class="operator-avatar"/>
+              <div class="operator-card-body">
+                <div class="operator-name">{{op.name}}</div>
+                <div class="operator-type-badge otype-{{op.type}}">{{uppercase op.type}}</div>
+                {{#if (eq op.type "cetacean")}}
+                  <div class="operator-cete-note">Cetacean — dual remote, +4 constellation, +2 sonar COG</div>
+                {{/if}}
+              </div>
+              <div class="operator-card-actions">
+                <a class="open-actor operator-btn" data-actor-id="{{op.actorId}}" title="Open Actor Sheet">📋</a>
+                <a class="remove-operator operator-btn" data-actor-id="{{op.actorId}}" title="Remove Operator">✖</a>
+              </div>
+            </div>
+            {{/each}}
+          {{else}}
+            <div class="operators-empty-zone">
+              <div class="empty-icon">⬇</div>
+              <div class="empty-msg">No operators assigned</div>
+              <div class="empty-sub">Drag actor tokens here from the Actors sidebar</div>
+              <div class="empty-types">Accepts: Character · NPC · Cetacean</div>
+            </div>
+          {{/if}}
+        </div>
+      </div>
+
+    </div>{{!-- end operators tab --}}
+
+    {{!-- ── SYSTEMS TAB ──────────────────────────────────────────────────── --}}
+    <div class="tab systems" data-group="primary" data-tab="systems">
+
+      <div class="remote-features-panel">
+        <h3>FEATURES & COMPONENTS</h3>
+        <div class="features-grid">
+          <label class="feat-tag {{#if system.features.hot}}feat-on{{/if}}">
+            <input type="checkbox" name="system.features.hot" {{#if system.features.hot}}checked{{/if}}/>
+            <span class="feat-name">HOT</span>
+            <span class="feat-desc">Neural jack interface +2</span>
+          </label>
+          <label class="feat-tag {{#if system.features.hardened}}feat-on{{/if}}">
+            <input type="checkbox" name="system.features.hardened" {{#if system.features.hardened}}checked{{/if}}/>
+            <span class="feat-name">HARDENED</span>
+            <span class="feat-desc">EMP shielded</span>
+          </label>
+          <label class="feat-tag {{#if system.features.sensors}}feat-on{{/if}}">
+            <input type="checkbox" name="system.features.sensors" {{#if system.features.sensors}}checked{{/if}}/>
+            <span class="feat-name">SENSORS</span>
+            <span class="feat-desc">AV, sonar/radar arrays</span>
+          </label>
+          <label class="feat-tag {{#if system.features.manipulators}}feat-on{{/if}}">
+            <input type="checkbox" name="system.features.manipulators" {{#if system.features.manipulators}}checked{{/if}}/>
+            <span class="feat-name">MANIPULATORS</span>
+            <span class="feat-desc">Waldo arms</span>
+          </label>
+          <label class="feat-tag {{#if system.features.weapons}}feat-on{{/if}}">
+            <input type="checkbox" name="system.features.weapons" {{#if system.features.weapons}}checked{{/if}}/>
+            <span class="feat-name">WEAPONS</span>
+            <span class="feat-desc">Hardpoints</span>
+          </label>
+          <label class="feat-tag {{#if system.features.sealed}}feat-on{{/if}}">
+            <input type="checkbox" name="system.features.sealed" {{#if system.features.sealed}}checked{{/if}}/>
+            <span class="feat-name">SEALED</span>
+            <span class="feat-desc">Waterproof/vacuum safe</span>
+          </label>
+          <label class="feat-tag {{#if system.features.rechargeable}}feat-on{{/if}}">
+            <input type="checkbox" name="system.features.rechargeable" {{#if system.features.rechargeable}}checked{{/if}}/>
+            <span class="feat-name">RECHARGEABLE</span>
+            <span class="feat-desc">Battery + inductive</span>
+          </label>
+          <label class="feat-tag {{#if system.features.smart}}feat-on{{/if}}">
+            <input type="checkbox" name="system.features.smart" {{#if system.features.smart}}checked{{/if}}/>
+            <span class="feat-name">SMART</span>
+            <span class="feat-desc">Autonomous waypoints</span>
+          </label>
+          <label class="feat-tag {{#if system.features.gi}}feat-on{{/if}}">
+            <input type="checkbox" name="system.features.gi" {{#if system.features.gi}}checked{{/if}}/>
+            <span class="feat-name">GI</span>
+            <span class="feat-desc">Full AI autopilot</span>
+          </label>
+          <label class="feat-tag {{#if system.features.ecm}}feat-on{{/if}}">
+            <input type="checkbox" name="system.features.ecm" {{#if system.features.ecm}}checked{{/if}}/>
+            <span class="feat-name">ECM</span>
+            <span class="feat-desc">Signal masking</span>
+          </label>
+          <label class="feat-tag {{#if system.features.voice_synth}}feat-on{{/if}}">
+            <input type="checkbox" name="system.features.voice_synth" {{#if system.features.voice_synth}}checked{{/if}}/>
+            <span class="feat-name">VOICE SYNTH</span>
+            <span class="feat-desc">Speech + translator</span>
+          </label>
+          <label class="feat-tag {{#if system.features.phototropic}}feat-on{{/if}}">
+            <input type="checkbox" name="system.features.phototropic" {{#if system.features.phototropic}}checked{{/if}}/>
+            <span class="feat-name">PHOTOTROPIC</span>
+            <span class="feat-desc">−4 visual detection</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="remote-sys-descriptions">
+        <div class="rsys-block">
+          <h4>WEAPONS & PAYLOAD</h4>
+          <textarea name="system.weapons_description" class="remote-textarea"
+            placeholder="Onboard guns (DR 5–8), stunners, blade fins (DR 3+Phy/3), pod-mounted SASERs, mini-torps, ECM specs. RAM attack: DR = speed (kph) ÷ 10.">{{system.weapons_description}}</textarea>
+        </div>
+        <div class="rsys-block">
+          <h4>SENSORS & COMMS</h4>
+          <textarea name="system.sensors_description" class="remote-textarea"
+            placeholder="Visual (low-light, IR, UV, telescopic, 360°), audio, sonar/radar arrays, DDF, encrypted comms. Cetacean sonar gives operators +2 COG.">{{system.sensors_description}}</textarea>
+        </div>
+      </div>
+
+    </div>{{!-- end systems tab --}}
+
+    {{!-- ── NOTES TAB ────────────────────────────────────────────────────── --}}
+    <div class="tab notes" data-group="primary" data-tab="notes">
+      <div class="remote-notes-panel">
+        <h3>NOTES & CUSTOMIZATION</h3>
+        <div class="remote-notes-rule-box">
+          <strong>Key Reminder:</strong> A remote acts on its operator's initiative. It uses the operator's Cognition and Coordination plus skill sets, modified by interface bonuses. Physical actions use the remote's own stats (Durability, speed, Chase/Evade). Operators can hold conversation while operating a remote (cetaceans can do this with two remotes simultaneously). Remotes above 10 kph can make kinetic RAM attacks.
+        </div>
+        <textarea name="system.notes" class="remote-textarea remote-notes"
+          placeholder="Personality, custom paint, fiber-optic accents, operational history, tactical notes, constellation composition…">{{system.notes}}</textarea>
+      </div>
+    </div>
+
+  </section>
+
+</form>

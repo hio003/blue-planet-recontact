@@ -16,16 +16,17 @@ export class BluePlanetActorSheet extends foundry.appv1.sheets.ActorSheet {
       width: 900,
       height: 700,
       tabs: [{navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "abilities"}],
-      dragDrop: [{dragSelector: ".item-list .item", dropSelector: null}],
+      dragDrop: [
+        {dragSelector: ".item-list .item", dropSelector: null},
+        {dragSelector: ".biomod-list .item", dropSelector: ".biomods-section"},
+        {dragSelector: ".cyberware-list .item", dropSelector: ".cyberware-section"}
+      ],
       popOut: true,
       // RESIZABLE: Enabled for ALL actor types (character, cetacean, npc, creature)
       // Users can drag the bottom-right corner to resize sheets
       resizable: true,
       minimizable: true,
       dragHandle: ".window-header",
-      // Default position - can be moved anywhere
-      top: 100,
-      left: 300
     });
   }
 
@@ -42,10 +43,18 @@ export class BluePlanetActorSheet extends foundry.appv1.sheets.ActorSheet {
     
     const result = await super.render(force, options);
     
+    // Apply theme class to the window element
+    if (this.element?.[0]) {
+      const globalTheme = game.settings.get('blue-planet-recontact', 'defaultSheetTheme') ?? 'blue-planet';
+      const theme = this.actor.getFlag('blue-planet-recontact', 'sheetTheme') ?? globalTheme;
+      const el = this.element[0];
+      el.classList.remove('bpr-theme-blue-planet', 'bpr-theme-dark');
+      el.classList.add(`bpr-theme-${theme}`);
+    }
+
     // Restore pip states after any render
     if (this._pipStates && this._pipStates.size > 0) {
       setTimeout(() => {
-        console.log('BluePlanet: Auto-restoring pip states after render');
         this._restoreAllPipStates();
       }, 50);
     }
@@ -64,6 +73,10 @@ export class BluePlanetActorSheet extends foundry.appv1.sheets.ActorSheet {
     // Add the actor's data to context.data for easier access, as well as flags.
     context.system = actorData.system;
     context.flags = actorData.flags;
+
+    // Theme: per-actor flag overrides global setting
+    const globalTheme = game.settings.get('blue-planet-recontact', 'defaultSheetTheme') ?? 'blue-planet';
+    context.sheetTheme = this.actor.getFlag('blue-planet-recontact', 'sheetTheme') ?? globalTheme;
 
     // Prepare character data and items.
     if (actorData.type == 'character') {
@@ -208,13 +221,33 @@ export class BluePlanetActorSheet extends foundry.appv1.sheets.ActorSheet {
     const wounds = context.system.wounds || {};
     context.system.totalWoundPenalty = -(wounds.minor || 0) - ((wounds.major || 0) * 2) - ((wounds.mortal || 0) * 3);
 
-    // Prepare reputation level text
+    // Prepare reputation level text (Blue Planet: levels from Unknown to Renowned)
     const repLevel = context.system.profile?.reputation?.level || 0;
     if (repLevel < 6) context.system.profile.reputation.levelText = "Unknown";
     else if (repLevel < 11) context.system.profile.reputation.levelText = "Rumored";
     else if (repLevel < 16) context.system.profile.reputation.levelText = "Notable";
     else if (repLevel < 21) context.system.profile.reputation.levelText = "(In)famous";
     else context.system.profile.reputation.levelText = "Renowned";
+    
+    // Provide reputation type options for the template
+    context.reputationTypes = [
+      { value: "", label: "— None —" },
+      { value: "criminal", label: "Criminal" },
+      { value: "corporate", label: "Corporate / GEO" },
+      { value: "native", label: "Native / Indigenous" },
+      { value: "scientific", label: "Scientific Community" },
+      { value: "military", label: "Military / Security" },
+      { value: "maritime", label: "Maritime / Aquatic" },
+      { value: "underground", label: "Underground / Black Market" },
+      { value: "political", label: "Political" },
+      { value: "celebrity", label: "Celebrity / Media" }
+    ];
+    // Reputation effects by level
+    context.reputationEffect = repLevel < 6 ? "No social bonuses." :
+      repLevel < 11 ? "+1 to relevant social tests with those who know of you." :
+      repLevel < 16 ? "+2 to social tests; people seek you out." :
+      repLevel < 21 ? "+3 to social tests; significant political/social weight." :
+      "+4 to social tests; legendary status.";
   }
 
   /**
@@ -285,8 +318,10 @@ export class BluePlanetActorSheet extends foundry.appv1.sheets.ActorSheet {
   _prepareItems(context) {
     // Initialize containers.
     const weapons = [];
+    const ammunition = [];
     const equipment = [];
     const biomods = [];
+    const cyberware = [];
     const features = [];
     const skills = [];
     const species = [];
@@ -298,6 +333,10 @@ export class BluePlanetActorSheet extends foundry.appv1.sheets.ActorSheet {
       if (i.type === 'weapon') {
         weapons.push(i);
       }
+      // Append to ammunition.
+      else if (i.type === 'ammunition') {
+        ammunition.push(i);
+      }
       // Append to equipment.
       else if (i.type === 'equipment') {
         equipment.push(i);
@@ -305,6 +344,10 @@ export class BluePlanetActorSheet extends foundry.appv1.sheets.ActorSheet {
       // Append to biomods.
       else if (i.type === 'biomod') {
         biomods.push(i);
+      }
+      // Append to cyberware.
+      else if (i.type === 'cyberware') {
+        cyberware.push(i);
       }
       // Append to features.
       else if (i.type === 'feature') {
@@ -322,16 +365,44 @@ export class BluePlanetActorSheet extends foundry.appv1.sheets.ActorSheet {
 
     // Assign and return
     context.weapons = weapons;
+    context.ammunition = ammunition;
     context.equipment = equipment;
     context.biomods = biomods;
+    context.cyberware = cyberware;
     context.features = features;
     context.skills = skills;
     context.species = species;
+    
+    // Calculate capacity statistics for the CAPACITIES tab
+    context.activeBiomodCount = biomods.filter(b => b.system?.active === true).length;
+    context.activeCyberwareCount = cyberware.filter(c => c.system?.active === true).length;
+    
+    // Calculate total strain cost from active biomods and cyberware
+    let totalStrainCost = 0;
+    biomods.forEach(b => {
+      if (b.system?.active === true && b.system?.strainCost) {
+        totalStrainCost += parseInt(b.system.strainCost) || 0;
+      }
+    });
+    cyberware.forEach(c => {
+      if (c.system?.active === true && c.system?.strainCost) {
+        totalStrainCost += parseInt(c.system.strainCost) || 0;
+      }
+    });
+    context.totalCapacityStrainCost = totalStrainCost;
   }
 
   /** @override */
   activateListeners(html) {
     super.activateListeners(html);
+
+    // ── Theme toggle ────────────────────────────────────────────────────
+    html.find('.theme-toggle-btn').on('click', async (ev) => {
+      const current = ev.currentTarget.dataset.currentTheme ?? 'blue-planet';
+      const next    = current === 'blue-planet' ? 'dark' : 'blue-planet';
+      await this.actor.setFlag('blue-planet-recontact', 'sheetTheme', next);
+      // render() aplicará la nueva clase automáticamente
+    });
 
     // Render the item sheet for viewing/editing prior to the editable check.
     html.find('.item-edit').click(ev => {
@@ -354,6 +425,9 @@ export class BluePlanetActorSheet extends foundry.appv1.sheets.ActorSheet {
       li.slideUp(200, () => this.render(false));
     });
     
+    // Weapon attack roll from actor sheet
+    html.find('.weapon-attack-roll').click(this._onWeaponAttackRoll.bind(this));
+    
     // Weapon damage roll from actor sheet
     html.find('.weapon-damage-roll').click(this._onWeaponDamageRoll.bind(this));
     
@@ -362,6 +436,9 @@ export class BluePlanetActorSheet extends foundry.appv1.sheets.ActorSheet {
     html.find('.item-unequip').click(this._onItemUnequip.bind(this));
     html.find('.item-activate').click(this._onItemActivate.bind(this));
     html.find('.item-deactivate').click(this._onItemDeactivate.bind(this));
+    
+    // Item chat functionality
+    html.find('.item-chat').click(this._onItemChat.bind(this));
 
     // Active Effect management
     html.find(".effect-control").click(ev => this._onManageActiveEffect(ev));
@@ -390,6 +467,12 @@ export class BluePlanetActorSheet extends foundry.appv1.sheets.ActorSheet {
     html.find('.add-tag-btn').click(this._onAddTag.bind(this));
     html.find('.tag-delete').click(this._onDeleteTag.bind(this));
     html.find('.add-track-btn').click(this._onAddTrack.bind(this));
+
+    // Armor durability controls (event delegation)
+    html.on('click', '.armor-dura-plus', this._onArmorDurabilityPlus.bind(this));
+    html.on('click', '.armor-dura-minus', this._onArmorDurabilityMinus.bind(this));
+    html.on('change', '.armor-dura-input', this._onArmorDurabilityInput.bind(this));
+    html.on('change', '.armor-dura-max-input', this._onArmorDurabilityMaxInput.bind(this));
     
     // Track delete with both direct and event delegation approaches
     const trackDeleteElements = html.find('.track-delete');
@@ -418,6 +501,46 @@ export class BluePlanetActorSheet extends foundry.appv1.sheets.ActorSheet {
     // Strain recovery functionality
     html.find('.strain-recover').click(this._onStrainRecover.bind(this));
     html.find('.strain-recover-all').click(this._onStrainRecoverAll.bind(this));
+    
+    // Accordion functionality for cetacean abilities
+    html.find('.accordion-header').click(this._onAccordionToggle.bind(this));
+
+    // Make weapon names clickable for attack rolls
+    html.find('.item[data-item-id] .item-name h4').each((i, element) => {
+      const li = $(element).closest('.item');
+      const itemId = li.data('item-id');
+      const item = this.actor.items.get(itemId);
+      
+      if (item && item.type === 'weapon') {
+        $(element).addClass('weapon-name-clickable');
+        $(element).css({
+          'cursor': 'pointer',
+          'color': '#4a90e2',
+          'text-decoration': 'underline'
+        });
+        
+        $(element).on('click', (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          console.log('BluePlanet: Weapon name clicked:', item.name);
+          this._onWeaponNameClick(event, itemId);
+        });
+        
+        $(element).on('mouseenter', function() {
+          $(this).css({
+            'color': '#357abd',
+            'text-shadow': '0 0 4px rgba(74, 144, 226, 0.3)'
+          });
+        });
+        
+        $(element).on('mouseleave', function() {
+          $(this).css({
+            'color': '#4a90e2',
+            'text-shadow': 'none'
+          });
+        });
+      }
+    });
 
     // Drag events for macros.
     if (this.actor.isOwner) {
@@ -428,6 +551,14 @@ export class BluePlanetActorSheet extends foundry.appv1.sheets.ActorSheet {
         li.addEventListener("dragstart", handler, false);
       });
     }
+    
+    // Enhanced Ammunition functionality (both enhanced and compact)
+    html.find('.load-ammo-btn').click(this._onLoadAmmoToWeapon.bind(this));
+    html.find('.load-ammo-btn-compact').click(this._onLoadAmmoToWeaponCompact.bind(this));
+    html.on('change', '.ammo-capacity-input', this._onAmmoCapacityChange.bind(this));
+    html.on('change', '.current-ammo-input', this._onCurrentAmmoChange.bind(this));
+    html.on('change', '.compatible-weapon-select', this._onCompatibleWeaponSelect.bind(this));
+    html.on('change', '.compatible-weapon-select-compact', this._onCompatibleWeaponSelectCompact.bind(this));
     
     // Apply initial pip states after DOM is ready
     setTimeout(() => {
@@ -452,7 +583,7 @@ export class BluePlanetActorSheet extends foundry.appv1.sheets.ActorSheet {
     }
     
     // Handle other item types normally
-    const data = duplicate(header.dataset);
+    const data = foundry.utils.duplicate(header.dataset);
     // Initialize a default name.
     const name = `New ${type.capitalize()}`;
     // Prepare the item object.
@@ -465,7 +596,7 @@ export class BluePlanetActorSheet extends foundry.appv1.sheets.ActorSheet {
     delete itemData.system["type"];
 
     // Finally, create the item!
-    return await Item.create(itemData, {parent: this.actor});
+    return await foundry.documents.Item.create(itemData, {parent: this.actor});
   }
 
   /**
@@ -494,8 +625,8 @@ export class BluePlanetActorSheet extends foundry.appv1.sheets.ActorSheet {
       roll.toMessage({
         speaker: ChatMessage.getSpeaker({ actor: this.actor }),
         flavor: label,
-        rollMode: game.settings.get('core', 'rollMode'),
-      });
+        rollMode: game.settings.get('core', 'rollMode')
+  });
       return roll;
     }
   }
@@ -720,6 +851,32 @@ export class BluePlanetActorSheet extends foundry.appv1.sheets.ActorSheet {
   }
   
   /**
+   * Handle clicking on weapon name for attack roll
+   * @param {Event} event   The originating click event
+   * @param {string} itemId The weapon item ID
+   * @private
+   */
+  async _onWeaponNameClick(event, itemId) {
+    console.log('BluePlanet: _onWeaponNameClick called with itemId:', itemId);
+    
+    // Get the weapon item
+    const weapon = this.actor.items.get(itemId);
+    if (!weapon || weapon.type !== 'weapon') {
+      ui.notifications.warn('Weapon not found');
+      return;
+    }
+    
+    // Call the weapon's roll method for attack
+    try {
+      await weapon.roll();
+      console.log('BluePlanet: Weapon attack roll initiated successfully');
+    } catch (error) {
+      console.error('BluePlanet: Error initiating weapon attack roll:', error);
+      ui.notifications.error('Error initiating weapon attack roll. Check console for details.');
+    }
+  }
+
+  /**
    * Get available combat skills for a weapon type
    * @param {string} weaponType - The type of weapon (melee, firearm, etc.)
    * @returns {Array} Array of available combat skills
@@ -784,6 +941,35 @@ export class BluePlanetActorSheet extends foundry.appv1.sheets.ActorSheet {
     }
     
     return combatSkills;
+  }
+
+  /**
+   * Handle weapon attack rolls from actor sheet
+   * @param {Event} event   The originating click event
+   * @private
+   */
+  async _onWeaponAttackRoll(event) {
+    event.preventDefault();
+    const dataset = event.currentTarget.dataset;
+    const itemId = dataset.itemId;
+    
+    // Get the weapon item
+    const weapon = this.actor.items.get(itemId);
+    if (!weapon || weapon.type !== 'weapon') {
+      ui.notifications.warn('Weapon not found');
+      return;
+    }
+    
+    console.log('BluePlanet Actor Sheet: Weapon attack roll clicked for:', weapon.name);
+    
+    // Call the weapon's roll method (same as clicking weapon name)
+    try {
+      await weapon.roll();
+      console.log('BluePlanet Actor Sheet: Weapon attack roll initiated successfully');
+    } catch (error) {
+      console.error('BluePlanet Actor Sheet: Error initiating weapon attack roll:', error);
+      ui.notifications.error('Error initiating weapon attack roll. Check console for details.');
+    }
   }
 
   /**
@@ -862,7 +1048,7 @@ export class BluePlanetActorSheet extends foundry.appv1.sheets.ActorSheet {
     // Add collapsible wound effects explanation  
     const woundId = `wound-details-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     if (successes === 0) {
-      flavorText += `<div style="margin-top: 8px; border-radius: 4px; border: 1px solid rgba(108, 117, 125, 0.3);">`;
+      flavorText += `<div style="margin- px; border-radius: 4px; border: 1px solid rgba(108, 117, 125, 0.3);">`;
       flavorText += `<div class="damage-accordion-header" data-target="${woundId}" style="padding: 6px; background: rgba(108, 117, 125, 0.1); cursor: pointer; user-select: none; border-radius: 4px 4px 0 0;">`;
       flavorText += `<p style="color: black; margin: 0; font-size: 12px;"><i class="fas fa-chevron-right accordion-arrow" style="margin-right: 6px; transition: transform 0.2s;"></i><strong><i class="fas fa-shield-alt"></i> No Injury - Click for details</strong></p>`;
       flavorText += `</div>`;
@@ -872,7 +1058,7 @@ export class BluePlanetActorSheet extends foundry.appv1.sheets.ActorSheet {
       flavorText += `<p style="color: black; font-size: 10px; margin: 2px 0;">• Character continues normally</p>`;
       flavorText += `</div></div>`;
     } else if (successes === 1) {
-      flavorText += `<div style="margin-top: 8px; border-radius: 4px; border: 1px solid rgba(255, 193, 7, 0.4);">`;
+      flavorText += `<div style="margin- px; border-radius: 4px; border: 1px solid rgba(255, 193, 7, 0.4);">`;
       flavorText += `<div class="damage-accordion-header" data-target="${woundId}" style="padding: 6px; background: rgba(255, 193, 7, 0.15); cursor: pointer; user-select: none; border-radius: 4px 4px 0 0;">`;
       flavorText += `<p style="color: black; margin: 0; font-size: 12px;"><i class="fas fa-chevron-right accordion-arrow" style="margin-right: 6px; transition: transform 0.2s;"></i><strong><i class="fas fa-band-aid"></i> Minor Wound - Click for details</strong></p>`;
       flavorText += `</div>`;
@@ -883,7 +1069,7 @@ export class BluePlanetActorSheet extends foundry.appv1.sheets.ActorSheet {
       flavorText += `<p style="color: black; font-size: 10px; margin: 2px 0;">• Can be treated with basic first aid</p>`;
       flavorText += `</div></div>`;
     } else if (successes === 2) {
-      flavorText += `<div style="margin-top: 8px; border-radius: 4px; border: 1px solid rgba(220, 53, 69, 0.4);">`;
+      flavorText += `<div style="margin- px; border-radius: 4px; border: 1px solid rgba(220, 53, 69, 0.4);">`;
       flavorText += `<div class="damage-accordion-header" data-target="${woundId}" style="padding: 6px; background: rgba(220, 53, 69, 0.15); cursor: pointer; user-select: none; border-radius: 4px 4px 0 0;">`;
       flavorText += `<p style="color: black; margin: 0; font-size: 12px;"><i class="fas fa-chevron-right accordion-arrow" style="margin-right: 6px; transition: transform 0.2s;"></i><strong><i class="fas fa-heart-broken"></i> Major Wound - Click for details</strong></p>`;
       flavorText += `</div>`;
@@ -895,7 +1081,7 @@ export class BluePlanetActorSheet extends foundry.appv1.sheets.ActorSheet {
       flavorText += `<p style="color: black; font-size: 10px; margin: 2px 0;">• Without treatment, may become infected</p>`;
       flavorText += `</div></div>`;
     } else if (successes >= 3) {
-      flavorText += `<div style="margin-top: 8px; border-radius: 4px; border: 1px solid rgba(139, 0, 0, 0.4);">`;
+      flavorText += `<div style="margin- px; border-radius: 4px; border: 1px solid rgba(139, 0, 0, 0.4);">`;
       flavorText += `<div class="damage-accordion-header" data-target="${woundId}" style="padding: 6px; background: rgba(139, 0, 0, 0.15); cursor: pointer; user-select: none; border-radius: 4px 4px 0 0;">`;
       flavorText += `<p style="color: black; margin: 0; font-size: 12px;"><i class="fas fa-chevron-right accordion-arrow" style="margin-right: 6px; transition: transform 0.2s;"></i><strong><i class="fas fa-skull"></i> Mortal Wound - Click for details</strong></p>`;
       flavorText += `</div>`;
@@ -911,7 +1097,7 @@ export class BluePlanetActorSheet extends foundry.appv1.sheets.ActorSheet {
     
     // Add collapsible GM reminder
     const gmId = `gm-reminder-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-    flavorText += `<div style="margin-top: 8px; border-radius: 4px; border: 1px solid rgba(74, 144, 226, 0.3);">`;
+    flavorText += `<div style="margin- px; border-radius: 4px; border: 1px solid rgba(74, 144, 226, 0.3);">`;
     flavorText += `<div class="damage-accordion-header" data-target="${gmId}" style="padding: 4px 6px; background: rgba(74, 144, 226, 0.1); cursor: pointer; user-select: none; border-radius: 4px 4px 0 0;">`;
     flavorText += `<p style="color: black; margin: 0; font-size: 11px;"><i class="fas fa-chevron-right accordion-arrow" style="margin-right: 6px; transition: transform 0.2s;"></i><strong><i class="fas fa-info-circle"></i> GM Reminder - Click for damage modifiers</strong></p>`;
     flavorText += `</div>`;
@@ -969,7 +1155,72 @@ export class BluePlanetActorSheet extends foundry.appv1.sheets.ActorSheet {
     // Auto-scroll chat messages to bottom
     delayedScrollChatToBottom();
   }
-  
+
+  /**
+   * Armor durability handlers
+   */
+  _rebuildArmorPips(itemId, curr, max) {
+    try {
+      const track = this.element.find(`.armor-dura-track[data-item-id="${itemId}"]`);
+      if (!track || track.length === 0) return;
+      let html = '';
+      const maximum = Math.max(1, parseInt(max) || 1);
+      const current = Math.max(0, Math.min(maximum, parseInt(curr) || 0));
+      for (let i = 0; i < maximum; i++) {
+        const filled = i < current ? 'filled' : '';
+        html += `<span class=\"pip armor-pip ${filled}\" data-index=\"${i}\"></span>`;
+      }
+      track.html(html);
+    } catch (_) {}
+  }
+  async _onArmorDurabilityPlus(event) {
+    event.preventDefault();
+    const itemId = event.currentTarget.dataset.itemId;
+    const item = this.actor.items.get(itemId);
+    if (!item) return;
+    const max = item.system?.max_durability ?? 10;
+    const curr = item.system?.durability ?? 0;
+    const next = Math.min(max, curr + 1);
+    await item.update({ 'system.durability': next });
+    this._rebuildArmorPips(itemId, next, max);
+  }
+
+  async _onArmorDurabilityMinus(event) {
+    event.preventDefault();
+    const itemId = event.currentTarget.dataset.itemId;
+    const item = this.actor.items.get(itemId);
+    if (!item) return;
+    const max = item.system?.max_durability ?? 10;
+    const curr = item.system?.durability ?? 0;
+    const next = Math.max(0, curr - 1);
+    await item.update({ 'system.durability': next });
+    this._rebuildArmorPips(itemId, next, max);
+  }
+
+  async _onArmorDurabilityInput(event) {
+    event.preventDefault();
+    const itemId = event.currentTarget.dataset.itemId;
+    const item = this.actor.items.get(itemId);
+    if (!item) return;
+    const max = item.system?.max_durability ?? 10;
+    let value = parseInt(event.currentTarget.value) || 0;
+    value = Math.max(0, Math.min(max, value));
+    await item.update({ 'system.durability': value });
+    this._rebuildArmorPips(itemId, value, max);
+  }
+
+  async _onArmorDurabilityMaxInput(event) {
+    event.preventDefault();
+    const itemId = event.currentTarget.dataset.itemId;
+    const item = this.actor.items.get(itemId);
+    if (!item) return;
+    let max = parseInt(event.currentTarget.value) || 1;
+    max = Math.max(1, max);
+    const curr = Math.max(0, Math.min(max, item.system?.durability ?? 0));
+    await item.update({ 'system.max_durability': max, 'system.durability': curr });
+    this._rebuildArmorPips(itemId, curr, max);
+  }
+
   /**
    * Handle equipping an item
    * @param {Event} event   The originating click event
@@ -1118,19 +1369,22 @@ export class BluePlanetActorSheet extends foundry.appv1.sheets.ActorSheet {
       return;
     }
     
-    const pips = document.querySelectorAll(selector);
-    pips.forEach(pip => {
-      const pipValue = parseInt(pip.dataset.value);
+    // CRITICAL FIX: Only select pips within THIS actor sheet, not globally
+    const pips = this.element ? this.element.find(selector) : $(selector);
+    pips.each(function() {
+      const pip = $(this);
+      const pipValue = parseInt(pip.data('value'));
       if (pipValue <= currentValue) {
-        pip.classList.add('filled');
-        pip.setAttribute('data-manually-filled', 'true'); // Mark as manually filled
+        pip.addClass('filled');
+        pip.attr('data-manually-filled', 'true'); // Mark as manually filled
       } else {
-        pip.classList.remove('filled');
-        pip.removeAttribute('data-manually-filled');
+        pip.removeClass('filled');
+        pip.removeAttr('data-manually-filled');
       }
     });
     
     console.log(`BluePlanet: Manually updated ${pips.length} ${pipType} ${subType ? subType : ''} pips, ${currentValue} filled`);
+    console.log(`BluePlanet: Actor sheet ID: ${this.actor.id}, Actor name: ${this.actor.name}`);
     
     // Store the current values to restore after any re-renders
     this._storePipState(pipType, subType, currentValue);
@@ -1218,7 +1472,7 @@ export class BluePlanetActorSheet extends foundry.appv1.sheets.ActorSheet {
     const mortal = this.actor.system.wounds?.mortal || 0;
     const totalPenalty = -(minor + (major * 2) + (mortal * 3));
     
-    const totalDisplay = document.querySelector('.total-penalty strong');
+    const totalDisplay = this.element ? this.element.find('.total-penalty strong')[0] : null;
     if (totalDisplay) {
       totalDisplay.textContent = `Total Penalty: ${totalPenalty}`;
     }
@@ -1259,7 +1513,7 @@ export class BluePlanetActorSheet extends foundry.appv1.sheets.ActorSheet {
     this._updatePipClasses('chip', null, expectedFilled);
     
     // Update the displayed value
-    const chipsValueDisplay = document.querySelector('.chips-track .pip-value');
+    const chipsValueDisplay = this.element ? this.element.find('.chips-track .pip-value')[0] : null;
     if (chipsValueDisplay) {
       chipsValueDisplay.textContent = expectedFilled;
     }
@@ -1294,7 +1548,7 @@ export class BluePlanetActorSheet extends foundry.appv1.sheets.ActorSheet {
     this._updatePipClasses('reputation', null, expectedFilled);
     
     // Update the displayed value
-    const reputationValueDisplay = document.querySelector('.reputation-track .pip-value');
+    const reputationValueDisplay = this.element ? this.element.find('.reputation-track .pip-value')[0] : null;
     if (reputationValueDisplay) {
       reputationValueDisplay.textContent = expectedFilled;
     }
@@ -1336,9 +1590,9 @@ export class BluePlanetActorSheet extends foundry.appv1.sheets.ActorSheet {
     this._updatePipClasses('strain', type, expectedFilled);
     
     // Update the displayed value for the specific strain type
-    const strainTypeSection = document.querySelector(`.strain-pip[data-type="${type}"]`)?.closest('.strain-type');
+    const strainTypeSection = this.element ? this.element.find(`.strain-pip[data-type="${type}"]`).closest('.strain-type')[0] : null;
     if (strainTypeSection) {
-      const strainValueDisplay = strainTypeSection.querySelector('.pip-value');
+      const strainValueDisplay = $(strainTypeSection).find('.pip-value')[0];
       if (strainValueDisplay) {
         const maxValue = this.actor.system.strain[type].max;
         strainValueDisplay.textContent = `${expectedFilled}/${maxValue}`;
@@ -1377,9 +1631,9 @@ export class BluePlanetActorSheet extends foundry.appv1.sheets.ActorSheet {
     this._updatePipClasses('wound', type, expectedFilled);
     
     // Update the displayed penalty value
-    const woundTypeSection = document.querySelector(`.wound-pip[data-type="${type}"]`)?.closest('.wound-type');
+    const woundTypeSection = this.element ? this.element.find(`.wound-pip[data-type="${type}"]`).closest('.wound-type')[0] : null;
     if (woundTypeSection) {
-      const penaltyDisplay = woundTypeSection.querySelector('.wound-penalty');
+      const penaltyDisplay = $(woundTypeSection).find('.wound-penalty')[0];
       if (penaltyDisplay) {
         let penalty;
         if (type === 'minor') penalty = expectedFilled;
@@ -1393,6 +1647,27 @@ export class BluePlanetActorSheet extends foundry.appv1.sheets.ActorSheet {
     this._updateTotalWoundPenalty();
     
     return result;
+  }
+  
+  /**
+   * Handle accordion toggle for cetacean abilities
+   * @param {Event} event   The originating click event
+   * @private
+   */
+  _onAccordionToggle(event) {
+    event.preventDefault();
+    const header = $(event.currentTarget);
+    const targetId = header.data('accordion-target');
+    const content = $(`#${targetId}`);
+    const toggle = header.find('.accordion-toggle');
+    
+    if (content.hasClass('collapsed')) {
+      content.removeClass('collapsed').slideDown(200);
+      toggle.removeClass('fa-chevron-down').addClass('fa-chevron-up');
+    } else {
+      content.addClass('collapsed').slideUp(200);
+      toggle.removeClass('fa-chevron-up').addClass('fa-chevron-down');
+    }
   }
   
   /**
@@ -1633,7 +1908,7 @@ export class BluePlanetActorSheet extends foundry.appv1.sheets.ActorSheet {
    * @override
    */
   async _onDrop(event) {
-    const data = TextEditor.getDragEventData(event);
+    const data = foundry.applications.ux.TextEditor.getDragEventData(event);
     const actor = this.actor;
     const allowed = Hooks.call("dropActorSheetData", actor, this, data);
     if (allowed === false) return;
@@ -1860,6 +2135,22 @@ export class BluePlanetActorSheet extends foundry.appv1.sheets.ActorSheet {
               <input type="checkbox" name="recover-attributes" checked> Recover attribute damage
             </label>
           </div>
+          <div class="form-group">
+            <label>Minor Wounds to Heal:</label>
+            <input type="number" name="minor-wounds" min="0" max="${this.actor.system.wounds?.minor || 0}" value="${Math.min(1, this.actor.system.wounds?.minor || 0)}" style="width: 60px;">
+            <span style="font-size: 11px; color: #aaa;">/ ${this.actor.system.wounds?.minor || 0}</span>
+          </div>
+          <div class="form-group">
+            <label>Major Wounds to Heal:</label>
+            <input type="number" name="major-wounds" min="0" max="${this.actor.system.wounds?.major || 0}" value="${Math.min(1, this.actor.system.wounds?.major || 0)}" style="width: 60px;">
+            <span style="font-size: 11px; color: #aaa;">/ ${this.actor.system.wounds?.major || 0}</span>
+          </div>
+          <div class="form-group">
+            <label>Mortal Wounds to Heal:</label>
+            <input type="number" name="mortal-wounds" min="0" max="${this.actor.system.wounds?.mortal || 0}" value="0" style="width: 60px;">
+            <span style="font-size: 11px; color: #aaa;">/ ${this.actor.system.wounds?.mortal || 0}</span>
+            <div style="font-size: 9px; color: #666; font-style: italic;">Mortal wounds typically require medical attention</div>
+          </div>
         </div>
       `,
       buttons: {
@@ -1870,9 +2161,19 @@ export class BluePlanetActorSheet extends foundry.appv1.sheets.ActorSheet {
             const physicalAmount = parseInt(html.find('[name="physical-strain"]').val()) || 0;
             const recoverAttributes = html.find('[name="recover-attributes"]').prop('checked');
             
+            // Wound recovery amounts
+            const minorWoundsAmount = parseInt(html.find('[name="minor-wounds"]').val()) || 0;
+            const majorWoundsAmount = parseInt(html.find('[name="major-wounds"]').val()) || 0;
+            const mortalWoundsAmount = parseInt(html.find('[name="mortal-wounds"]').val()) || 0;
+            
             // Custom recovery amounts
             const currentMental = this.actor.system.strain?.mental?.value || 0;
             const currentPhysical = this.actor.system.strain?.physical?.value || 0;
+            
+            // Current wounds
+            const currentMinorWounds = this.actor.system.wounds?.minor || 0;
+            const currentMajorWounds = this.actor.system.wounds?.major || 0;
+            const currentMortalWounds = this.actor.system.wounds?.mortal || 0;
             
             const updates = {};
             if (mentalAmount > 0) {
@@ -1880,6 +2181,17 @@ export class BluePlanetActorSheet extends foundry.appv1.sheets.ActorSheet {
             }
             if (physicalAmount > 0) {
               updates[`system.strain.physical.value`] = Math.max(0, currentPhysical - physicalAmount);
+            }
+            
+            // Add wound healing updates
+            if (minorWoundsAmount > 0) {
+              updates[`system.wounds.minor`] = Math.max(0, currentMinorWounds - minorWoundsAmount);
+            }
+            if (majorWoundsAmount > 0) {
+              updates[`system.wounds.major`] = Math.max(0, currentMajorWounds - majorWoundsAmount);
+            }
+            if (mortalWoundsAmount > 0) {
+              updates[`system.wounds.mortal`] = Math.max(0, currentMortalWounds - mortalWoundsAmount);
             }
             
             if (Object.keys(updates).length > 0) {
@@ -1906,6 +2218,9 @@ export class BluePlanetActorSheet extends foundry.appv1.sheets.ActorSheet {
             if (mentalAmount > 0) messages.push(`${mentalAmount} mental strain`);
             if (physicalAmount > 0) messages.push(`${physicalAmount} physical strain`);
             if (recoverAttributes) messages.push('attribute damage');
+            if (minorWoundsAmount > 0) messages.push(`${minorWoundsAmount} minor wound${minorWoundsAmount > 1 ? 's' : ''}`);
+            if (majorWoundsAmount > 0) messages.push(`${majorWoundsAmount} major wound${majorWoundsAmount > 1 ? 's' : ''}`);
+            if (mortalWoundsAmount > 0) messages.push(`${mortalWoundsAmount} mortal wound${mortalWoundsAmount > 1 ? 's' : ''}`);
             
             if (messages.length > 0) {
               ui.notifications.info(`Recovered: ${messages.join(', ')}`);
@@ -1947,8 +2262,457 @@ export class BluePlanetActorSheet extends foundry.appv1.sheets.ActorSheet {
     await recoverFromStrain(this.actor, {
       recoverStrain: true,
       recoverAttributes: true,
+      recoverWounds: true,
       strainAmount: 'full',
-      attributeAmount: 'full'
+      attributeAmount: 'full',
+      woundAmount: {
+        minor: this.actor.system.wounds?.minor || 0,
+        major: this.actor.system.wounds?.major || 0,
+        mortal: this.actor.system.wounds?.mortal || 0
+      }
     });
+  }
+
+  /* -------------------------------------------- */
+  /* Enhanced Ammunition Methods                  */
+  /* -------------------------------------------- */
+
+  /**
+   * Handle loading ammunition into a compatible weapon
+   * @param {Event} event   The originating click event
+   * @private
+   */
+  async _onLoadAmmoToWeapon(event) {
+    event.preventDefault();
+    
+    const ammoId = event.currentTarget.dataset.ammoId;
+    const ammo = this.actor.items.get(ammoId);
+    
+    if (!ammo) {
+      ui.notifications.error('Ammunition not found.');
+      return;
+    }
+    
+    // Get selected weapon from the dropdown
+    const selectElement = this.element.find(`.compatible-weapon-select[data-item-id="${ammoId}"]`);
+    const weaponId = selectElement.val();
+    
+    if (!weaponId) {
+      ui.notifications.warn('Please select a weapon to load first.');
+      return;
+    }
+    
+    const weapon = this.actor.items.get(weaponId);
+    if (!weapon) {
+      ui.notifications.error('Selected weapon not found.');
+      return;
+    }
+    
+    // Check if ammunition is available
+    const totalRounds = (ammo.system.quantity || 0) * (ammo.system.package_size || 0);
+    const usedRounds = ammo.system.rounds_fired || 0;
+    const availableRounds = totalRounds - usedRounds;
+    
+    if (availableRounds <= 0) {
+      ui.notifications.warn('No ammunition available to load.');
+      return;
+    }
+    
+    // Calculate how much to load
+    const weaponCapacity = weapon.system.magazine_capacity || 0;
+    const currentAmmo = weapon.system.current_ammo || 0;
+    const spaceInWeapon = weaponCapacity - currentAmmo;
+    const roundsToLoad = Math.min(availableRounds, spaceInWeapon);
+    
+    if (roundsToLoad <= 0) {
+      ui.notifications.warn('Weapon is already fully loaded.');
+      return;
+    }
+    
+    // Update weapon with loaded ammunition
+    await weapon.update({
+      'system.current_ammo': currentAmmo + roundsToLoad,
+      'system.loaded_ammunition': {
+        id: ammo.id,
+        name: ammo.name,
+        ammo_type: ammo.system.ammo_type,
+        attack_modifier: ammo.system.attack_modifier || 0,
+        damage_modifier: ammo.system.damage_modifier || 0,
+        range_modifier: ammo.system.range_modifier || 0,
+        penetration: ammo.system.penetration || 0
+      }
+    });
+    
+    // Update ammunition consumed
+    await ammo.update({
+      'system.rounds_fired': usedRounds + roundsToLoad
+    });
+    
+    ui.notifications.info(`Loaded ${roundsToLoad} rounds of ${ammo.name} into ${weapon.name}.`);
+    
+    // Reset the dropdown
+    selectElement.val('');
+  }
+  
+  /**
+   * Handle ammunition capacity changes
+   * @param {Event} event   The originating change event
+   * @private
+   */
+  async _onAmmoCapacityChange(event) {
+    event.preventDefault();
+    
+    const itemId = event.currentTarget.dataset.itemId;
+    const newCapacity = parseInt(event.currentTarget.value) || 1;
+    const item = this.actor.items.get(itemId);
+    
+    if (!item) {
+      console.warn('BluePlanet: Ammunition item not found:', itemId);
+      return;
+    }
+    
+    console.log('BluePlanet: Updating ammunition capacity:', {
+      itemName: item.name,
+      oldCapacity: item.system.package_size,
+      newCapacity: newCapacity
+    });
+    
+    await item.update({
+      'system.package_size': Math.max(1, newCapacity)
+    });
+    
+    // Update the total rounds display in real time - works for both enhanced and compact
+    const li = event.currentTarget.closest('.ammunition-item-enhanced, .ammunition-item-compact');
+    const quantity = item.system.quantity || 0;
+    const totalRounds = quantity * Math.max(1, newCapacity);
+    
+    console.log('BluePlanet: Calculated total rounds:', {
+      quantity: quantity,
+      capacity: newCapacity,
+      totalRounds: totalRounds
+    });
+    
+    $(li).find('.total-rounds').text(`/${totalRounds}`);
+    
+    // Also update the current ammo input max value
+    const currentAmmoInput = $(li).find('.current-ammo-input');
+    currentAmmoInput.attr('max', totalRounds);
+    
+    // If current value exceeds new total, clamp it
+    const currentValue = parseInt(currentAmmoInput.val()) || 0;
+    if (currentValue > totalRounds) {
+      currentAmmoInput.val(totalRounds);
+      // Update the item's rounds_fired accordingly - set to 0 if clamping to max
+      await item.update({ 'system.rounds_fired': 0 });
+    }
+  }
+  
+  /**
+   * Handle current ammunition changes
+   * @param {Event} event   The originating change event
+   * @private
+   */
+  async _onCurrentAmmoChange(event) {
+    event.preventDefault();
+    
+    const itemId = event.currentTarget.dataset.itemId;
+    const newCurrent = parseInt(event.currentTarget.value) || 0;
+    const item = this.actor.items.get(itemId);
+    
+    if (!item) {
+      console.warn('BluePlanet: Ammunition item not found for current ammo change:', itemId);
+      return;
+    }
+    
+    const totalRounds = (item.system.quantity || 0) * (item.system.package_size || 0);
+    const validCurrent = Math.max(0, Math.min(newCurrent, totalRounds));
+    
+    // Calculate rounds fired based on current remaining
+    const roundsFired = totalRounds - validCurrent;
+    
+    console.log('BluePlanet: Updating current ammunition:', {
+      itemName: item.name,
+      totalRounds: totalRounds,
+      newCurrent: newCurrent,
+      validCurrent: validCurrent,
+      roundsFired: roundsFired,
+      oldRoundsFired: item.system.rounds_fired || 0
+    });
+    
+    await item.update({
+      'system.rounds_fired': Math.max(0, roundsFired)
+    });
+    
+    // Update the input to the valid value if it was clamped
+    if (validCurrent !== newCurrent) {
+      console.log('BluePlanet: Clamping current ammo value from', newCurrent, 'to', validCurrent);
+      event.currentTarget.value = validCurrent;
+    }
+  }
+  
+  /**
+   * Handle compatible weapon selection changes
+   * @param {Event} event   The originating change event
+   * @private
+   */
+  _onCompatibleWeaponSelect(event) {
+    const selectElement = $(event.currentTarget);
+    const loadBtn = selectElement.siblings('.load-ammo-btn');
+    
+    if (selectElement.val()) {
+      loadBtn.prop('disabled', false).removeClass('disabled');
+    } else {
+      loadBtn.prop('disabled', true).addClass('disabled');
+    }
+  }
+
+  /**
+   * Handle loading ammunition into a compatible weapon (compact version)
+   * @param {Event} event   The originating click event
+   * @private
+   */
+  async _onLoadAmmoToWeaponCompact(event) {
+    event.preventDefault();
+    
+    const ammoId = event.currentTarget.dataset.ammoId;
+    const ammo = this.actor.items.get(ammoId);
+    
+    if (!ammo) {
+      ui.notifications.error('Ammunition not found.');
+      return;
+    }
+    
+    // Get selected weapon from the compact dropdown
+    const selectElement = this.element.find(`.compatible-weapon-select-compact[data-item-id="${ammoId}"]`);
+    const weaponId = selectElement.val();
+    
+    if (!weaponId) {
+      ui.notifications.warn('Please select a weapon to load first.');
+      return;
+    }
+    
+    const weapon = this.actor.items.get(weaponId);
+    if (!weapon) {
+      ui.notifications.error('Selected weapon not found.');
+      return;
+    }
+    
+    // Check if ammunition is available
+    const totalRounds = (ammo.system.quantity || 0) * (ammo.system.package_size || 0);
+    const usedRounds = ammo.system.rounds_fired || 0;
+    const availableRounds = totalRounds - usedRounds;
+    
+    if (availableRounds <= 0) {
+      ui.notifications.warn('No ammunition available to load.');
+      return;
+    }
+    
+    // Calculate how much to load
+    const weaponCapacity = weapon.system.magazine_capacity || 0;
+    const currentAmmo = weapon.system.current_ammo || 0;
+    const spaceInWeapon = weaponCapacity - currentAmmo;
+    const roundsToLoad = Math.min(availableRounds, spaceInWeapon);
+    
+    if (roundsToLoad <= 0) {
+      ui.notifications.warn('Weapon is already fully loaded.');
+      return;
+    }
+    
+    // Update weapon with loaded ammunition
+    await weapon.update({
+      'system.current_ammo': currentAmmo + roundsToLoad,
+      'system.loaded_ammunition': {
+        id: ammo.id,
+        name: ammo.name,
+        ammo_type: ammo.system.ammo_type,
+        attack_modifier: ammo.system.attack_modifier || 0,
+        damage_modifier: ammo.system.damage_modifier || 0,
+        range_modifier: ammo.system.range_modifier || 0,
+        penetration: ammo.system.penetration || 0
+      }
+    });
+    
+    // Update ammunition consumed
+    await ammo.update({
+      'system.rounds_fired': usedRounds + roundsToLoad
+    });
+    
+    ui.notifications.info(`Loaded ${roundsToLoad} rounds of ${ammo.name} into ${weapon.name}.`);
+    
+    // Reset the dropdown
+    selectElement.val('');
+  }
+  
+  /**
+   * Handle compatible weapon selection changes (compact version)
+   * @param {Event} event   The originating change event
+   * @private
+   */
+  _onCompatibleWeaponSelectCompact(event) {
+    const selectElement = $(event.currentTarget);
+    const loadBtn = selectElement.siblings('.load-ammo-btn-compact');
+    
+    if (selectElement.val()) {
+      loadBtn.prop('disabled', false).removeClass('disabled');
+    } else {
+      loadBtn.prop('disabled', true).addClass('disabled');
+    }
+  }
+
+  /**
+   * Handle showing item information in chat
+   * @param {Event} event   The originating click event
+   * @private
+   */
+  async _onItemChat(event) {
+    event.preventDefault();
+    const dataset = event.currentTarget.dataset;
+    const itemId = dataset.itemId;
+    
+    const item = this.actor.items.get(itemId);
+    if (!item) {
+      ui.notifications.warn('Item not found');
+      return;
+    }
+
+    console.log('BluePlanet: Showing item in chat:', item);
+    
+    // Create chat card based on item type
+    let chatData = {
+      user: game.user.id,
+      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      content: await this._generateItemChatCard(item),
+      type: CONST.CHAT_MESSAGE_TYPES.OTHER
+    };
+
+    // Send the chat message
+    foundry.documents.ChatMessage.create(chatData);
+  }
+
+  /**
+   * Generate HTML content for item chat card
+   * @param {Item} item   The item to display
+   * @private
+   */
+  async _generateItemChatCard(item) {
+    const itemData = item.system;
+    let content = `
+      <div class="blue-planet-item-chat-card" style="
+        background: linear-gradient(135deg, #0d1f2d 0%, #1a3e5c 50%, #0d1f2d 100%);
+        border: 2px solid #4a90e2;
+        border-radius: 12px;
+        padding: 15px;
+        color: #ffffff;
+        font-family: 'Segoe UI', Arial, sans-serif;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      ">
+        <div class="item-header" style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px; border-bottom: 2px solid rgba(107, 182, 255, 0.3); padding-bottom: 8px;">
+          <img src="${item.img}" style="width: 48px; height: 48px; border-radius: 6px; border: 2px solid #6bb6ff;" />
+          <div>
+            <h3 style="margin: 0; color: #6bb6ff; text-shadow: 0 0 8px rgba(107, 182, 255, 0.4);">${item.name}</h3>
+            <p style="margin: 2px 0 0 0; color: #b8d4f0; font-style: italic; font-size: 13px;">${this._getItemTypeLabel(item.type)}</p>
+          </div>
+        </div>
+    `;
+
+    // Add description if available
+    if (itemData.description) {
+      content += `
+        <div class="item-description" style="background: rgba(26, 62, 92, 0.4); padding: 10px; border-radius: 6px; margin-bottom: 12px; border- px solid #6bb6ff;">
+          <p style="margin: 0; color: #e8f4fd; line-height: 1.4;">${itemData.description}</p>
+        </div>
+      `;
+    }
+
+    // Add item-specific stats based on type
+    content += this._getItemSpecificStats(item);
+
+    content += `</div>`;
+    
+    return content;
+  }
+
+  /**
+   * Get readable label for item type
+   * @param {string} itemType
+   * @private
+   */
+  _getItemTypeLabel(itemType) {
+    const typeLabels = {
+      weapon: "🗡️ Weapon",
+      ammunition: "🎯 Ammunition",
+      equipment: "⚙️ Equipment",
+      biomod: "🧬 Biomodification",
+      cyberware: "🤖 Cyberware",
+      feature: "⭐ Feature",
+      skill: "📚 Skill"
+    };
+    return typeLabels[itemType] || itemType.charAt(0).toUpperCase() + itemType.slice(1);
+  }
+
+  /**
+   * Get item-specific statistics for chat card
+   * @param {Item} item
+   * @private
+   */
+  _getItemSpecificStats(item) {
+    const itemData = item.system;
+    let statsHtml = `<div class="item-stats" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px;">`;
+
+    switch (item.type) {
+      case 'weapon':
+        if (itemData.damage) statsHtml += `<div class="stat-item" style="background: rgba(255, 215, 0, 0.1); padding: 6px; border-radius: 4px; border: 1px solid rgba(255, 215, 0, 0.3);"><strong style="color: #ffd700;">Damage Rating:</strong> ${itemData.damage}</div>`;
+        if (itemData.weapon_type) statsHtml += `<div class="stat-item" style="background: rgba(74, 144, 226, 0.1); padding: 6px; border-radius: 4px; border: 1px solid rgba(74, 144, 226, 0.3);"><strong style="color: #4a90e2;">Type:</strong> ${itemData.weapon_type.charAt(0).toUpperCase() + itemData.weapon_type.slice(1)}</div>`;
+        if (itemData.effective_range) statsHtml += `<div class="stat-item" style="background: rgba(40, 167, 69, 0.1); padding: 6px; border-radius: 4px; border: 1px solid rgba(40, 167, 69, 0.3);"><strong style="color: #28a745;">Range:</strong> ${itemData.effective_range}m</div>`;
+        if (itemData.durability) statsHtml += `<div class="stat-item" style="background: rgba(107, 182, 255, 0.1); padding: 6px; border-radius: 4px; border: 1px solid rgba(107, 182, 255, 0.3);"><strong style="color: #6bb6ff;">Durability:</strong> ${itemData.durability}</div>`;
+        if (itemData.dimensions) statsHtml += `<div class="stat-item" style="background: rgba(107, 182, 255, 0.1); padding: 6px; border-radius: 4px; border: 1px solid rgba(107, 182, 255, 0.3);"><strong style="color: #6bb6ff;">Dimensions:</strong> ${itemData.dimensions.charAt(0).toUpperCase() + itemData.dimensions.slice(1)}</div>`;
+        if (itemData.features && itemData.features.length > 0) {
+          statsHtml += `<div class="stat-item" style="background: rgba(64, 224, 208, 0.1); padding: 6px; border-radius: 4px; border: 1px solid rgba(64, 224, 208, 0.3); grid-column: 1 / -1;"><strong style="color: #40e0d0;">Features:</strong> ${itemData.features.join(', ')}</div>`;
+        }
+        break;
+        
+      case 'ammunition':
+        if (itemData.damage_modifier) statsHtml += `<div class="stat-item" style="background: rgba(255, 215, 0, 0.1); padding: 6px; border-radius: 4px; border: 1px solid rgba(255, 215, 0, 0.3);"><strong style="color: #ffd700;">Damage Mod:</strong> ${itemData.damage_modifier >= 0 ? '+' : ''}${itemData.damage_modifier}</div>`;
+        if (itemData.attack_modifier) statsHtml += `<div class="stat-item" style="background: rgba(220, 53, 69, 0.1); padding: 6px; border-radius: 4px; border: 1px solid rgba(220, 53, 69, 0.3);"><strong style="color: #dc3545;">Attack Mod:</strong> ${itemData.attack_modifier >= 0 ? '+' : ''}${itemData.attack_modifier}</div>`;
+        if (itemData.range_modifier) statsHtml += `<div class="stat-item" style="background: rgba(40, 167, 69, 0.1); padding: 6px; border-radius: 4px; border: 1px solid rgba(40, 167, 69, 0.3);"><strong style="color: #28a745;">Range Mod:</strong> ${itemData.range_modifier}%</div>`;
+        if (itemData.penetration) statsHtml += `<div class="stat-item" style="background: rgba(255, 152, 0, 0.1); padding: 6px; border-radius: 4px; border: 1px solid rgba(255, 152, 0, 0.3);"><strong style="color: #ff9800;">Penetration:</strong> ${itemData.penetration}</div>`;
+        if (itemData.dimensions) statsHtml += `<div class="stat-item" style="background: rgba(107, 182, 255, 0.1); padding: 6px; border-radius: 4px; border: 1px solid rgba(107, 182, 255, 0.3);"><strong style="color: #6bb6ff;">Dimensions:</strong> ${itemData.dimensions.charAt(0).toUpperCase() + itemData.dimensions.slice(1)}</div>`;
+        if (itemData.availability) statsHtml += `<div class="stat-item" style="background: rgba(156, 39, 176, 0.1); padding: 6px; border-radius: 4px; border: 1px solid rgba(156, 39, 176, 0.3);"><strong style="color: #9c27b0;">Availability:</strong> ${itemData.availability.charAt(0).toUpperCase() + itemData.availability.slice(1)}</div>`;
+        break;
+        
+      case 'equipment':
+        if (itemData.durability) statsHtml += `<div class="stat-item" style="background: rgba(107, 182, 255, 0.1); padding: 6px; border-radius: 4px; border: 1px solid rgba(107, 182, 255, 0.3);"><strong style="color: #6bb6ff;">Durability:</strong> ${itemData.durability}</div>`;
+        if (itemData.dimensions) statsHtml += `<div class="stat-item" style="background: rgba(107, 182, 255, 0.1); padding: 6px; border-radius: 4px; border: 1px solid rgba(107, 182, 255, 0.3);"><strong style="color: #6bb6ff;">Dimensions:</strong> ${itemData.dimensions.charAt(0).toUpperCase() + itemData.dimensions.slice(1)}</div>`;
+        if (itemData.availability) statsHtml += `<div class="stat-item" style="background: rgba(156, 39, 176, 0.1); padding: 6px; border-radius: 4px; border: 1px solid rgba(156, 39, 176, 0.3);"><strong style="color: #9c27b0;">Availability:</strong> ${itemData.availability.charAt(0).toUpperCase() + itemData.availability.slice(1)}</div>`;
+        if (itemData.features && itemData.features.length > 0) {
+          statsHtml += `<div class="stat-item" style="background: rgba(64, 224, 208, 0.1); padding: 6px; border-radius: 4px; border: 1px solid rgba(64, 224, 208, 0.3); grid-column: 1 / -1;"><strong style="color: #40e0d0;">Features:</strong> ${itemData.features.join(', ')}</div>`;
+        }
+        break;
+        
+      case 'biomod':
+        if (itemData.type) statsHtml += `<div class="stat-item" style="background: rgba(40, 167, 69, 0.1); padding: 6px; border-radius: 4px; border: 1px solid rgba(40, 167, 69, 0.3);"><strong style="color: #28a745;">Type:</strong> ${itemData.type.charAt(0).toUpperCase() + itemData.type.slice(1)}</div>`;
+        if (itemData.availability) statsHtml += `<div class="stat-item" style="background: rgba(156, 39, 176, 0.1); padding: 6px; border-radius: 4px; border: 1px solid rgba(156, 39, 176, 0.3);"><strong style="color: #9c27b0;">Availability:</strong> ${itemData.availability.charAt(0).toUpperCase() + itemData.availability.slice(1)}</div>`;
+        if (itemData.active !== undefined) statsHtml += `<div class="stat-item" style="background: rgba(${itemData.active ? '40, 167, 69' : '220, 53, 69'}, 0.1); padding: 6px; border-radius: 4px; border: 1px solid rgba(${itemData.active ? '40, 167, 69' : '220, 53, 69'}, 0.3);"><strong style="color: ${itemData.active ? '#28a745' : '#dc3545'};">Status:</strong> ${itemData.active ? 'Active' : 'Inactive'}</div>`;
+        break;
+        
+      case 'cyberware':
+        if (itemData.type) statsHtml += `<div class="stat-item" style="background: rgba(74, 144, 226, 0.1); padding: 6px; border-radius: 4px; border: 1px solid rgba(74, 144, 226, 0.3);"><strong style="color: #4a90e2;">Type:</strong> ${itemData.type.charAt(0).toUpperCase() + itemData.type.slice(1)}</div>`;
+        if (itemData.durability) statsHtml += `<div class="stat-item" style="background: rgba(107, 182, 255, 0.1); padding: 6px; border-radius: 4px; border: 1px solid rgba(107, 182, 255, 0.3);"><strong style="color: #6bb6ff;">Durability:</strong> ${itemData.durability}</div>`;
+        if (itemData.availability) statsHtml += `<div class="stat-item" style="background: rgba(156, 39, 176, 0.1); padding: 6px; border-radius: 4px; border: 1px solid rgba(156, 39, 176, 0.3);"><strong style="color: #9c27b0;">Availability:</strong> ${itemData.availability.charAt(0).toUpperCase() + itemData.availability.slice(1)}</div>`;
+        if (itemData.active !== undefined) statsHtml += `<div class="stat-item" style="background: rgba(${itemData.active ? '40, 167, 69' : '220, 53, 69'}, 0.1); padding: 6px; border-radius: 4px; border: 1px solid rgba(${itemData.active ? '40, 167, 69' : '220, 53, 69'}, 0.3);"><strong style="color: ${itemData.active ? '#28a745' : '#dc3545'};">Status:</strong> ${itemData.active ? 'Active' : 'Inactive'}</div>`;
+        if (itemData.features && itemData.features.length > 0) {
+          statsHtml += `<div class="stat-item" style="background: rgba(64, 224, 208, 0.1); padding: 6px; border-radius: 4px; border: 1px solid rgba(64, 224, 208, 0.3); grid-column: 1 / -1;"><strong style="color: #40e0d0;">Features:</strong> ${itemData.features.join(', ')}</div>`;
+        }
+        break;
+    }
+
+    // Add cost if available
+    if (itemData.cost) {
+      statsHtml += `<div class="stat-item" style="background: rgba(255, 215, 0, 0.1); padding: 6px; border-radius: 4px; border: 1px solid rgba(255, 215, 0, 0.3);"><strong style="color: #ffd700;">Cost:</strong> ¤${itemData.cost}</div>`;
+    }
+
+    statsHtml += `</div>`;
+    
+    return statsHtml;
   }
 }

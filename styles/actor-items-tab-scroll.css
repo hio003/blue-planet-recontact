@@ -1,0 +1,99 @@
+/* Scrollbar interna para la tab de ITEMS en actor sheets */
+
+/* Tab de ITEMS con scroll interno */
+.tab.items {
+  /* max-height: 400px; — reemplazado por scrollbars-unified.css */ /* Altura máxima antes de scroll */
+  overflow-y: auto;  /* Scroll vertical cuando sea necesario */
+  overflow-x: hidden; /* Sin scroll horizontal */
+  padding-right: 8px; /* Espacio para la scrollbar */
+}
+
+/* Estilo de la scrollbar para la tab de ITEMS */
+.tab.items::-webkit-scrollbar {
+  width: 8px;
+}
+
+.tab.items::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+.tab.items::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+}
+
+.tab.items::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/* Para Firefox */
+.tab.items {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.3) rgba(0, 0, 0, 0.1);
+}
+
+/* Asegurar que las secciones de items se ajusten bien */
+.tab.items .items-section {
+  margin-bottom: 16px;
+  flex-shrink: 0; /* Evitar que se compriman */
+}
+
+/* Asegurar que las listas mantengan su altura natural */
+.tab.items .item-list {
+  min-height: auto;
+  max-height: none;
+}
+
+/* Espaciado interno mejorado para la tab */
+.tab.items {
+  padding: 12px 16px 12px 12px; /* Extra padding derecho para scrollbar */
+}
+
+/* Aplicar a todos los tipos de actor sheets */
+.character-sheet .tab.items,
+.npc-sheet .tab.items,
+.cetacean-sheet .tab.items {
+  /* max-height: 400px; — reemplazado por scrollbars-unified.css */
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 8px;
+}
+
+/* Ajustar altura según el tamaño de la ventana */
+@media (min-height: 600px) {
+  .tab.items {
+    /* max-height: 450px; — reemplazado por scrollbars-unified.css */
+  }
+}
+
+@media (min-height: 800px) {
+  .tab.items {
+    /* max-height: 500px; — reemplazado por scrollbars-unified.css */
+  }
+}
+
+@media (max-height: 500px) {
+  .tab.items {
+    /* max-height: 250px; — reemplazado por scrollbars-unified.css */
+  }
+}
+
+/* Estilo especial para cuando la scrollbar es visible */
+.tab.items.scrolling {
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+/* Restaurar estilo azul original con sombreado para los títulos */
+.tab.items h3 {
+  color: #4a90e2 !important;
+  margin-bottom: 10px;
+  font-size: 16px;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+  /* Sin background blanco ni sticky para mantener estilo original */
+}
+
+/* Smooth scrolling */
+.tab.items {
+  scroll-behavior: smooth;
+}

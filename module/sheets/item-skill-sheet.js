@@ -2,9 +2,9 @@ import { BluePlanetRollDialog } from '../roll-dialog.js';
 
 /**
  * Blue Planet Skill Sheet
- * @extends {ItemSheet}
+ * @extends {foundry.appv1.sheets.ItemSheet}
  */
-export class BluePlanetSkillSheet extends ItemSheet {
+export class BluePlanetSkillSheet extends foundry.appv1.sheets.ItemSheet {
   
   /** @override */
   static get defaultOptions() {

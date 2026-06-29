@@ -1,0 +1,705 @@
+/* CSS para hacer que las pestañas de item sheets se vean como las de actor sheets */
+
+/* Contenedor principal de pestañas para item sheets */
+.weapon-sheet .sheet-tabs,
+.ammunition-sheet .sheet-tabs,
+.equipment-sheet .sheet-tabs,
+.biomod-sheet .sheet-tabs,
+.feature-sheet .sheet-tabs,
+.sensor-sheet .sheet-tabs,
+.skill-sheet .sheet-tabs,
+.item-sheet .sheet-tabs {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  border-bottom: 2px solid #007cad;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  flex-wrap: nowrap;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Items/pestañas individuales */
+.weapon-sheet .sheet-tabs .item,
+.ammunition-sheet .sheet-tabs .item,
+.equipment-sheet .sheet-tabs .item,
+.biomod-sheet .sheet-tabs .item,
+.feature-sheet .sheet-tabs .item,
+.sensor-sheet .sheet-tabs .item,
+.skill-sheet .sheet-tabs .item,
+.item-sheet .sheet-tabs .item {
+  flex: 1;
+  text-align: center;
+  padding: 12px 16px;
+  background: #2a2a2a;
+  color: #ccc;
+  text-decoration: none;
+  border: none;
+  border-right: 1px solid #444;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  position: relative;
+}
+
+/* Eliminar borde derecho del último item */
+.weapon-sheet .sheet-tabs .item:last-child,
+.ammunition-sheet .sheet-tabs .item:last-child,
+.equipment-sheet .sheet-tabs .item:last-child,
+.biomod-sheet .sheet-tabs .item:last-child,
+.feature-sheet .sheet-tabs .item:last-child,
+.sensor-sheet .sheet-tabs .item:last-child,
+.skill-sheet .sheet-tabs .item:last-child,
+.item-sheet .sheet-tabs .item:last-child {
+  border-right: none;
+}
+
+/* Estado hover */
+.weapon-sheet .sheet-tabs .item:hover,
+.ammunition-sheet .sheet-tabs .item:hover,
+.equipment-sheet .sheet-tabs .item:hover,
+.biomod-sheet .sheet-tabs .item:hover,
+.feature-sheet .sheet-tabs .item:hover,
+.sensor-sheet .sheet-tabs .item:hover,
+.skill-sheet .sheet-tabs .item:hover,
+.item-sheet .sheet-tabs .item:hover {
+  background: #3a3a3a;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 124, 173, 0.2);
+}
+
+/* Pestaña activa */
+.weapon-sheet .sheet-tabs .item.active,
+.ammunition-sheet .sheet-tabs .item.active,
+.equipment-sheet .sheet-tabs .item.active,
+.biomod-sheet .sheet-tabs .item.active,
+.feature-sheet .sheet-tabs .item.active,
+.sensor-sheet .sheet-tabs .item.active,
+.skill-sheet .sheet-tabs .item.active,
+.item-sheet .sheet-tabs .item.active {
+  background: #007cad;
+  color: #fff;
+  box-shadow: inset 0 -3px 0 #005577;
+  transform: none;
+}
+
+/* Indicador inferior para pestaña activa */
+.weapon-sheet .sheet-tabs .item.active::after,
+.ammunition-sheet .sheet-tabs .item.active::after,
+.equipment-sheet .sheet-tabs .item.active::after,
+.biomod-sheet .sheet-tabs .item.active::after,
+.feature-sheet .sheet-tabs .item.active::after,
+.sensor-sheet .sheet-tabs .item.active::after,
+.skill-sheet .sheet-tabs .item.active::after,
+.item-sheet .sheet-tabs .item.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #00a3d9;
+  box-shadow: 0 0 6px rgba(0, 163, 217, 0.6);
+}
+
+/* Asegurar que el contenido de las pestañas esté correctamente espaciado */
+.weapon-sheet .sheet-body,
+.ammunition-sheet .sheet-body,
+.equipment-sheet .sheet-body,
+.biomod-sheet .sheet-body,
+.feature-sheet .sheet-body,
+.sensor-sheet .sheet-body,
+.skill-sheet .sheet-body,
+.item-sheet .sheet-body {
+  padding: 20px;
+  background: #1e1e1e;
+  min-height: 400px;
+  border-top: none;
+}
+
+/* Ocultar pestañas inactivas */
+.weapon-sheet .sheet-body .tab:not(.active),
+.ammunition-sheet .sheet-body .tab:not(.active),
+.equipment-sheet .sheet-body .tab:not(.active),
+.biomod-sheet .sheet-body .tab:not(.active),
+.feature-sheet .sheet-body .tab:not(.active),
+.sensor-sheet .sheet-body .tab:not(.active),
+.skill-sheet .sheet-body .tab:not(.active),
+.item-sheet .sheet-body .tab:not(.active) {
+  display: none;
+}
+
+/* Mostrar pestaña activa */
+.weapon-sheet .sheet-body .tab.active,
+.ammunition-sheet .sheet-body .tab.active,
+.equipment-sheet .sheet-body .tab.active,
+.biomod-sheet .sheet-body .tab.active,
+.feature-sheet .sheet-body .tab.active,
+.sensor-sheet .sheet-body .tab.active,
+.skill-sheet .sheet-body .tab.active,
+.item-sheet .sheet-body .tab.active {
+  display: block;
+}
+
+/* Ajustar el contenedor principal para dar más espacio */
+.weapon-sheet,
+.ammunition-sheet,
+.equipment-sheet,
+.biomod-sheet,
+.feature-sheet,
+.sensor-sheet,
+.skill-sheet {
+  min-height: 500px;
+}
+
+/* Mejorar el espaciado del contenido principal */
+.weapon-sheet .sheet-main,
+.ammunition-sheet .sheet-main,
+.equipment-sheet .sheet-main,
+.biomod-sheet .sheet-main,
+.feature-sheet .sheet-main,
+.sensor-sheet .sheet-main,
+.skill-sheet .sheet-main {
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 120px); /* Ajustar según el header */
+}
+
+/* Asegurar que las pestañas no se envuelvan */
+.weapon-sheet .sheet-tabs,
+.ammunition-sheet .sheet-tabs,
+.equipment-sheet .sheet-tabs,
+.biomod-sheet .sheet-tabs,
+.feature-sheet .sheet-tabs,
+.sensor-sheet .sheet-tabs,
+.skill-sheet .sheet-tabs,
+.item-sheet .sheet-tabs {
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/* Responsive para pestañas más pequeñas si es necesario */
+@media (max-width: 700px) {
+  .weapon-sheet .sheet-tabs .item,
+  .ammunition-sheet .sheet-tabs .item,
+  .equipment-sheet .sheet-tabs .item,
+  .biomod-sheet .sheet-tabs .item,
+  .feature-sheet .sheet-tabs .item,
+  .sensor-sheet .sheet-tabs .item,
+  .skill-sheet .sheet-tabs .item,
+  .item-sheet .sheet-tabs .item {
+    font-size: 11px;
+    padding: 10px 12px;
+  }
+}
+
+/* ===== AMMUNITION SHEET DISTINCTIVE STYLING ===== */
+
+/* Color distintivo dorado/ámbar para ammunition sheets */
+.ammunition-sheet .sheet-tabs {
+  border-bottom: 2px solid #d4af37; /* Oro */
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2508 100%);
+}
+
+.ammunition-sheet .sheet-tabs .item {
+  background: #2a2208;
+  color: #ddc;
+  border-right: 1px solid #556633;
+}
+
+.ammunition-sheet .sheet-tabs .item:hover {
+  background: #3a3318;
+  color: #fff;
+  box-shadow: 0 4px 8px rgba(212, 175, 55, 0.2);
+}
+
+.ammunition-sheet .sheet-tabs .item.active {
+  background: #d4af37; /* Oro para pestaña activa */
+  color: #000;
+  box-shadow: inset 0 -3px 0 #b8941f;
+}
+
+.ammunition-sheet .sheet-tabs .item.active::after {
+  background: #f4d03f;
+  box-shadow: 0 0 6px rgba(244, 208, 63, 0.6);
+}
+
+/* Header de ammunition con toque dorado */
+.ammunition-sheet .sheet-header {
+  background: linear-gradient(135deg, #2a2a2a 0%, #332b08 100%);
+  border-bottom: 2px solid #d4af37;
+}
+
+/* Estilo especial para controles de cantidad */
+.ammunition-sheet .quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.ammunition-sheet .qty-minus,
+.ammunition-sheet .qty-plus {
+  background: #d4af37;
+  color: #000;
+  border: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 3px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  transition: all 0.2s ease;
+}
+
+.ammunition-sheet .qty-minus:hover,
+.ammunition-sheet .qty-plus:hover {
+  background: #f4d03f;
+  transform: scale(1.1);
+  box-shadow: 0 2px 4px rgba(212, 175, 55, 0.3);
+}
+
+/* Iconos de estadísticas con color distintivo */
+.ammunition-sheet .stat-display i {
+  color: #d4af37;
+  font-size: 18px;
+  margin-right: 8px;
+}
+
+/* Headers con acento dorado */
+.ammunition-sheet h3,
+.ammunition-sheet h4 {
+  color: #d4af37;
+  border-bottom: 1px solid #556633;
+  padding-bottom: 4px;
+  margin-bottom: 12px;
+}
+
+/* Tags de armas compatibles con estilo dorado */
+.ammunition-sheet .weapon-tag {
+  background: rgba(212, 175, 55, 0.2);
+  color: #f4d03f;
+  border: 1px solid #d4af37;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  margin-right: 6px;
+  margin-bottom: 4px;
+  display: inline-block;
+}
+
+/* Inputs con acento dorado en focus */
+.ammunition-sheet input:focus,
+.ammunition-sheet select:focus,
+.ammunition-sheet textarea:focus {
+  border-color: #d4af37;
+  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
+}
+
+/* Texto de ayuda con color sutil */
+.ammunition-sheet .help-text {
+  color: #998866;
+  font-size: 10px;
+  font-style: italic;
+  margin-top: 2px;
+}
+
+/* Valores calculados destacados */
+.ammunition-sheet .calculated-weight,
+.ammunition-sheet .calculated-value {
+  color: #f4d03f;
+  font-weight: bold;
+}
+
+/* Botones de acción con tema dorado */
+.ammunition-sheet button[data-action] {
+  background: #d4af37;
+  color: #000;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 600;
+}
+
+.ammunition-sheet button[data-action]:hover {
+  background: #f4d03f;
+  transform: translateY(-1px);
+  box-shadow: 0 3px 6px rgba(212, 175, 55, 0.3);
+}
+
+/* ===== ENHANCED WEAPON COMPATIBILITY STYLES ===== */
+
+/* Weapon drop zone styling */
+.ammunition-sheet .weapon-drop-zone {
+  border: 2px dashed #556633;
+  border-radius: 8px;
+  padding: 24px;
+  text-align: center;
+  background: rgba(212, 175, 55, 0.05);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  margin: 12px 0;
+}
+
+.ammunition-sheet .weapon-drop-zone:hover,
+.ammunition-sheet .weapon-drop-zone.drag-hover {
+  border-color: #d4af37;
+  background: rgba(212, 175, 55, 0.15);
+  box-shadow: inset 0 0 20px rgba(212, 175, 55, 0.1);
+}
+
+.ammunition-sheet .drop-zone-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.ammunition-sheet .drop-zone-content i {
+  font-size: 24px;
+  color: #d4af37;
+  opacity: 0.7;
+}
+
+.ammunition-sheet .drop-zone-content p {
+  margin: 4px 0;
+  color: #ccc;
+}
+
+.ammunition-sheet .drop-zone-content .help-text {
+  font-size: 11px;
+  color: #998866;
+  font-style: italic;
+}
+
+.ammunition-sheet .drop-indicators {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  font-size: 12px;
+  color: #d4af37;
+  opacity: 0.8;
+}
+
+/* Weapon item display cards */
+.ammunition-sheet .weapon-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  background: rgba(212, 175, 55, 0.1);
+  border: 1px solid #d4af37;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  transition: all 0.2s ease;
+}
+
+.ammunition-sheet .weapon-item:hover {
+  background: rgba(212, 175, 55, 0.2);
+  box-shadow: 0 2px 8px rgba(212, 175, 55, 0.2);
+}
+
+.ammunition-sheet .weapon-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.ammunition-sheet .weapon-info i {
+  color: #d4af37;
+  font-size: 16px;
+  width: 20px;
+  text-align: center;
+}
+
+.ammunition-sheet .weapon-info strong {
+  color: #fff;
+  font-weight: 600;
+}
+
+.ammunition-sheet .weapon-type {
+  color: #aaa;
+  font-size: 11px;
+  margin-left: 8px;
+}
+
+.ammunition-sheet .weapon-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.ammunition-sheet .remove-weapon-item,
+.ammunition-sheet .remove-weapon {
+  background: #cc4444;
+  color: #fff;
+  border: none;
+  padding: 4px 8px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 11px;
+  transition: all 0.2s ease;
+}
+
+.ammunition-sheet .remove-weapon-item:hover,
+.ammunition-sheet .remove-weapon:hover {
+  background: #dd5555;
+  transform: scale(1.05);
+}
+
+/* Text-based weapon entries */
+.ammunition-sheet .weapon-text-entry {
+  margin-bottom: 8px;
+}
+
+.ammunition-sheet .weapon-input-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ammunition-sheet .weapon-input-group i {
+  color: #d4af37;
+  width: 16px;
+  text-align: center;
+}
+
+.ammunition-sheet .weapon-input-group input {
+  flex: 1;
+  padding: 6px 10px;
+  background: #333;
+  border: 1px solid #555;
+  border-radius: 4px;
+  color: #fff;
+}
+
+.ammunition-sheet .weapon-input-group input:focus {
+  border-color: #d4af37;
+  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
+}
+
+/* Universal compatibility display */
+.ammunition-sheet .universal-compatibility {
+  text-align: center;
+  padding: 20px;
+  background: rgba(212, 175, 55, 0.05);
+  border: 1px dashed #556633;
+  border-radius: 6px;
+}
+
+.ammunition-sheet .universal-compatibility i {
+  font-size: 32px;
+  color: #d4af37;
+  margin-bottom: 12px;
+  opacity: 0.7;
+}
+
+.ammunition-sheet .universal-compatibility p {
+  margin: 4px 0;
+  color: #ccc;
+}
+
+/* Control buttons */
+.ammunition-sheet .manual-add-controls {
+  margin-top: 16px;
+}
+
+.ammunition-sheet .control-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.ammunition-sheet .add-text-weapon-btn,
+.ammunition-sheet .select-weapon-modal-btn {
+  background: linear-gradient(135deg, #d4af37 0%, #f4d03f 100%);
+  color: #000;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ammunition-sheet .add-text-weapon-btn:hover,
+.ammunition-sheet .select-weapon-modal-btn:hover {
+  background: linear-gradient(135deg, #f4d03f 0%, #d4af37 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(212, 175, 55, 0.3);
+}
+
+/* Usage statistics enhancements */
+.ammunition-sheet .usage-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.ammunition-sheet .usage-stat {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: rgba(212, 175, 55, 0.1);
+  border: 1px solid #556633;
+  border-radius: 6px;
+}
+
+.ammunition-sheet .stat-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: #d4af37;
+  color: #000;
+  border-radius: 50%;
+  font-size: 14px;
+}
+
+.ammunition-sheet .stat-details {
+  flex: 1;
+}
+
+.ammunition-sheet .stat-details label {
+  display: block;
+  font-size: 11px;
+  color: #aaa;
+  margin-bottom: 2px;
+}
+
+.ammunition-sheet .usage-value {
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.ammunition-sheet .usage-value.remaining {
+  color: #4ade80;
+}
+
+.ammunition-sheet .usage-value.fired {
+  color: #f97316;
+}
+
+.ammunition-sheet .usage-value.percent {
+  color: #d4af37;
+}
+
+/* Progress bar */
+.ammunition-sheet .usage-progress {
+  margin: 16px 0;
+}
+
+.ammunition-sheet .progress-bar {
+  width: 100%;
+  height: 12px;
+  background: #333;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid #555;
+}
+
+.ammunition-sheet .progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4ade80 0%, #f97316 70%, #dc2626 100%);
+  transition: width 0.3s ease;
+}
+
+.ammunition-sheet .progress-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+  font-size: 10px;
+  color: #aaa;
+}
+
+/* Custom fire controls */
+.ammunition-sheet .custom-fire-section {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid #556633;
+}
+
+.ammunition-sheet .custom-fire-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.ammunition-sheet .custom-rounds-input {
+  width: 100px;
+  padding: 6px 10px;
+  background: #333;
+  border: 1px solid #555;
+  border-radius: 4px;
+  color: #fff;
+  text-align: center;
+}
+
+.ammunition-sheet .custom-rounds-input:focus {
+  border-color: #d4af37;
+  box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.2);
+}
+
+/* Modal overlay styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .ammunition-sheet .control-row {
+    flex-direction: column;
+  }
+  
+  .ammunition-sheet .add-text-weapon-btn,
+  .ammunition-sheet .select-weapon-modal-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .ammunition-sheet .usage-stat-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .ammunition-sheet .custom-fire-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .ammunition-sheet .custom-rounds-input {
+    width: 100%;
+  }
+}

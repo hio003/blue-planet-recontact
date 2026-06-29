@@ -1,0 +1,130 @@
+<form class="{{cssClass}} flexcol skill-sheet" autocomplete="off">
+
+  {{!-- Header --}}
+  <header class="sheet-header">
+    <div class="header-fields">
+      <div class="name-section">
+        <input name="name" type="text" value="{{item.name}}" placeholder="Skill Name" class="item-name"/>
+        <div class="item-subtitle">
+          <span class="item-type">Blue Planet Skill</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  {{!-- Main Content --}}
+  <section class="sheet-main">
+    
+    {{!-- Navigation Tabs --}}
+    <nav class="sheet-tabs" data-group="primary">
+      <a class="item active" data-tab="basic">BASIC INFO</a>
+      <a class="item" data-tab="levels">SKILL LEVELS</a>
+      <a class="item" data-tab="properties">PROPERTIES</a>
+    </nav>
+
+    {{!-- Tab Content --}}
+    <section class="sheet-body">
+      
+      {{!-- Basic Info Tab --}}
+      <div class="tab basic active" data-group="primary" data-tab="basic">
+        <div class="basic-info">
+          <div class="form-group">
+            <label>Rank:</label>
+            <input type="number" name="system.rank" value="{{system.rank}}" min="1" max="6" />
+          </div>
+          
+          <div class="form-group">
+            <label>Primary Attribute:</label>
+            <select name="system.attribute">
+              <option value="" {{#unless system.attribute}}selected{{/unless}}>No Fixed Attribute</option>
+              <option value="cognition" {{#if (eq system.attribute "cognition")}}selected{{/if}}>Cognition</option>
+              <option value="psyche" {{#if (eq system.attribute "psyche")}}selected{{/if}}>Psyche</option>
+              <option value="coordination" {{#if (eq system.attribute "coordination")}}selected{{/if}}>Coordination</option>
+              <option value="physique" {{#if (eq system.attribute "physique")}}selected{{/if}}>Physique</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label>Current Level:</label>
+            <select name="system.level_type">
+              <option value="general" {{#if (eq system.level_type "general")}}selected{{/if}}>General (1d10)</option>
+              <option value="core" {{#if (eq system.level_type "core")}}selected{{/if}}>Core (2d10, keep lowest)</option>
+              <option value="specialty" {{#if (eq system.level_type "specialty")}}selected{{/if}}>Specialty (3d10, keep lowest)</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label>Category:</label>
+            <select name="system.category">
+              <option value="origin" {{#if (eq system.category "origin")}}selected{{/if}}>Origin</option>
+              <option value="background" {{#if (eq system.category "background")}}selected{{/if}}>Background</option>
+              <option value="occupation" {{#if (eq system.category "occupation")}}selected{{/if}}>Occupation</option>
+              <option value="equipment" {{#if (eq system.category "equipment")}}selected{{/if}}>Equipment</option>
+              <option value="other" {{#if (eq system.category "other")}}selected{{/if}}>Other</option>
+            </select>
+          </div>
+        </div>
+
+        {{!-- Description --}}
+        <div class="form-group stacked">
+          <label>Description:</label>
+          <textarea name="system.description" rows="4">{{system.description}}</textarea>
+        </div>
+      </div>
+
+      {{!-- Skill Levels Tab --}}
+      <div class="tab levels" data-group="primary" data-tab="levels">
+        <div class="skill-levels">
+          <h3>Skill Level Definitions</h3>
+          
+          <div class="level-section">
+            <h4>General Level (1d10)</h4>
+            <div class="form-group">
+              <label>Name:</label>
+              <input type="text" name="system.levels.general.name" value="{{system.levels.general.name}}" placeholder="e.g., 'Swimming'"/>
+            </div>
+            <div class="form-group">
+              <label>Description:</label>
+              <textarea name="system.levels.general.description" rows="2">{{system.levels.general.description}}</textarea>
+            </div>
+          </div>
+          
+          <div class="level-section">
+            <h4>Core Level (2d10, keep lowest)</h4>
+            <div class="form-group">
+              <label>Name:</label>
+              <input type="text" name="system.levels.core.name" value="{{system.levels.core.name}}" placeholder="e.g., 'Competitive Swimming'"/>
+            </div>
+            <div class="form-group">
+              <label>Description:</label>
+              <textarea name="system.levels.core.description" rows="2">{{system.levels.core.description}}</textarea>
+            </div>
+          </div>
+          
+          <div class="level-section">
+            <h4>Specialty Level (3d10, keep lowest)</h4>
+            <div class="form-group">
+              <label>Name:</label>
+              <input type="text" name="system.levels.specialty.name" value="{{system.levels.specialty.name}}" placeholder="e.g., 'Olympic Swimming'"/>
+            </div>
+            <div class="form-group">
+              <label>Description:</label>
+              <textarea name="system.levels.specialty.description" rows="2">{{system.levels.specialty.description}}</textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {{!-- Properties Tab --}}
+      <div class="tab properties" data-group="primary" data-tab="properties">
+        {{!-- Tags --}}
+        <div class="form-group">
+          <label>Tags (comma separated):</label>
+          <input type="text" name="system.tags" value="{{join system.tags ', '}}" placeholder="e.g., aquatic, physical, endurance"/>
+        </div>
+      </div>
+
+    </section>
+  </section>
+
+</form>

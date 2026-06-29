@@ -1,0 +1,332 @@
+/* =================================== */
+/*        FOUNDRY SCROLL FIXES         */
+/* =================================== */
+
+/* Combat Tracker Scroll Fixes */
+#combat-tracker {
+  /* Prevent automatic scrolling to top */
+  scroll-behavior: auto !important;
+}
+
+#combat-tracker .directory-list {
+  /* Maintain scroll position during updates */
+  scroll-behavior: auto !important;
+  overflow-anchor: auto;
+}
+
+/* Prevent scroll jump on combat tracker updates */
+#combat-tracker .combatant {
+  /* Stable positioning to prevent layout shifts */
+  contain: layout style;
+  will-change: auto;
+}
+
+/* Fix for combat tracker scroll jumping during initiative changes */
+#combat-tracker .combatant.active {
+  /* Prevent active combatant from causing scroll jumps */
+  scroll-margin-top: 0;
+  scroll-snap-align: none;
+}
+
+/* General combat tracker improvements */
+#combat-tracker .directory-list {
+  /* Better scroll performance */
+  -webkit-overflow-scrolling: touch;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* Fix scroll anchoring issues */
+#combat-tracker .directory-list li {
+  overflow-anchor: auto;
+}
+
+/* Prevent scroll restoration on render */
+.app.combat-tracker {
+  /* Disable automatic scroll restoration */
+  scroll-restoration: manual;
+}
+
+/* ================================= */
+/*     CHAT LOG SCROLL FIXES         */
+/* ================================= */
+
+/* Fix chat log scroll jumping */
+#chat-log {
+  scroll-behavior: smooth;
+  overflow-anchor: auto;
+}
+
+#chat-log .message {
+  /* Prevent messages from causing scroll jumps */
+  contain: layout;
+  overflow-anchor: auto;
+}
+
+/* Better chat scroll performance */
+#chat-log .log {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ================================= */
+/*    SIDEBAR SCROLL IMPROVEMENTS    */
+/* ================================= */
+
+/* Fix sidebar tab scroll issues */
+#sidebar .tab {
+  scroll-behavior: auto;
+  overflow-anchor: auto;
+}
+
+/* Actors directory scroll fix */
+#actors .directory-list {
+  scroll-behavior: auto !important;
+  overflow-anchor: auto;
+}
+
+/* Items directory scroll fix */
+#items .directory-list {
+  scroll-behavior: auto !important;
+  overflow-anchor: auto;
+}
+
+/* Journal directory scroll fix */
+#journal .directory-list {
+  scroll-behavior: auto !important;
+  overflow-anchor: auto;
+}
+
+/* Scenes directory scroll fix */
+#scenes .directory-list {
+  scroll-behavior: auto !important;
+  overflow-anchor: auto;
+}
+
+/* Compendium scroll fix */
+.compendium .directory-list {
+  scroll-behavior: auto !important;
+  overflow-anchor: auto;
+}
+
+/* ================================= */
+/*      DIALOG SCROLL FIXES          */
+/* ================================= */
+
+/* Fix dialog scroll issues */
+.dialog .window-content {
+  overflow-anchor: auto;
+  scroll-behavior: auto;
+}
+
+/* Application window scroll fixes */
+.app.window-app .window-content {
+  overflow-anchor: auto;
+  scroll-behavior: auto;
+}
+
+/* ================================= */
+/*    TOKEN SELECTION FIXES          */
+/* ================================= */
+
+/* Prevent combat tracker from scrolling when tokens are selected */
+#combat-tracker[data-combat-state="active"] {
+  /* Lock scroll position during combat */
+  overflow-anchor: none;
+}
+
+/* Fix for turn advancement scroll issues */
+.combat-tracker .combatant.turn {
+  /* Prevent turn changes from causing scroll jumps */
+  scroll-margin: 0;
+}
+
+/* ================================= */
+/*      PERFORMANCE IMPROVEMENTS     */
+/* ================================= */
+
+/* Improve scroll performance across Foundry */
+.directory-list,
+.tab-content,
+.window-content {
+  /* Better scroll performance */
+  -webkit-overflow-scrolling: touch;
+  transform: translateZ(0); /* Force hardware acceleration */
+}
+
+/* Reduce paint operations during scroll */
+.directory-item,
+.chat-message,
+.combatant {
+  will-change: auto; /* Prevent unnecessary layer creation */
+  transform: translateZ(0);
+}
+
+/* ================================= */
+/*       SPECIFIC FIXES              */
+/* ================================= */
+
+/* Fix for specific combat tracker scroll to top issue */
+#combat-tracker.app {
+  /* Prevent the entire app from auto-scrolling */
+  scroll-snap-type: none;
+  overflow-anchor: none;
+}
+
+#combat-tracker .directory-list:focus-within {
+  /* Prevent focus changes from causing scroll jumps */
+  scroll-behavior: auto;
+}
+
+/* Fix for encounter updates causing scroll reset */
+.combat-tracker .encounter-controls {
+  /* Stable positioning for controls */
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: inherit;
+}
+
+/* Fix scroll position memory */
+#combat-tracker .directory-list {
+  /* Remember scroll position better */
+  scroll-timeline: none;
+  scroll-snap-type: none;
+}
+
+/* ================================= */
+/*    BROWSER-SPECIFIC FIXES         */
+/* ================================= */
+
+/* Firefox specific fixes */
+@-moz-document url-prefix() {
+  #combat-tracker .directory-list {
+    scrollbar-width: thin;
+  }
+  
+  .directory-list {
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Webkit/Chrome specific fixes */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  #combat-tracker .directory-list {
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .directory-list::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .directory-list::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+  }
+  
+  .directory-list::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+  }
+  
+  .directory-list::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+  }
+}
+
+/* ================================= */
+/*       ACCESSIBILITY FIXES         */
+/* ================================= */
+
+/* Ensure scroll focus is maintained */
+.directory-list:focus {
+  outline: none;
+  box-shadow: inset 0 0 0 2px rgba(74, 144, 226, 0.5);
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  #combat-tracker,
+  .directory-list,
+  .tab-content {
+    scroll-behavior: auto !important;
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .directory-list::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.8);
+  }
+}
+
+/* ================================= */
+/*      DEBUG AND TESTING            */
+/* ================================= */
+
+/* Add this class to debug scroll issues */
+.debug-scroll {
+  border: 2px solid red !important;
+  background: rgba(255, 0, 0, 0.1) !important;
+}
+
+.debug-scroll * {
+  border: 1px solid orange !important;
+}
+
+/* Visual indicator for scroll anchor elements */
+[style*="overflow-anchor"] {
+  outline: 1px dashed green;
+}
+
+/* ================================= */
+/*     EMERGENCY SCROLL RESET        */
+/* ================================= */
+
+/* Use this class to completely disable problematic scroll behaviors */
+.scroll-reset {
+  scroll-behavior: auto !important;
+  scroll-snap-type: none !important;
+  overflow-anchor: none !important;
+  scroll-timeline: none !important;
+  overscroll-behavior: auto !important;
+}
+
+/* Apply to combat tracker if issues persist */
+.scroll-reset#combat-tracker {
+  contain: none !important;
+  will-change: auto !important;
+}
+
+.scroll-reset .directory-list {
+  scroll-behavior: auto !important;
+  overflow-anchor: none !important;
+  contain: none !important;
+}
+
+/* ================================= */
+/*     COMBAT ENCOUNTER SPECIFIC     */
+/* ================================= */
+
+/* Prevent scroll on encounter start/end */
+#combat .encounter-controls button {
+  /* Stable button positioning */
+  contain: layout;
+}
+
+/* Fix for turn order scroll issues */
+.combat-tracker .combatant .token-name {
+  /* Prevent name updates from causing scroll */
+  contain: layout style;
+}
+
+/* Fix for initiative roll scroll jumping */
+.combat-tracker .combatant .initiative {
+  /* Stable initiative display */
+  contain: layout;
+}
+
+/* Prevent HP updates from causing scroll issues */
+.combat-tracker .combatant .resource {
+  contain: layout;
+}

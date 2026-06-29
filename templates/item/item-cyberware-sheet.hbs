@@ -1,0 +1,403 @@
+<form class="{{cssClass}} flexcol cyberware-sheet" autocomplete="off">
+
+  {{!-- Header --}}
+  <header class="sheet-header">
+    <div class="header-fields">
+      <div class="name-section">
+        <input name="name" type="text" value="{{item.name}}" placeholder="Cyberware Name" class="item-name"/>
+        <div class="cyberware-type-line">
+          <select name="system.type">
+            {{#each cyberwareTypes as |label key|}}
+              <option value="{{key}}" {{#if (eq ../system.type key)}}selected{{/if}}>{{label}}</option>
+            {{/each}}
+          </select>
+        </div>
+      </div>
+      
+      <div class="cyberware-summary">
+        <div class="attribute-bonuses">
+          <label>Attribute Bonuses:</label>
+          <div class="bonus-display">
+            {{#if attributeBonuses.length}}
+              {{#each attributeBonuses as |bonus|}}
+                <span class="bonus-item">{{bonus.name}} {{bonus.value}}</span>
+              {{/each}}
+            {{else}}
+              <span class="no-bonuses">None</span>
+            {{/if}}
+          </div>
+        </div>
+        
+        <div class="total-bonus">
+          <label>Total Bonus:</label>
+          <span class="total-value {{#if (gt totalAttributeBonus 0)}}positive{{else if (lt totalAttributeBonus 0)}}negative{{/if}}">
+            {{#if (gt totalAttributeBonus 0)}}+{{/if}}{{totalAttributeBonus}}
+          </span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  {{!-- Main Content --}}
+  <section class="sheet-main">
+    
+    {{!-- Navigation Tabs --}}
+    <nav class="sheet-tabs tabs" data-group="primary">
+      <a class="item active" data-tab="description">DESCRIPTION</a>
+      <a class="item" data-tab="attributes">ATTRIBUTES</a>
+      <a class="item" data-tab="effects">EFFECTS</a>
+      <a class="item" data-tab="installation">INSTALLATION</a>
+      <a class="item" data-tab="mechanics">MECHANICS</a>
+      <a class="item" data-tab="properties">PROPERTIES</a>
+    </nav>
+
+    {{!-- Tab Content --}}
+    <section class="sheet-body">
+      
+      {{!-- Description Tab --}}
+      <div class="tab description active" data-group="primary" data-tab="description">
+        <div class="description-section">
+          <label>Description:</label>
+          <textarea name="system.description" placeholder="Cyberware description, appearance, and functionality">{{system.description}}</textarea>
+        </div>
+        
+        {{#if installationWarnings.length}}
+        <div class="installation-warnings">
+          <h4><i class="fas fa-exclamation-triangle"></i> Installation Requirements:</h4>
+          <ul>
+            {{#each installationWarnings as |warning|}}
+            <li>{{warning}}</li>
+            {{/each}}
+          </ul>
+        </div>
+        {{/if}}
+      </div>
+
+      {{!-- Attributes Tab --}}
+      <div class="tab attributes" data-group="primary" data-tab="attributes">
+        <div class="attributes-section">
+          
+          <div class="attribute-controls">
+            <h3>Attribute Modifications</h3>
+            <p class="attribute-help">Cyberware can provide bonuses or penalties to attributes. Positive values enhance attributes, negative values impose penalties.</p>
+            
+            <div class="attribute-list">
+              
+              <div class="attribute-mod">
+                <label>Cognition:</label>
+                <div class="attribute-controls">
+                  <button type="button" class="attribute-decrease" data-attribute="cognition" title="Decrease bonus">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                  <input type="number" name="system.attributes.cognition" value="{{attributes.cognition}}" min="-3" max="5" class="attribute-input">
+                  <button type="button" class="attribute-increase" data-attribute="cognition" title="Increase bonus">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                </div>
+              </div>
+              
+              <div class="attribute-mod">
+                <label>Psyche:</label>
+                <div class="attribute-controls">
+                  <button type="button" class="attribute-decrease" data-attribute="psyche" title="Decrease bonus">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                  <input type="number" name="system.attributes.psyche" value="{{attributes.psyche}}" min="-3" max="5" class="attribute-input">
+                  <button type="button" class="attribute-increase" data-attribute="psyche" title="Increase bonus">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                </div>
+              </div>
+              
+              <div class="attribute-mod">
+                <label>Coordination:</label>
+                <div class="attribute-controls">
+                  <button type="button" class="attribute-decrease" data-attribute="coordination" title="Decrease bonus">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                  <input type="number" name="system.attributes.coordination" value="{{attributes.coordination}}" min="-3" max="5" class="attribute-input">
+                  <button type="button" class="attribute-increase" data-attribute="coordination" title="Increase bonus">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                </div>
+              </div>
+              
+              <div class="attribute-mod">
+                <label>Physique:</label>
+                <div class="attribute-controls">
+                  <button type="button" class="attribute-decrease" data-attribute="physique" title="Decrease bonus">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                  <input type="number" name="system.attributes.physique" value="{{attributes.physique}}" min="-3" max="5" class="attribute-input">
+                  <button type="button" class="attribute-increase" data-attribute="physique" title="Increase bonus">
+                    <i class="fas fa-plus"></i>
+                  </button>
+                </div>
+              </div>
+              
+            </div>
+            
+            <div class="attribute-notes">
+              <h4>Attribute Guidelines:</h4>
+              <ul>
+                <li><strong>+1 to +2:</strong> Minor enhancement (common)</li>
+                <li><strong>+3 to +4:</strong> Significant enhancement (uncommon)</li>
+                <li><strong>+5:</strong> Maximum enhancement (rare/experimental)</li>
+                <li><strong>-1 to -2:</strong> Minor side effect or trade-off</li>
+                <li><strong>-3:</strong> Significant penalty (experimental risks)</li>
+              </ul>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+
+      {{!-- Effects Tab --}}
+      <div class="tab effects" data-group="primary" data-tab="effects">
+        <div class="features-section scrollable-content">
+          
+          <div class="features-header">
+            <h3>Cyberware Effects</h3>
+            <p class="features-description">Define special properties and mechanical effects for this cyberware. Drag Feature items here or add them manually.</p>
+          </div>
+
+          <div class="features-list">
+            {{#if cyberwareEffects.length}}
+            {{!-- Effects list when there are effects --}}
+            <div class="features-display-area drop-zone" data-drop="effects">
+              <div class="features-header-info">
+                <div class="features-status">
+                  <p class="features-count"><i class="fas fa-list"></i> {{cyberwareEffects.length}} effect{{#unless (eq cyberwareEffects.length 1)}}s{{/unless}} defined</p>
+                </div>
+                <div class="drop-hint">
+                  <i class="fas fa-download"></i>
+                  <span>Drop additional features here</span>
+                </div>
+              </div>
+              
+              <div class="features-items-list">
+                {{#each cyberwareEffects as |effect index|}}
+                <div class="feature-item-compact" data-index="{{index}}">
+                  <div class="feature-header-row">
+                    <div class="feature-name-section">
+                      <input type="text" name="system.effects.{{index}}.name" value="{{#if effect.name}}{{effect.name}}{{else}}{{effect}}{{/if}}" placeholder="Feature name" class="feature-name-input">
+                    </div>
+                    <div class="feature-actions">
+                      <button type="button" class="feature-expand-btn" data-index="{{index}}" title="Expand/Collapse details">
+                        <i class="fas fa-chevron-down"></i>
+                      </button>
+                      <button type="button" class="effect-edit compact-btn" data-index="{{index}}" title="Edit Feature">
+                        <i class="fas fa-edit"></i>
+                      </button>
+                      <button type="button" class="effect-delete compact-btn" data-index="{{index}}" title="Delete Effect">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="feature-details-section" style="display: none;">
+                    <textarea name="system.effects.{{index}}.summary" placeholder="Brief description of this feature's effect..." class="feature-summary-input">{{#if effect.summary}}{{effect.summary}}{{/if}}</textarea>
+                  </div>
+                </div>
+                {{/each}}
+              </div>
+            </div>
+            {{else}}
+            {{!-- Empty state with drop zone --}}
+            <div class="no-features drop-zone" data-drop="effects">
+              <div class="no-features-content">
+                <i class="fas fa-download features-drop-icon"></i>
+                <h4>No cyberware effects defined</h4>
+                <p><em>Drag Feature items from your compendium or inventory here</em></p>
+                <p class="no-features-hint">Effects represent mechanical advantages like "Neural Interface", "Targeting System", or "Subdermal Armor".</p>
+                <div class="drop-indicators">
+                  <div class="drop-indicator">
+                    <i class="fas fa-arrow-down"></i>
+                    <span>Drop Feature items here</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {{/if}}
+          </div>
+          
+          <div class="features-controls">
+            <button type="button" class="effect-add add-effect-button">
+              <i class="fas fa-plus"></i> Add Effect Manually
+            </button>
+          </div>
+          
+          {{#if predefinedEffects.length}}
+          <div class="predefined-effects">
+            <h4>Common Cyberware Effects:</h4>
+            <div class="predefined-list">
+              {{#each predefinedEffects as |effect|}}
+              <span class="predefined-tag">{{effect}}</span>
+              {{/each}}
+            </div>
+          </div>
+          {{/if}}
+          
+        </div>
+      </div>
+
+      {{!-- Installation Tab --}}
+      <div class="tab installation" data-group="primary" data-tab="installation">
+        <div class="installation-section">
+          
+          <div class="installation-info">
+            <h3>Installation Details</h3>
+            
+            <div class="installation-field">
+              <label>Installation Time:</label>
+              <select name="system.installation_time" class="installation-select">
+                <option value="" {{#unless system.installation_time}}selected{{/unless}}>Custom/Other</option>
+                {{#each predefinedInstallationTimes as |time|}}
+                  <option value="{{time}}" {{#if (eq ../system.installation_time time)}}selected{{/if}}>{{time}}</option>
+                {{/each}}
+              </select>
+              <input type="text" name="system.installation_time" value="{{system.installation_time}}" placeholder="e.g., 4 hours, 2 days" class="installation-custom">
+            </div>
+            
+            <div class="installation-field">
+              <label>Recovery Time:</label>
+              <select name="system.recovery_time" class="installation-select">
+                <option value="" {{#unless system.recovery_time}}selected{{/unless}}>Custom/Other</option>
+                {{#each predefinedRecoveryTimes as |time|}}
+                  <option value="{{time}}" {{#if (eq ../system.recovery_time time)}}selected{{/if}}>{{time}}</option>
+                {{/each}}
+              </select>
+              <input type="text" name="system.recovery_time" value="{{system.recovery_time}}" placeholder="e.g., 2 hours, 1 day" class="installation-custom">
+            </div>
+            
+            <div class="installation-field">
+              <label>Power Requirements:</label>
+              <input type="text" name="system.power_requirements" value="{{system.power_requirements}}" placeholder="e.g., Internal battery, Neural power">
+            </div>
+            
+            <div class="installation-field">
+              <label>Maintenance Interval:</label>
+              <input type="text" name="system.maintenance_interval" value="{{system.maintenance_interval}}" placeholder="e.g., Monthly, Every 6 months">
+            </div>
+            
+          </div>
+          
+        </div>
+      </div>
+
+      {{!-- Mechanics Tab --}}
+      <div class="tab mechanics" data-group="primary" data-tab="mechanics">
+        <div class="mechanics-section">
+          
+          <div class="mechanics-group">
+            <h3>Combat Mechanics</h3>
+            <div class="mechanics-field">
+              <label>Initiative Bonus:</label>
+              <input type="number" name="system.mechanics.initiative_bonus" value="{{system.mechanics.initiative_bonus}}" min="-5" max="5">
+            </div>
+            <div class="mechanics-field">
+              <label>Natural Armor:</label>
+              <input type="number" name="system.mechanics.natural_armor" value="{{system.mechanics.natural_armor}}" min="0" max="10">
+            </div>
+            <div class="mechanics-field">
+              <label>Unarmed Damage Bonus:</label>
+              <input type="number" name="system.mechanics.unarmed_damage_bonus" value="{{system.mechanics.unarmed_damage_bonus}}" min="0" max="5">
+            </div>
+          </div>
+          
+          <div class="mechanics-group">
+            <h3>Wound Penalty Reduction</h3>
+            <div class="mechanics-field">
+              <label>Major Wound Reduction:</label>
+              <input type="number" name="system.mechanics.wound_penalty_reduction.major" value="{{system.mechanics.wound_penalty_reduction.major}}" min="0" max="2">
+            </div>
+            <div class="mechanics-field">
+              <label>Mortal Wound Reduction:</label>
+              <input type="number" name="system.mechanics.wound_penalty_reduction.mortal" value="{{system.mechanics.wound_penalty_reduction.mortal}}" min="0" max="3">
+            </div>
+          </div>
+          
+          <div class="mechanics-group">
+            <h3>Strain Modifiers</h3>
+            <div class="mechanics-field">
+              <label>Mental Strain Modifier:</label>
+              <input type="number" name="system.strain_modifiers.mental" value="{{system.strain_modifiers.mental}}" min="-3" max="5">
+            </div>
+            <div class="mechanics-field">
+              <label>Physical Strain Modifier:</label>
+              <input type="number" name="system.strain_modifiers.physical" value="{{system.strain_modifiers.physical}}" min="-3" max="5">
+            </div>
+          </div>
+          
+        </div>
+      </div>
+
+      {{!-- Properties Tab --}}
+      <div class="tab properties" data-group="primary" data-tab="properties">
+        <div class="properties-section">
+          
+          <div class="properties-group">
+            <h3>Basic Properties</h3>
+            <div class="properties-field">
+              <label>Cost:</label>
+              <input type="number" name="system.cost" value="{{system.cost}}" min="0" placeholder="Credits">
+            </div>
+            <div class="properties-field">
+              <label>Availability:</label>
+              <select name="system.availability">
+                {{#each availabilityOptions as |label key|}}
+                  <option value="{{key}}" {{#if (eq ../system.availability key)}}selected{{/if}}>{{label}}</option>
+                {{/each}}
+              </select>
+            </div>
+            <div class="properties-field">
+              <label>Legality:</label>
+              <select name="system.legality">
+                {{#each legalityOptions as |label key|}}
+                  <option value="{{key}}" {{#if (eq ../system.legality key)}}selected{{/if}}>{{label}}</option>
+                {{/each}}
+              </select>
+            </div>
+          </div>
+          
+          <div class="properties-group">
+            <h3>Physical Properties</h3>
+            <div class="properties-field">
+              <label>Dimensions:</label>
+              <select name="system.dimensions">
+                {{#each dimensionsOptions as |label key|}}
+                  <option value="{{key}}" {{#if (eq ../system.dimensions key)}}selected{{/if}}>{{label}}</option>
+                {{/each}}
+              </select>
+            </div>
+            <div class="properties-field">
+              <label>Durability:</label>
+              <input type="number" name="system.durability" value="{{system.durability}}" min="0" max="20">
+            </div>
+            <div class="properties-field">
+              <label>Models:</label>
+              <textarea name="system.models" placeholder="Available models and variants">{{system.models}}</textarea>
+            </div>
+          </div>
+          
+          <div class="properties-group">
+            <h3>Special Rules</h3>
+            <div class="special-rules-list">
+              {{#each specialRules as |rule index|}}
+              <div class="special-rule-item" data-index="{{index}}">
+                <input type="text" name="system.special_rules.{{index}}" value="{{rule}}" placeholder="Special rule description">
+                <button type="button" class="special-rule-delete" data-index="{{index}}" title="Delete Rule"><i class="fas fa-trash"></i></button>
+              </div>
+              {{/each}}
+            </div>
+            <button type="button" class="special-rule-add">
+              <i class="fas fa-plus"></i> Add Special Rule
+            </button>
+          </div>
+          
+        </div>
+      </div>
+      
+    </section>
+  </section>
+
+</form>

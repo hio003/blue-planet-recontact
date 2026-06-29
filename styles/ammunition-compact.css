@@ -1,0 +1,360 @@
+/* =================================== */
+/*      COMPACT AMMUNITION LAYOUT      */
+/* =================================== */
+
+/* Compact ammunition list container */
+.ammunition-list-compact {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+/* Custom scrollbar for ammunition list */
+.ammunition-list-compact::-webkit-scrollbar {
+  width: 4px;
+}
+
+.ammunition-list-compact::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 2px;
+}
+
+.ammunition-list-compact::-webkit-scrollbar-thumb {
+  background: #4a90a4;
+  border-radius: 2px;
+}
+
+.ammunition-list-compact::-webkit-scrollbar-thumb:hover {
+  background: #87ceeb;
+}
+
+/* Compact ammunition item layout */
+.ammunition-item-compact {
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px solid #4a90a4;
+  border-radius: 4px;
+  padding: 4px 8px;
+  margin-bottom: 2px;
+  transition: all 0.2s ease;
+  min-height: 28px;
+}
+
+.ammunition-item-compact:hover {
+  background: rgba(74, 144, 164, 0.1);
+  border-color: #87ceeb;
+  box-shadow: 0 1px 4px rgba(74, 144, 164, 0.2);
+}
+
+/* Single row layout */
+.ammunition-compact-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 20px;
+}
+
+/* Item image */
+.ammunition-compact-row .item-image img {
+  border-radius: 2px;
+  border: 1px solid #4a90a4;
+}
+
+/* Name and type section */
+.ammo-info {
+  flex: 1;
+  min-width: 120px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ammo-info .ammo-name {
+  margin: 0;
+  font-size: 12px;
+  font-weight: bold;
+  color: white;
+  line-height: 1;
+}
+
+.ammo-info .ammo-type {
+  font-size: 9px;
+  color: #87ceeb;
+  text-transform: uppercase;
+  font-weight: bold;
+  background: rgba(135, 206, 235, 0.2);
+  padding: 1px 3px;
+  border-radius: 2px;
+}
+
+/* Magazines */
+.ammo-mags {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  min-width: 35px;
+}
+
+.ammo-mags i {
+  font-size: 10px;
+  color: #87ceeb;
+}
+
+.ammo-mags span {
+  font-size: 11px;
+  font-weight: bold;
+  color: #87ceeb;
+}
+
+/* Capacity */
+.ammo-cap {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  min-width: 55px;
+}
+
+.ammo-cap label {
+  font-size: 9px;
+  color: #b0c4de;
+  font-weight: bold;
+}
+
+.ammo-capacity-input {
+  width: 35px;
+  height: 18px;
+  padding: 1px 3px;
+  border: 1px solid #4a90a4;
+  background: rgba(0, 0, 0, 0.2);
+  color: white;
+  border-radius: 2px;
+  text-align: center;
+  font-size: 10px;
+}
+
+.ammo-capacity-input:focus {
+  border-color: #87ceeb;
+  background: rgba(135, 206, 235, 0.1);
+  outline: none;
+}
+
+/* Current ammo */
+.ammo-current {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  min-width: 70px;
+}
+
+.current-ammo-input {
+  width: 35px;
+  height: 18px;
+  padding: 1px 3px;
+  border: 1px solid #4a90a4;
+  background: rgba(0, 0, 0, 0.2);
+  color: white;
+  border-radius: 2px;
+  text-align: center;
+  font-size: 10px;
+}
+
+.current-ammo-input:focus {
+  border-color: #87ceeb;
+  background: rgba(135, 206, 235, 0.1);
+  outline: none;
+}
+
+.total-rounds {
+  font-size: 9px;
+  color: #8fbc8f;
+}
+
+/* Bonuses compact */
+.ammo-bonuses-compact {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+  min-width: 120px;
+  flex-wrap: wrap;
+}
+
+.bonus-compact {
+  font-size: 8px;
+  font-weight: bold;
+  padding: 1px 3px;
+  border-radius: 2px;
+  text-transform: uppercase;
+  line-height: 1;
+  text-align: center;
+  border: 1px solid;
+}
+
+.bonus-compact.attack-bonus {
+  color: #32cd32;
+  background: rgba(50, 205, 50, 0.2);
+  border-color: #32cd32;
+}
+
+.bonus-compact.damage-bonus {
+  color: #ff6b6b;
+  background: rgba(255, 107, 107, 0.2);
+  border-color: #ff6b6b;
+}
+
+.bonus-compact.range-bonus {
+  color: #87ceeb;
+  background: rgba(135, 206, 235, 0.2);
+  border-color: #87ceeb;
+}
+
+.bonus-compact.penetration-bonus {
+  color: #dda0dd;
+  background: rgba(221, 160, 221, 0.2);
+  border-color: #dda0dd;
+}
+
+/* Load section */
+.ammo-load {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+  min-width: 80px;
+}
+
+.compatible-weapon-select-compact {
+  min-width: 60px;
+  height: 18px;
+  font-size: 9px;
+  padding: 1px 2px;
+  border: 1px solid #4a90a4;
+  background: rgba(0, 0, 0, 0.2);
+  color: white;
+  border-radius: 2px;
+}
+
+.compatible-weapon-select-compact:focus {
+  border-color: #87ceeb;
+  background: rgba(135, 206, 235, 0.1);
+  outline: none;
+}
+
+.compatible-weapon-select-compact option {
+  background: #1e3a5f;
+  color: white;
+}
+
+.load-ammo-btn-compact {
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: 1px solid #32cd32;
+  background: rgba(50, 205, 50, 0.2);
+  color: #32cd32;
+  border-radius: 2px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8px;
+  transition: all 0.2s ease;
+}
+
+.load-ammo-btn-compact:hover:not(.disabled) {
+  background: rgba(50, 205, 50, 0.4);
+  transform: scale(1.05);
+}
+
+.load-ammo-btn-compact.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  border-color: #666;
+  color: #666;
+  background: rgba(102, 102, 102, 0.2);
+}
+
+/* Item controls - compact version */
+.ammunition-item-compact .item-controls {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+  min-width: 45px;
+}
+
+.ammunition-item-compact .item-control {
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  border-radius: 2px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.ammunition-item-compact .item-edit {
+  color: #4a90e2;
+  border: 1px solid #4a90e2;
+  background: rgba(74, 144, 226, 0.1);
+}
+
+.ammunition-item-compact .item-edit:hover {
+  background: rgba(74, 144, 226, 0.3);
+  transform: scale(1.05);
+}
+
+.ammunition-item-compact .item-delete {
+  color: #dc3545;
+  border: 1px solid #dc3545;
+  background: rgba(220, 53, 69, 0.1);
+}
+
+.ammunition-item-compact .item-delete:hover {
+  background: rgba(220, 53, 69, 0.3);
+  transform: scale(1.05);
+}
+
+/* Visual feedback */
+.ammunition-item-compact.empty {
+  opacity: 0.6;
+}
+
+.ammunition-item-compact.empty .ammo-mags span {
+  color: #dc3545;
+}
+
+.ammunition-item-compact.low-ammo .ammo-mags span {
+  color: #ffa500;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1000px) {
+  .ammunition-compact-row {
+    gap: 6px;
+  }
+  
+  .ammo-info {
+    min-width: 100px;
+  }
+  
+  .ammo-bonuses-compact {
+    min-width: 100px;
+  }
+  
+  .bonus-compact {
+    font-size: 7px;
+    padding: 1px 2px;
+  }
+}
+
+/* Tooltip styles */
+.bonus-compact[title] {
+  cursor: help;
+}
+
+.bonus-compact[title]:hover {
+  filter: brightness(1.2);
+  transform: scale(1.05);
+}

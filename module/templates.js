@@ -17,6 +17,10 @@ export const preloadHandlebarsTemplates = async function() {
     // Item sheets
     "systems/blue-planet-recontact/templates/item/item-skill-sheet.hbs",
     
+    // Vehicle & Remote sheets
+    "systems/blue-planet-recontact/templates/actor/actor-vehicle-sheet.hbs",
+    "systems/blue-planet-recontact/templates/actor/actor-remote-sheet.hbs",
+    
     // Roll card template
     "systems/blue-planet-recontact/templates/roll-card.hbs",
     

@@ -587,7 +587,294 @@ body .window-app.dialog.blue-planet-recontact.sheet {
   .blue-planet-roll-dialog .character-name {
     font-size: 14px;
   }
+}
+
+/* ===== ENHANCED WEAPON DAMAGE DIALOG STYLES ===== */
+
+/* Weapon damage dialog specific styling */
+.dialog.weapon-damage.targeting-enhanced {
+  background: linear-gradient(135deg, #2a1810 0%, #3a2418 100%);
+  border: 2px solid #8B4513;
+}
+
+.dialog.weapon-damage.targeting-enhanced .window-title {
+  background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+  color: #fff;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+}
+
+.blue-planet-weapon-damage-dialog {
+  color: #e0e0e0;
+  font-family: 'Roboto', sans-serif;
+}
+
+.blue-planet-weapon-damage-dialog h4 {
+  color: #D2691E;
+  font-weight: bold;
+  margin: 12px 0 8px 0;
+  border-bottom: 2px solid #8B4513;
+  padding-bottom: 4px;
+}
+
+.blue-planet-weapon-damage-dialog h5 {
+  color: #CD853F;
+  font-weight: 600;
+  margin: 8px 0 6px 0;
+}
+
+/* Target section styling */
+.blue-planet-weapon-damage-dialog .target-section {
+  animation: targetGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes targetGlow {
+  from { box-shadow: 0 0 5px rgba(23, 162, 184, 0.3); }
+  to { box-shadow: 0 0 15px rgba(23, 162, 184, 0.6); }
+}
+
+.blue-planet-weapon-damage-dialog .target-details {
+  margin-top: 8px;
+}
+
+.blue-planet-weapon-damage-dialog .armor-details,
+.blue-planet-weapon-damage-dialog .physique-details {
+  transition: all 0.3s ease;
+}
+
+.blue-planet-weapon-damage-dialog .armor-details:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(255, 193, 7, 0.3);
+}
+
+.blue-planet-weapon-damage-dialog .physique-details:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+}
+
+/* No target section */
+.blue-planet-weapon-damage-dialog .no-target-section {
+  text-align: center;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.blue-planet-weapon-damage-dialog .no-target-section:hover {
+  opacity: 1;
+}
+
+/* Damage calculation section */
+.blue-planet-weapon-damage-dialog .damage-calculation-section {
+  background: rgba(139, 69, 19, 0.1);
+  border-radius: 8px;
+  padding: 8px;
+  margin: 8px 0;
+}
+
+.blue-planet-weapon-damage-dialog .calculation-breakdown {
+  font-family: 'Courier New', monospace;
+  background: #1a1a1a;
+  border-radius: 4px;
+  padding: 8px;
+  border: 1px solid #444;
+}
+
+.blue-planet-weapon-damage-dialog .calculation-breakdown > div {
+  transition: all 0.2s ease;
+}
+
+.blue-planet-weapon-damage-dialog .calculation-breakdown > div:hover {
+  background: rgba(212, 175, 55, 0.1);
+  border-radius: 2px;
+}
+
+/* Final damage rating highlight */
+.blue-planet-weapon-damage-dialog #final-damage-rating {
+  font-size: 18px !important;
+  text-shadow: 0 0 8px currentColor;
+  transition: all 0.3s ease;
+}
+
+/* Manual adjustments section */
+.blue-planet-weapon-damage-dialog .manual-adjustments {
+  background: rgba(108, 117, 125, 0.1);
+  border-radius: 4px;
+  padding: 8px;
+}
+
+.blue-planet-weapon-damage-dialog .manual-adjustments input {
+  background: #333;
+  border: 1px solid #555;
+  color: #fff;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.blue-planet-weapon-damage-dialog .manual-adjustments input:focus {
+  border-color: #D2691E;
+  box-shadow: 0 0 0 2px rgba(210, 105, 30, 0.3);
+  outline: none;
+}
+
+.blue-planet-weapon-damage-dialog .manual-adjustments input:hover {
+  border-color: #CD853F;
+}
+
+/* Penetration info section */
+.blue-planet-weapon-damage-dialog .penetration-info {
+  animation: penetrationPulse 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes penetrationPulse {
+  from { background: rgba(255, 152, 0, 0.1); }
+  to { background: rgba(255, 152, 0, 0.2); }
+}
+
+/* Dialog buttons styling for damage dialog */
+.dialog.weapon-damage.targeting-enhanced .dialog-button {
+  background: linear-gradient(135deg, #8B4513 0%, #D2691E 100%);
+  border: 1px solid #CD853F;
+  color: #fff;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+  transition: all 0.3s ease;
+}
+
+.dialog.weapon-damage.targeting-enhanced .dialog-button:hover {
+  background: linear-gradient(135deg, #D2691E 0%, #F4A460 100%);
+  box-shadow: 0 4px 12px rgba(210, 105, 30, 0.4);
+  transform: translateY(-2px);
+}
+
+.dialog.weapon-damage.targeting-enhanced .dialog-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(210, 105, 30, 0.4);
+}
+
+/* Responsive adjustments for damage dialog */
+@media (max-width: 600px) {
+  .dialog.weapon-damage.targeting-enhanced {
+    width: 95vw !important;
+    left: 2.5vw !important;
+    height: auto !important;
+    max-height: 90vh !important;
+  }
   
+  .blue-planet-weapon-damage-dialog .target-details {
+    grid-template-columns: 1fr !important;
+    gap: 8px;
+  }
+  
+  .blue-planet-weapon-damage-dialog .manual-adjustments > div:first-child {
+    grid-template-columns: 1fr !important;
+    gap: 8px;
+  }
+}
+
+/* ===== WOUND APPLICATION DIALOG STYLES ===== */
+
+.dialog.wound-confirmation {
+  background: linear-gradient(135deg, #2a1810 0%, #3a1818 100%);
+  border: 2px solid #dc3545;
+}
+
+.dialog.wound-confirmation .window-title {
+  background: linear-gradient(135deg, #dc3545 0%, #e74c3c 100%);
+  color: #fff;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.7);
+}
+
+.wound-confirmation-dialog {
+  color: #e0e0e0;
+  font-family: 'Roboto', sans-serif;
+}
+
+.wound-confirmation-dialog .target-info {
+  animation: targetPulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes targetPulse {
+  from { box-shadow: 0 0 5px rgba(23, 162, 184, 0.3); }
+  to { box-shadow: 0 0 15px rgba(23, 162, 184, 0.6); }
+}
+
+.wound-confirmation-dialog .wound-result {
+  animation: woundGlow 1.5s ease-in-out infinite alternate;
+}
+
+@keyframes woundGlow {
+  from { transform: scale(1); }
+  to { transform: scale(1.02); }
+}
+
+.wound-confirmation-dialog .damage-details {
+  border-left: 3px solid #ffc107;
+  background: linear-gradient(90deg, rgba(255, 193, 7, 0.1) 0%, #2a2a2a 20%);
+}
+
+/* Wound application section in damage dialog */
+.blue-planet-weapon-damage-dialog .wound-application-section {
+  background: rgba(23, 162, 184, 0.05);
+  border-radius: 4px;
+  margin-top: 8px;
+}
+
+.blue-planet-weapon-damage-dialog .wound-application-section h5 {
+  color: #17a2b8;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.blue-planet-weapon-damage-dialog .wound-application-section input[type="checkbox"] {
+  transform: scale(1.1);
+  margin-right: 6px;
+}
+
+.blue-planet-weapon-damage-dialog .wound-application-section label {
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.blue-planet-weapon-damage-dialog .wound-application-section label:hover {
+  color: #fff;
+}
+
+/* Wound visual effects */
+.wound-effect {
+  font-family: 'Arial', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  border: 2px solid rgba(0, 0, 0, 0.2);
+}
+
+/* Dialog button overrides for wound confirmation */
+.dialog.wound-confirmation .dialog-button {
+  transition: all 0.3s ease;
+}
+
+.dialog.wound-confirmation .dialog-buttons button[data-button="apply"] {
+  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+  border-color: #dc3545;
+  color: #fff;
+  font-weight: bold;
+}
+
+.dialog.wound-confirmation .dialog-buttons button[data-button="apply"]:hover {
+  background: linear-gradient(135deg, #e74c3c 0%, #dc3545 100%);
+  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4);
+  transform: translateY(-1px);
+}
+
+.dialog.wound-confirmation .dialog-buttons button[data-button="cancel"] {
+  background: linear-gradient(135deg, #6c757d 0%, #5a6268 100%);
+  border-color: #6c757d;
+}
+
+.dialog.wound-confirmation .dialog-buttons button[data-button="cancel"]:hover {
+  background: linear-gradient(135deg, #868e96 0%, #6c757d 100%);
+}
   .calculation-display {
     font-size: 10px;
     gap: 4px;

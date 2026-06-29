@@ -1,0 +1,223 @@
+/* ==============================================
+   FOUNDRY UI RESET - Blue Planet System
+   Restaura el estilo por defecto de Foundry en
+   ventanas que NO son del sistema BP.
+   
+   EXCLUYE:
+     .blue-planet-recontact  — fichas del sistema
+     .bpr-dialog             — diálogos del sistema
+     .bpr-themed             — ventanas temáticas BP
+   ============================================== */
+
+/* ── Marco de ventana ────────────────────────────────────────────────── */
+.dialog:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed),
+.window-app:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed),
+.app.window-app:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed) {
+  background: var(--color-bg) !important;
+  border: 2px solid var(--color-border-dark) !important;
+  border-radius: 5px !important;
+  box-shadow: 0 0 20px var(--color-shadow-dark) !important;
+  color: var(--color-text-primary) !important;
+  font-family: var(--font-primary) !important;
+}
+
+/* ── Cabecera ────────────────────────────────────────────────────────── */
+.dialog:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed) .window-header,
+.window-app:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed) .window-header {
+  background: var(--color-bg-btn) !important;
+  border-bottom: 1px solid var(--color-border-dark) !important;
+  color: var(--color-text-primary) !important;
+  padding: 0 !important;
+}
+
+/* ── Contenido ───────────────────────────────────────────────────────── */
+.dialog:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed) .window-content,
+.window-app:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed) .window-content {
+  background: var(--color-bg) !important;
+  color: var(--color-text-primary) !important;
+  padding: 10px !important;
+}
+
+/* ── Form groups ─────────────────────────────────────────────────────── */
+.dialog:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed) .form-group,
+.window-app:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed) .form-group {
+  margin-bottom: 10px !important;
+}
+
+.dialog:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed) .form-group label,
+.window-app:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed) .form-group label {
+  color: var(--color-text-primary) !important;
+  font-weight: bold !important;
+  display: block !important;
+  margin-bottom: 2px !important;
+}
+
+/* ── Inputs / selects / textarea ─────────────────────────────────────── */
+.dialog:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed) .form-group input,
+.dialog:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed) .form-group select,
+.dialog:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed) .form-group textarea,
+.window-app:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed) .form-group input,
+.window-app:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed) .form-group select,
+.window-app:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed) .form-group textarea,
+.window-app:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed) input,
+.window-app:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed) select,
+.window-app:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed) textarea {
+  background: var(--color-bg-option) !important;
+  border: 1px solid var(--color-border-light-primary) !important;
+  border-radius: 3px !important;
+  color: var(--color-text-primary) !important;
+  padding: 4px 6px !important;
+  font-family: var(--font-primary) !important;
+  font-size: var(--font-size-13) !important;
+}
+
+/* ── Focus ───────────────────────────────────────────────────────────── */
+.dialog:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed) .form-group input:focus,
+.dialog:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed) .form-group select:focus,
+.dialog:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed) .form-group textarea:focus,
+.window-app:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed) input:focus,
+.window-app:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed) select:focus,
+.window-app:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed) textarea:focus {
+  border-color: var(--color-border-highlight-alt) !important;
+  box-shadow: 0 0 5px var(--color-shadow-highlight) !important;
+  outline: none !important;
+}
+
+/* ── Botones ─────────────────────────────────────────────────────────── */
+.dialog:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed) .dialog-buttons,
+.dialog:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed) .dialog-button,
+.window-app:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed) button {
+  background: var(--color-bg-btn) !important;
+  border: 1px solid var(--color-border-light-primary) !important;
+  border-radius: 3px !important;
+  color: var(--color-text-primary) !important;
+  padding: 6px 12px !important;
+  font-family: var(--font-primary) !important;
+  font-size: var(--font-size-12) !important;
+  font-weight: normal !important;
+  text-decoration: none !important;
+  transition: none !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.dialog:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed) .dialog-buttons button:hover,
+.dialog:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed) .dialog-button:hover,
+.window-app:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed) button:hover {
+  background: var(--color-bg-btn-hover) !important;
+  border-color: var(--color-border-highlight-alt) !important;
+  color: var(--color-text-primary) !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.dialog:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed) .dialog-buttons {
+  background: var(--color-bg) !important;
+  border-top: 1px solid var(--color-border-dark) !important;
+  padding: 10px !important;
+  text-align: right !important;
+}
+
+/* ── Ventanas específicas de Foundry ─────────────────────────────────── */
+.sheet.dialog:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed),
+.directory:not(.blue-planet-recontact):not(.bpr-themed),
+.scene-browser:not(.blue-planet-recontact):not(.bpr-themed),
+.image-browser:not(.blue-planet-recontact):not(.bpr-themed),
+.prototype-token:not(.blue-planet-recontact):not(.bpr-themed),
+.game-settings:not(.blue-planet-recontact):not(.bpr-themed),
+.settings-config:not(.blue-planet-recontact):not(.bpr-themed),
+.folder-create:not(.blue-planet-recontact):not(.bpr-themed),
+.entity-create:not(.blue-planet-recontact):not(.bpr-themed),
+.scene-config:not(.blue-planet-recontact):not(.bpr-themed) {
+  background: var(--color-bg) !important;
+  border: 2px solid var(--color-border-dark) !important;
+  border-radius: 5px !important;
+  box-shadow: 0 0 20px var(--color-shadow-dark) !important;
+  color: var(--color-text-primary) !important;
+  font-family: var(--font-primary) !important;
+}
+
+/* ── Directorio ──────────────────────────────────────────────────────── */
+.directory:not(.blue-planet-recontact):not(.bpr-themed) .directory-list .directory-item {
+  background: transparent !important;
+  border: none !important;
+  color: var(--color-text-primary) !important;
+  font-family: var(--font-primary) !important;
+}
+
+/* ── ::before decorativo (solo ventanas no BP) ───────────────────────── */
+.dialog:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed)::before,
+.window-app:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed)::before {
+  display: none !important;
+}
+
+/* ── Tabs ────────────────────────────────────────────────────────────── */
+.sheet:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed) .sheet-tabs,
+.window-app:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed) .tabs {
+  background: var(--color-bg) !important;
+  border-bottom: 1px solid var(--color-border-dark) !important;
+}
+
+.sheet:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed) .sheet-tabs .item,
+.window-app:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed) .tabs .item {
+  background: var(--color-bg-btn) !important;
+  border: 1px solid var(--color-border-light-primary) !important;
+  color: var(--color-text-primary) !important;
+  font-family: var(--font-primary) !important;
+}
+
+.sheet:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed) .sheet-tabs .item.active,
+.window-app:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed) .tabs .item.active {
+  background: var(--color-bg) !important;
+  border-bottom-color: var(--color-bg) !important;
+  color: var(--color-text-primary) !important;
+}
+
+/* ── Listas ──────────────────────────────────────────────────────────── */
+.window-app:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed) ol,
+.window-app:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed) ul,
+.window-app:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed) li {
+  color: var(--color-text-primary) !important;
+  font-family: var(--font-primary) !important;
+}
+
+/* ── Headings ────────────────────────────────────────────────────────── */
+.dialog:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed) h1,
+.dialog:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed) h2,
+.dialog:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed) h3,
+.dialog:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed) h4,
+.window-app:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed) h1,
+.window-app:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed) h2,
+.window-app:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed) h3,
+.window-app:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed) h4 {
+  color: var(--color-text-primary) !important;
+  font-family: var(--font-primary) !important;
+  font-weight: bold !important;
+  text-shadow: none !important;
+}
+
+/* ── Párrafos ────────────────────────────────────────────────────────── */
+.dialog:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed) p,
+.window-app:not(.blue-planet-recontact):not(.bpr-dialog):not(.bpr-themed) p {
+  color: var(--color-text-primary) !important;
+  font-family: var(--font-primary) !important;
+  margin: 0 0 10px 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+}
+
+/* ── Diálogos de creación de Foundry (se tematizan con bpr-themed via JS) */
+/* Por eso solo excluyen blue-planet-recontact, no bpr-themed             */
+.dialog.scene-create:not(.blue-planet-recontact):not(.bpr-themed),
+.dialog.folder-create:not(.blue-planet-recontact):not(.bpr-themed),
+.dialog.actor-create:not(.blue-planet-recontact):not(.bpr-themed),
+.dialog.item-create:not(.blue-planet-recontact):not(.bpr-themed) {
+  background: var(--color-bg) !important;
+  border: 2px solid var(--color-border-dark) !important;
+  border-radius: 5px !important;
+  box-shadow: 0 0 20px var(--color-shadow-dark) !important;
+  color: var(--color-text-primary) !important;
+  font-family: var(--font-primary) !important;
+}

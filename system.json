@@ -2,7 +2,7 @@
   "id": "blue-planet-recontact",
   "title": "Blue Planet 3e: Recontact",
   "description": "A Foundry VTT system for Blue Planet Third Edition: Recontact, featuring hard science fiction roleplaying on the ocean world of Poseidon.",
-  "version": "1.1.1-v13.351",
+  "version": "1.1.0",
   "compatibility": {
     "minimum": "13.0.0",
     "verified": "13.351",
@@ -10,7 +10,7 @@
   },
   "authors": [
     {
-      "name": "Custom System Creator"
+      "name": "HIO"
     }
   ],
   "esmodules": [
@@ -18,7 +18,25 @@
   ],
   "styles": [
     "css/blue-planet-recontact.css",
-    "styles/roll-dialog.css"
+    "styles/roll-dialog.css",
+    "styles/ammunition-sheet.css",
+    "styles/weapon-ammunition.css",
+    "styles/item-tabs-fix.css",
+    "styles/character-ammunition-enhanced.css",
+    "styles/ammunition-compact.css",
+    "styles/foundry-scroll-fixes.css",
+    "styles/combat-tracker-fixed.css",
+    "styles/combat-scroll-force.css",
+    "styles/floating-combat-window.css",
+    "styles/controls-bottom-left.css",
+    "styles/draggable-improvements.css",
+    "styles/biomod-attributes-fix.css",
+    "styles/actor-items-tab-scroll.css",
+    "styles/foundry-ui-reset.css",
+    "styles/scrollbars-unified.css",
+    "styles/vehicle-remote-sheets.css",
+    "styles/bp-dialog-theme.css",
+    "styles/sheet-themes.css"
   ],
   "languages": [
     {
@@ -33,21 +51,24 @@
   },
   "primaryTokenAttribute": "attributes.physique",
   "secondaryTokenAttribute": "strain.physical",
-  "initiative": "attributes.coordination.value",
   "documentTypes": {
     "Actor": {
       "character": {},
       "npc": {},
       "cetacean": {},
-      "creature": {}
+      "creature": {},
+      "vehicle": {},
+      "remote": {}
     },
     "Item": {
       "weapon": {},
       "equipment": {},
       "biomod": {},
+      "cyberware": {},
       "skill": {},
       "feature": {},
-      "species": {}
+      "species": {},
+      "ammunition": {}
     }
   },
   "packFolders": [
@@ -60,7 +81,9 @@
         "creatures",
         "biomods",
         "equipment",
-        "sample-characters"
+        "sample-characters",
+        "vehicles",
+        "remotes"
       ]
     }
   ],
@@ -68,27 +91,74 @@
     {
       "name": "species",
       "label": "Species",
-      "type": "Item"
+      "type": "Item",
+      "system": "blue-planet-recontact"
     },
     {
       "name": "creatures",
-      "label": "Poseidon Creatures",
-      "type": "Actor"
+      "label": "Poseidon Creatures (Biosurvey)",
+      "type": "Actor",
+      "system": "blue-planet-recontact"
     },
     {
       "name": "biomods",
       "label": "Biomodifications",
-      "type": "Item"
+      "type": "Item",
+      "system": "blue-planet-recontact"
     },
     {
       "name": "equipment",
       "label": "Equipment",
-      "type": "Item"
+      "type": "Item",
+      "system": "blue-planet-recontact"
     },
     {
       "name": "sample-characters",
       "label": "Sample Characters",
-      "type": "Actor"
+      "type": "Actor",
+      "system": "blue-planet-recontact"
+    },
+    {
+      "name": "vehicles",
+      "label": "Vehicles of Poseidon",
+      "type": "Actor",
+      "system": "blue-planet-recontact"
+    },
+    {
+      "name": "remotes",
+      "label": "Remotes & CICADA",
+      "type": "Actor",
+      "system": "blue-planet-recontact"
+    },
+    {
+      "name": "weapons",
+      "label": "Weapons",
+      "type": "Item",
+      "system": "blue-planet-recontact"
+    },
+    {
+      "name": "ammunition",
+      "label": "Ammunition",
+      "type": "Item",
+      "system": "blue-planet-recontact"
+    },
+    {
+      "name": "cyberware",
+      "label": "Cyberware (Hardware)",
+      "type": "Item",
+      "system": "blue-planet-recontact"
+    },
+    {
+      "name": "sensors",
+      "label": "Sensors",
+      "type": "Item",
+      "system": "blue-planet-recontact"
+    },
+    {
+      "name": "features",
+      "label": "Features & Backgrounds",
+      "type": "Item",
+      "system": "blue-planet-recontact"
     }
   ],
   "socket": true

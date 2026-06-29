@@ -1,0 +1,846 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   BLUE PLANET RECONTACT — Vehicle & Remote Sheet Styles
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── Shared ocean-tech palette ─────────────────────────────────────────── */
+.vehicle-sheet, .remote-sheet {
+  --bpr-aqua:        rgba(107, 182, 255, 0.85);
+  --bpr-teal:        rgba(64, 224, 208, 0.85);
+  --bpr-aqua-low:    rgba(107, 182, 255, 0.35);
+  --bpr-teal-low:    rgba(64, 224, 208, 0.35);
+  --bpr-ocean:       rgba(26, 62, 92, 0.7);
+  --bpr-ocean-deep:  rgba(10, 25, 40, 0.9);
+  --bpr-ocean-bg:    rgba(26, 62, 92, 0.25);
+  --bpr-border:      rgba(107, 182, 255, 0.3);
+  --bpr-gold:        rgba(255, 210, 80, 0.9);
+  --bpr-red:         rgba(220, 80, 80, 0.9);
+  --bpr-green:       rgba(60, 200, 100, 0.9);
+  --bpr-text:        rgba(220, 240, 255, 0.92);
+  --bpr-text-dim:    rgba(150, 190, 230, 0.6);
+  font-family: 'Rajdhani', 'Orbitron', 'Share Tech Mono', monospace;
+  color: var(--bpr-text);
+  background: transparent;
+}
+
+/* ── HEADER ─────────────────────────────────────────────────────────────── */
+.vehicle-header, .remote-header {
+  display: flex;
+  gap: 14px;
+  padding: 12px 14px;
+  background: linear-gradient(135deg, rgba(10,25,40,0.85) 0%, rgba(26,62,92,0.7) 100%);
+  border-bottom: 2px solid var(--bpr-border);
+  position: relative;
+}
+
+/* portrait */
+.vehicle-portrait-wrap, .remote-portrait-wrap {
+  flex-shrink: 0;
+  position: relative;
+  width: 90px;
+}
+.vehicle-portrait-img, .remote-portrait-img {
+  width: 90px; height: 90px;
+  border-radius: 8px;
+  border: 2px solid var(--bpr-border);
+  object-fit: cover;
+  cursor: pointer;
+}
+.vehicle-type-badge, .remote-type-badge {
+  position: absolute;
+  bottom: -2px; left: 50%; transform: translateX(-50%);
+  background: var(--bpr-ocean-deep);
+  border: 1px solid var(--bpr-border);
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  color: var(--bpr-aqua);
+}
+.vbadge-ground   { color: #b8e0a0 !important; border-color: rgba(100,200,80,0.5) !important; }
+.vbadge-aquatic  { color: var(--bpr-aqua) !important; }
+.vbadge-submersible { color: var(--bpr-teal) !important; border-color: rgba(64,224,208,0.5) !important; }
+.vbadge-aerial   { color: #d0d0ff !important; border-color: rgba(180,180,255,0.5) !important; }
+.vbadge-space    { color: #e8c0ff !important; border-color: rgba(200,100,255,0.4) !important; }
+
+/* header info area */
+.vehicle-header-info, .remote-header-info { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+
+.vehicle-name-row, .remote-name-row {
+  display: flex; gap: 8px; align-items: center;
+}
+.vehicle-name-input, .remote-name-input {
+  flex: 1; font-size: 20px; font-weight: 700;
+  background: transparent; border: none; border-bottom: 1px solid var(--bpr-border);
+  color: var(--bpr-aqua); padding: 2px 4px;
+}
+.vehicle-type-select, .remote-type-select {
+  flex-shrink: 0;
+  background: var(--bpr-ocean); border: 1px solid var(--bpr-border);
+  color: var(--bpr-text); padding: 3px 6px; border-radius: 4px; font-size: 11px;
+}
+
+.vehicle-meta-row, .remote-meta-row {
+  display: flex; gap: 8px; flex-wrap: wrap;
+}
+.meta-field {
+  display: flex; flex-direction: column; gap: 2px;
+}
+.meta-field label {
+  font-size: 9px; letter-spacing: 0.8px; color: var(--bpr-text-dim); text-transform: uppercase;
+}
+.meta-field input, .meta-field select {
+  background: var(--bpr-ocean-bg); border: 1px solid var(--bpr-border);
+  color: var(--bpr-text); padding: 3px 6px; border-radius: 4px; font-size: 11px;
+  min-width: 80px;
+}
+.avail-restricted { border-color: rgba(220,80,80,0.6) !important; color: var(--bpr-red) !important; }
+
+/* condition row */
+.vehicle-condition-row {
+  display: flex; align-items: center; gap: 10px;
+}
+.condition-label { font-size: 9px; letter-spacing: 0.8px; color: var(--bpr-text-dim); }
+.condition-select {
+  background: var(--bpr-ocean-bg); border: 1px solid var(--bpr-border);
+  color: var(--bpr-text); padding: 2px 6px; border-radius: 4px; font-size: 11px;
+}
+.condition-operational { border-color: rgba(60,200,100,0.5) !important; }
+.condition-damaged     { border-color: rgba(255,200,0,0.6) !important; }
+.condition-critical    { border-color: rgba(220,80,80,0.7) !important; }
+.condition-destroyed   { border-color: rgba(150,50,50,0.8) !important; }
+
+.damage-track { display: flex; gap: 4px; }
+.damage-pip {
+  width: 18px; height: 18px; border-radius: 3px;
+  border: 1px solid var(--bpr-border); background: var(--bpr-ocean-bg);
+}
+.damage-pip.pip-hit     { background: rgba(255,200,0,0.6);  border-color: rgba(255,200,0,0.8); }
+.damage-pip.pip-critical{ background: rgba(220,80,80,0.6);  border-color: rgba(220,80,80,0.8); }
+.damage-pip.pip-destroyed{ background: rgba(100,10,10,0.8); border-color: rgba(150,30,30,0.9); }
+
+/* ── VEHICLE STATS PANEL ────────────────────────────────────────────────── */
+.vehicle-stats-panel {
+  display: flex; gap: 8px;
+  padding: 10px 12px;
+  background: rgba(10,25,40,0.4);
+  border-bottom: 1px solid var(--bpr-border);
+  overflow-x: auto;
+}
+
+.vstat-card {
+  background: var(--bpr-ocean-bg);
+  border: 1px solid var(--bpr-border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  flex-shrink: 0;
+}
+.vstat-card-title {
+  font-size: 9px; font-weight: 700; letter-spacing: 1.2px;
+  color: var(--bpr-aqua); text-transform: uppercase; margin-bottom: 8px;
+  padding-bottom: 4px; border-bottom: 1px solid var(--bpr-border);
+}
+
+/* Hull card */
+.hull-card { min-width: 140px; }
+.hull-stat-block { display: flex; flex-direction: column; gap: 6px; }
+.hull-main { display: flex; flex-direction: column; align-items: center; }
+.hull-label { font-size: 9px; color: var(--bpr-text-dim); }
+.hull-value {
+  width: 60px; height: 56px; text-align: center;
+  font-size: 28px; font-weight: 900;
+  background: var(--bpr-ocean); border: 2px solid var(--bpr-border);
+  color: var(--bpr-aqua); border-radius: 8px;
+}
+.hull-value.fragile   { color: var(--bpr-red); border-color: rgba(220,80,80,0.5); }
+.hull-value.armored-val { color: var(--bpr-gold); border-color: rgba(255,210,80,0.5); }
+.hull-sub { border-top: 1px solid var(--bpr-border); padding-top: 6px; }
+.hull-armor-row { display: flex; align-items: center; gap: 4px; font-size: 10px; }
+.armor-icon { color: var(--bpr-aqua); }
+.armor-value {
+  width: 40px; text-align: center; font-size: 14px; font-weight: 700;
+  background: var(--bpr-ocean-bg); border: 1px solid var(--bpr-border);
+  color: var(--bpr-teal); border-radius: 4px; padding: 1px;
+}
+.hull-rule-hint { font-size: 8px; color: var(--bpr-text-dim); margin-top: 4px; }
+
+/* Autopilot card */
+.autopilot-card { min-width: 130px; }
+.autopilot-block { display: flex; flex-direction: column; gap: 6px; }
+.auto-pair { display: flex; align-items: center; gap: 6px; justify-content: center; }
+.auto-stat { display: flex; flex-direction: column; align-items: center; }
+.auto-stat label { font-size: 9px; color: var(--bpr-text-dim); }
+.auto-val {
+  width: 38px; height: 34px; text-align: center;
+  font-size: 18px; font-weight: 700;
+  background: var(--bpr-ocean); border: 1px solid var(--bpr-border);
+  color: var(--bpr-teal); border-radius: 6px;
+}
+.auto-divider { font-size: 18px; color: var(--bpr-text-dim); }
+.interface-row, .power-row { display: flex; flex-direction: column; gap: 2px; }
+.interface-row label, .power-row label { font-size: 9px; color: var(--bpr-text-dim); }
+.iface-select {
+  background: var(--bpr-ocean-bg); border: 1px solid var(--bpr-border);
+  color: var(--bpr-text); padding: 2px 4px; border-radius: 4px; font-size: 10px;
+}
+.iface-hot  { border-color: rgba(107,182,255,0.6) !important; }
+.iface-gi   { border-color: rgba(180,100,255,0.6) !important; color: #d0a0ff !important; }
+.power-row select {
+  background: var(--bpr-ocean-bg); border: 1px solid var(--bpr-border);
+  color: var(--bpr-text); padding: 2px 4px; border-radius: 4px; font-size: 10px;
+}
+
+/* Performance card */
+.perf-card { min-width: 170px; }
+.perf-block { display: flex; flex-direction: column; gap: 6px; }
+.perf-row { display: flex; gap: 6px; }
+.perf-extra { display: flex; gap: 6px; margin-top: 4px; }
+.perf-item { display: flex; flex-direction: column; gap: 2px; }
+.perf-item label { font-size: 8px; letter-spacing: 0.6px; color: var(--bpr-text-dim); }
+.perf-input-unit { display: flex; align-items: center; gap: 2px; }
+.perf-input-unit input {
+  width: 44px; text-align: right;
+  background: var(--bpr-ocean-bg); border: 1px solid var(--bpr-border);
+  color: var(--bpr-text); padding: 2px 4px; border-radius: 4px; font-size: 11px;
+}
+.punit { font-size: 8px; color: var(--bpr-text-dim); }
+
+/* Maneuvers card */
+.maneuvers-card { min-width: 180px; }
+.maneuvers-block { display: flex; gap: 6px; flex-wrap: wrap; }
+.mano-item {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  min-width: 36px;
+}
+.mano-item.mano-na { opacity: 0.4; }
+.mano-icon { font-size: 12px; }
+.mano-item label { font-size: 8px; color: var(--bpr-text-dim); letter-spacing: 0.5px; }
+.mano-val {
+  width: 36px; height: 32px; text-align: center;
+  font-size: 15px; font-weight: 700;
+  background: var(--bpr-ocean); border: 1px solid var(--bpr-border);
+  color: var(--bpr-text); border-radius: 5px;
+}
+.mano-val.positive { color: var(--bpr-green); border-color: rgba(60,200,100,0.5); }
+.mano-val.negative { color: var(--bpr-red);   border-color: rgba(220,80,80,0.4); }
+.mano-na-text { font-size: 11px; color: var(--bpr-text-dim); }
+.maneuver-rule-hint { font-size: 8px; color: var(--bpr-text-dim); margin-top: 4px; width: 100%; }
+
+/* Dims card */
+.dims-card { min-width: 140px; }
+.dims-block { display: flex; flex-direction: column; gap: 5px; }
+.dim-row { display: flex; align-items: center; gap: 6px; }
+.dim-row label { font-size: 9px; color: var(--bpr-text-dim); min-width: 44px; }
+.size-select, .unit-select {
+  background: var(--bpr-ocean-bg); border: 1px solid var(--bpr-border);
+  color: var(--bpr-text); padding: 1px 4px; border-radius: 4px; font-size: 10px;
+}
+.dim-input-unit { display: flex; align-items: center; gap: 2px; }
+.dim-input-unit input {
+  width: 48px; text-align: right;
+  background: var(--bpr-ocean-bg); border: 1px solid var(--bpr-border);
+  color: var(--bpr-text); padding: 2px 4px; border-radius: 4px; font-size: 10px;
+}
+
+/* ── VEHICLE TABS ────────────────────────────────────────────────────────── */
+.vehicle-tabs, .remote-tabs {
+  display: flex; gap: 0;
+  background: rgba(10,25,40,0.6);
+  border-bottom: 1px solid var(--bpr-border);
+  padding: 0 12px;
+}
+.vehicle-tabs .item, .remote-tabs .item {
+  padding: 6px 16px;
+  font-size: 11px; font-weight: 600; letter-spacing: 0.6px;
+  color: var(--bpr-text-dim);
+  border: none; border-bottom: 2px solid transparent;
+  cursor: pointer; background: transparent;
+  transition: all 0.15s;
+}
+.vehicle-tabs .item.active, .remote-tabs .item.active {
+  color: var(--bpr-aqua);
+  border-bottom-color: var(--bpr-aqua);
+}
+.vehicle-tabs .item:hover, .remote-tabs .item:hover { color: var(--bpr-text); }
+
+/* vehicle-body y remote-body: padding lo ponen los .tab internos */
+.vehicle-body, .remote-body { padding: 0; min-height: 0; }
+
+/* ── CREW TAB ────────────────────────────────────────────────────────────── */
+.crew-requirements-bar {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 10px;
+  background: var(--bpr-ocean-bg); border-radius: 6px;
+  margin-bottom: 10px;
+  border: 1px solid var(--bpr-border);
+}
+.crew-req-item { display: flex; flex-direction: column; gap: 2px; }
+.crew-req-item label { font-size: 9px; color: var(--bpr-text-dim); }
+.crew-req-item input {
+  width: 50px; text-align: center; font-size: 14px; font-weight: 700;
+  background: var(--bpr-ocean); border: 1px solid var(--bpr-border);
+  color: var(--bpr-aqua); border-radius: 4px; padding: 2px;
+}
+.crew-req-sep { font-size: 16px; color: var(--bpr-border); }
+
+/* Cetacean access panel */
+.cetacean-access-panel {
+  padding: 8px 10px; margin-bottom: 10px;
+  background: rgba(64,224,208,0.05);
+  border: 1px solid rgba(64,224,208,0.3);
+  border-radius: 6px;
+}
+.cetacean-access-panel h4 {
+  font-size: 10px; font-weight: 700; color: var(--bpr-teal);
+  margin: 0 0 6px 0; letter-spacing: 0.6px;
+}
+.cete-access-grid { display: flex; gap: 10px; flex-wrap: wrap; }
+.cete-acc-toggle {
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  padding: 6px 10px; border-radius: 6px; cursor: pointer;
+  border: 1px solid rgba(64,224,208,0.25);
+  background: rgba(64,224,208,0.05);
+  font-size: 10px; font-weight: 600; color: var(--bpr-text-dim);
+  transition: all 0.15s;
+}
+.cete-acc-toggle.cete-acc-on {
+  background: rgba(64,224,208,0.15);
+  border-color: rgba(64,224,208,0.6);
+  color: var(--bpr-teal);
+}
+.cete-acc-toggle small { font-size: 8px; color: var(--bpr-text-dim); }
+.cete-acc-toggle input { display: none; }
+
+/* Crew panel */
+.crew-panel { }
+.crew-panel-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 8px;
+}
+.crew-panel-header h3 { font-size: 11px; letter-spacing: 0.8px; color: var(--bpr-aqua); margin: 0; }
+.drop-hint-badge {
+  font-size: 9px; color: var(--bpr-text-dim);
+  background: var(--bpr-ocean-bg); padding: 2px 8px;
+  border-radius: 10px; border: 1px solid var(--bpr-border);
+}
+
+.crew-roster {
+  display: flex; flex-direction: column; gap: 6px;
+  min-height: 80px; padding: 8px;
+  background: rgba(26,62,92,0.2);
+  border: 1px dashed var(--bpr-border); border-radius: 8px;
+  max-height: 220px; overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(107,182,255,0.5) rgba(26,62,92,0.3);
+}
+.crew-roster::-webkit-scrollbar { width: 6px; }
+.crew-roster::-webkit-scrollbar-track { background: rgba(26,62,92,0.3); border-radius: 3px; }
+.crew-roster::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, rgba(107,182,255,0.5), rgba(64,224,208,0.5));
+  border-radius: 3px;
+}
+
+.crew-card {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 8px;
+  background: var(--bpr-ocean-bg);
+  border: 1px solid var(--bpr-border); border-radius: 6px;
+  transition: border-color 0.15s;
+}
+.crew-card:hover { border-color: var(--bpr-aqua); }
+.crew-avatar {
+  width: 36px; height: 36px; border-radius: 4px;
+  border: 1px solid var(--bpr-border); object-fit: cover; flex-shrink: 0;
+}
+.crew-card-body { flex: 1; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.crew-card-name { font-size: 12px; font-weight: 600; color: var(--bpr-text); }
+.crew-card-type-badge {
+  font-size: 8px; font-weight: 700; padding: 1px 5px;
+  border-radius: 3px; letter-spacing: 0.5px;
+}
+.ctype-character { background: rgba(107,182,255,0.2); color: var(--bpr-aqua); border: 1px solid rgba(107,182,255,0.4); }
+.ctype-npc       { background: rgba(255,180,80,0.2);  color: #ffb450; border: 1px solid rgba(255,180,80,0.4); }
+.ctype-cetacean  { background: rgba(64,224,208,0.2);  color: var(--bpr-teal); border: 1px solid rgba(64,224,208,0.4); }
+.ctype-remote    { background: rgba(180,100,255,0.2); color: #d0a0ff; border: 1px solid rgba(180,100,255,0.4); }
+
+.crew-extra-badge {
+  font-size: 8px; padding: 1px 5px; border-radius: 3px;
+}
+.cete-badge  { background: rgba(64,224,208,0.15); color: var(--bpr-teal); }
+.remote-badge{ background: rgba(180,100,255,0.15); color: #c080ff; }
+
+.crew-role-input {
+  border: none; border-bottom: 1px solid var(--bpr-border);
+  background: transparent; color: var(--bpr-text-dim);
+  font-size: 10px; padding: 1px 2px; width: 140px;
+}
+
+.crew-card-actions { display: flex; gap: 4px; flex-shrink: 0; }
+.crew-btn {
+  width: 22px; height: 22px; display: flex; align-items: center; justify-content: center;
+  border-radius: 4px; cursor: pointer; font-size: 11px;
+  background: var(--bpr-ocean-bg); border: 1px solid var(--bpr-border);
+  color: var(--bpr-text-dim); transition: all 0.15s; text-decoration: none;
+}
+.crew-btn:hover { background: rgba(107,182,255,0.15); color: var(--bpr-aqua); }
+
+.crew-empty-zone {
+  display: flex; flex-direction: column; align-items: center; padding: 20px;
+  color: var(--bpr-text-dim);
+}
+.empty-icon { font-size: 24px; margin-bottom: 6px; }
+.empty-msg  { font-size: 12px; font-weight: 600; }
+.empty-sub  { font-size: 10px; }
+.empty-types{ font-size: 9px; color: var(--bpr-aqua); margin-top: 4px; }
+
+/* ── SYSTEMS TAB ─────────────────────────────────────────────────────────── */
+.features-panel { margin-bottom: 12px; }
+.features-panel h3, .remote-features-panel h3 {
+  font-size: 11px; letter-spacing: 0.8px; color: var(--bpr-aqua);
+  margin: 0 0 8px 0;
+}
+.features-grid {
+  display: flex; flex-wrap: wrap; gap: 6px;
+}
+.feat-tag {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 6px 8px; min-width: 80px;
+  border-radius: 6px; cursor: pointer;
+  border: 1px solid var(--bpr-border);
+  background: var(--bpr-ocean-bg);
+  color: var(--bpr-text-dim);
+  transition: all 0.15s;
+}
+.feat-tag.feat-on {
+  background: rgba(107,182,255,0.12);
+  border-color: rgba(107,182,255,0.5);
+  color: var(--bpr-aqua);
+}
+.feat-tag input { display: none; }
+.feat-name { font-size: 9px; font-weight: 700; letter-spacing: 0.6px; }
+.feat-desc { font-size: 8px; color: var(--bpr-text-dim); text-align: center; }
+
+.systems-descriptions, .remote-sys-descriptions {
+  display: flex; gap: 10px; flex-wrap: wrap;
+}
+.sys-desc-block, .rsys-block {
+  flex: 1; min-width: 200px;
+}
+.sys-desc-block h4, .rsys-block h4 {
+  font-size: 10px; font-weight: 700; color: var(--bpr-aqua);
+  margin: 0 0 5px 0; letter-spacing: 0.5px;
+}
+.sys-desc-block.sys-inactive { opacity: 0.4; }
+
+.vehicle-textarea, .remote-textarea {
+  width: 100%; min-height: 80px; resize: vertical;
+  background: var(--bpr-ocean-bg); border: 1px solid var(--bpr-border);
+  color: var(--bpr-text); border-radius: 6px;
+  padding: 6px 8px; font-size: 11px; font-family: inherit;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(107,182,255,0.5) rgba(26,62,92,0.3);
+}
+.vehicle-notes, .remote-notes { min-height: 200px; }
+.vehicle-textarea:focus, .remote-textarea:focus {
+  outline: none; border-color: rgba(107,182,255,0.6);
+}
+
+/* ── NOTES TAB ───────────────────────────────────────────────────────────── */
+.notes-panel h3, .remote-notes-panel h3 {
+  font-size: 11px; letter-spacing: 0.8px; color: var(--bpr-aqua); margin: 0 0 8px 0;
+}
+.remote-notes-rule-box {
+  background: rgba(107,182,255,0.07); border: 1px solid var(--bpr-border);
+  border-radius: 6px; padding: 8px 10px; font-size: 10px; margin-bottom: 10px;
+  color: var(--bpr-text-dim);
+}
+.remote-notes-rule-box strong { color: var(--bpr-aqua); }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   REMOTE SHEET SPECIFIC
+   ═══════════════════════════════════════════════════════════════════════════ */
+.remote-stats-panel {
+  display: flex; gap: 8px; flex-wrap: wrap;
+  padding: 10px 12px;
+  background: rgba(10,25,40,0.4);
+  border-bottom: 1px solid var(--bpr-border);
+}
+.rstat-card {
+  background: var(--bpr-ocean-bg); border: 1px solid var(--bpr-border);
+  border-radius: 8px; padding: 8px 10px; flex-shrink: 0;
+}
+.rstat-card-title {
+  font-size: 9px; font-weight: 700; letter-spacing: 1.2px;
+  color: var(--bpr-aqua); text-transform: uppercase; margin-bottom: 8px;
+  padding-bottom: 4px; border-bottom: 1px solid var(--bpr-border);
+}
+
+/* Durability card */
+.rdurability-card { min-width: 130px; }
+.rdur-block { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.rdur-value {
+  width: 58px; height: 54px; text-align: center;
+  font-size: 26px; font-weight: 900;
+  background: var(--bpr-ocean); border: 2px solid var(--bpr-border);
+  color: var(--bpr-aqua); border-radius: 8px;
+}
+.rdur-value.fragile     { color: var(--bpr-red); border-color: rgba(220,80,80,0.5); }
+.rdur-value.reinforced  { color: var(--bpr-gold); border-color: rgba(255,210,80,0.5); }
+.rdur-hint { font-size: 9px; color: var(--bpr-text-dim); text-align: center; }
+.rdur-rule { font-size: 8px; color: var(--bpr-text-dim); text-align: center; }
+
+/* Autonomy card */
+.rautonomy-card { min-width: 120px; }
+.raut-block { display: flex; flex-direction: column; gap: 6px; align-items: center; }
+.raut-pair { display: flex; align-items: center; gap: 6px; }
+.raut-stat { display: flex; flex-direction: column; align-items: center; }
+.raut-stat label { font-size: 9px; color: var(--bpr-text-dim); }
+.raut-val {
+  width: 36px; height: 32px; text-align: center;
+  font-size: 16px; font-weight: 700;
+  background: var(--bpr-ocean); border: 1px solid var(--bpr-border);
+  color: var(--bpr-teal); border-radius: 5px;
+}
+.raut-div { font-size: 16px; color: var(--bpr-text-dim); }
+.raut-rule { font-size: 8px; color: var(--bpr-text-dim); text-align: center; }
+
+/* Performance card */
+.rperf-card { min-width: 200px; }
+.rperf-block { display: flex; flex-direction: column; gap: 6px; }
+.rperf-item { display: flex; flex-direction: column; gap: 2px; }
+.rperf-item label { font-size: 9px; color: var(--bpr-text-dim); }
+.loco-select {
+  background: var(--bpr-ocean-bg); border: 1px solid var(--bpr-border);
+  color: var(--bpr-text); padding: 2px 4px; border-radius: 4px; font-size: 10px;
+}
+.rperf-row { display: flex; gap: 8px; }
+.rperf-stat { display: flex; flex-direction: column; gap: 2px; }
+.rperf-stat label { font-size: 8px; color: var(--bpr-text-dim); }
+.rperf-input-unit { display: flex; align-items: center; gap: 2px; }
+.rperf-input-unit input {
+  width: 44px; text-align: right; font-size: 11px; font-weight: 600;
+  background: var(--bpr-ocean-bg); border: 1px solid var(--bpr-border);
+  color: var(--bpr-text); padding: 2px 3px; border-radius: 4px;
+}
+
+/* Chase/Evade card */
+.rchase-card { min-width: 150px; }
+.rchase-block { display: flex; flex-direction: column; gap: 8px; }
+.rchase-main { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.rchase-main label { font-size: 9px; color: var(--bpr-text-dim); }
+.rchase-val {
+  width: 52px; height: 44px; text-align: center;
+  font-size: 22px; font-weight: 900;
+  background: var(--bpr-ocean); border: 1px solid var(--bpr-border);
+  color: var(--bpr-text); border-radius: 6px;
+}
+.rchase-val.positive { color: var(--bpr-green); border-color: rgba(60,200,100,0.5); }
+.rchase-val.negative { color: var(--bpr-red);   border-color: rgba(220,80,80,0.4); }
+.rchase-rule { font-size: 8px; color: var(--bpr-text-dim); text-align: center; }
+.rdim-block { display: flex; flex-direction: column; gap: 4px; border-top: 1px solid var(--bpr-border); padding-top: 6px; }
+.rdim-row { display: flex; align-items: center; gap: 6px; }
+.rdim-row label { font-size: 9px; color: var(--bpr-text-dim); min-width: 36px; }
+.rdim-row select {
+  background: var(--bpr-ocean-bg); border: 1px solid var(--bpr-border);
+  color: var(--bpr-text); padding: 1px 4px; border-radius: 4px; font-size: 10px;
+}
+
+/* Interface bonuses panel */
+.interface-bonuses-panel {
+  padding: 8px 12px;
+  background: rgba(10,25,40,0.35);
+  border-bottom: 1px solid var(--bpr-border);
+}
+.interface-bonuses-title {
+  font-size: 9px; font-weight: 700; letter-spacing: 0.8px;
+  color: var(--bpr-aqua); margin-bottom: 6px;
+}
+.interface-table { display: flex; flex-direction: column; gap: 2px; }
+.iface-row {
+  display: grid;
+  grid-template-columns: 120px 140px 140px 100px;
+  gap: 4px; font-size: 10px; padding: 3px 4px;
+  border-radius: 4px;
+}
+.iface-header {
+  font-size: 9px; font-weight: 700; color: var(--bpr-text-dim);
+  border-bottom: 1px solid var(--bpr-border); padding-bottom: 4px; margin-bottom: 2px;
+}
+.iface-row:not(.iface-header):nth-child(odd) { background: rgba(107,182,255,0.04); }
+.bonus-pos  { color: var(--bpr-green); font-weight: 600; }
+.bonus-zero { color: var(--bpr-text-dim); }
+.bonus-neg  { color: var(--bpr-red); }
+
+/* Cetacean bonuses panel */
+.cetacean-bonuses-panel {
+  padding: 8px 12px;
+  background: rgba(10,25,40,0.35);
+  border-bottom: 1px solid var(--bpr-border);
+}
+.cete-bonuses-header {
+  display: flex; align-items: center; gap: 10px;
+}
+.cete-toggle-label {
+  font-size: 10px; font-weight: 700; cursor: pointer;
+  color: var(--bpr-text-dim);
+  display: flex; align-items: center; gap: 6px;
+}
+.cetacean-bonuses-panel.cete-active .cete-toggle-label { color: var(--bpr-teal); }
+.cete-toggle-hint { font-size: 8px; color: var(--bpr-text-dim); }
+.cete-bonus-grid {
+  display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px;
+}
+.cete-bonus-card {
+  background: rgba(64,224,208,0.08); border: 1px solid rgba(64,224,208,0.3);
+  border-radius: 6px; padding: 6px 10px; min-width: 120px;
+}
+.cete-bonus-label { font-size: 9px; color: var(--bpr-text-dim); margin-bottom: 2px; }
+.cete-bonus-val { font-size: 13px; font-weight: 700; }
+.cete-bonus-val.pos { color: var(--bpr-teal); }
+.cete-bonus-val.neu { color: var(--bpr-aqua); }
+.cete-bonus-base { font-size: 8px; color: var(--bpr-text-dim); }
+
+/* Operators tab */
+.operators-panel { }
+.operators-panel-header {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;
+}
+.operators-panel-header h3 {
+  font-size: 11px; letter-spacing: 0.8px; color: var(--bpr-aqua); margin: 0;
+}
+.operator-rule-box {
+  background: rgba(107,182,255,0.06); border: 1px solid var(--bpr-border);
+  border-radius: 6px; padding: 8px 10px; font-size: 10px;
+  margin-bottom: 10px; color: var(--bpr-text-dim); line-height: 1.5;
+}
+.operator-rule-box strong { color: var(--bpr-aqua); }
+
+.operators-roster {
+  display: flex; flex-direction: column; gap: 6px;
+  min-height: 80px; padding: 8px;
+  background: rgba(26,62,92,0.2);
+  border: 1px dashed var(--bpr-border); border-radius: 8px;
+  max-height: 200px; overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(107,182,255,0.5) rgba(26,62,92,0.3);
+}
+.operator-card {
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 8px; background: var(--bpr-ocean-bg);
+  border: 1px solid var(--bpr-border); border-radius: 6px;
+  transition: border-color 0.15s;
+}
+.operator-card:hover { border-color: var(--bpr-teal); }
+.operator-avatar {
+  width: 36px; height: 36px; border-radius: 4px;
+  border: 1px solid var(--bpr-border); object-fit: cover; flex-shrink: 0;
+}
+.operator-card-body { flex: 1; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.operator-name { font-size: 12px; font-weight: 600; color: var(--bpr-text); }
+.operator-type-badge {
+  font-size: 8px; font-weight: 700; padding: 1px 5px; border-radius: 3px;
+}
+.otype-character { background: rgba(107,182,255,0.2); color: var(--bpr-aqua); border: 1px solid rgba(107,182,255,0.4); }
+.otype-npc       { background: rgba(255,180,80,0.2);  color: #ffb450; border: 1px solid rgba(255,180,80,0.4); }
+.otype-cetacean  { background: rgba(64,224,208,0.2);  color: var(--bpr-teal); border: 1px solid rgba(64,224,208,0.4); }
+.operator-cete-note { font-size: 9px; color: var(--bpr-teal); }
+
+.operator-card-actions { display: flex; gap: 4px; flex-shrink: 0; }
+.operator-btn {
+  width: 22px; height: 22px; display: flex; align-items: center; justify-content: center;
+  border-radius: 4px; cursor: pointer; font-size: 11px;
+  background: var(--bpr-ocean-bg); border: 1px solid var(--bpr-border);
+  color: var(--bpr-text-dim); transition: all 0.15s; text-decoration: none;
+}
+.operator-btn:hover { background: rgba(64,224,208,0.15); color: var(--bpr-teal); }
+
+.operators-empty-zone {
+  display: flex; flex-direction: column; align-items: center; padding: 20px;
+  color: var(--bpr-text-dim);
+}
+
+
+/* ── Drag-over feedback ──────────────────────────────────────────────────────
+   El drop-zone se ilumina cuando se arrastra cualquier actor sobre la ficha,
+   independientemente del tab activo.
+   ─────────────────────────────────────────────────────────────────────────── */
+
+/* Zona de crew cuando algo se arrastra encima (se activa desde cualquier tab) */
+.vehicle-sheet .droppable-crew.drag-over {
+  border-color: var(--bpr-aqua) !important;
+  background: rgba(107, 182, 255, 0.12) !important;
+  box-shadow: inset 0 0 12px rgba(107, 182, 255, 0.2),
+              0 0 8px rgba(107, 182, 255, 0.15);
+  transition: all 0.15s ease;
+}
+
+/* Si el drop-zone no está visible (otro tab), animamos el tab de Crew */
+.vehicle-sheet form:has(.droppable-crew):not(:has(.droppable-crew:visible)) .vehicle-tabs .item[data-tab="crew"] {
+  animation: tab-pulse 0.8s ease infinite;
+}
+
+@keyframes tab-pulse {
+  0%, 100% { color: var(--bpr-text-dim); }
+  50%       { color: var(--bpr-aqua); text-shadow: 0 0 6px rgba(107,182,255,0.6); }
+}
+
+/* Badge de tipo "remote" en la tarjeta de tripulación */
+.ctype-remote {
+  background: rgba(180, 100, 255, 0.2);
+  color: #d0a0ff;
+  border: 1px solid rgba(180, 100, 255, 0.4);
+}
+
+/* Nota especial para remotes en la tarjeta de tripulación */
+.crew-extra-badge.remote-badge {
+  background: rgba(180, 100, 255, 0.15);
+  color: #c080ff;
+  border: 1px solid rgba(180, 100, 255, 0.3);
+}
+
+/* Zona de operadores del remote también con feedback */
+.remote-sheet .droppable-operators.drag-over {
+  border-color: var(--bpr-teal) !important;
+  background: rgba(64, 224, 208, 0.1) !important;
+  box-shadow: inset 0 0 12px rgba(64, 224, 208, 0.2);
+  transition: all 0.15s ease;
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   LAYOUT FLEX — tabs con scroll interno
+   
+   La form ocupa toda la ventana (flex-column).
+   vehicle-header / stats-panel / interface-panels → tamaño fijo.
+   vehicle-tabs / remote-tabs → barra de navegación fija.
+   vehicle-body / remote-body → flex:1 + overflow:hidden  (rellena lo que queda).
+   Cada .tab individual → height:100% + overflow-y:auto  (scroll interno).
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ── VEHICLE ─────────────────────────────────────────────────────────────── */
+
+.vehicle-sheet.blue-planet-recontact {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Paneles fijos arriba */
+.vehicle-sheet .vehicle-header        { flex-shrink: 0; }
+.vehicle-sheet .vehicle-stats-panel   { flex-shrink: 0; }
+
+/* Barra de tabs fija */
+.vehicle-sheet .vehicle-tabs          { flex-shrink: 0; }
+
+/* Body ocupa TODO el espacio restante */
+.vehicle-sheet .vehicle-body {
+  flex: 1 1 0;
+  min-height: 0;          /* imprescindible para que flex respete el scroll */
+  overflow: hidden;       /* el scroll va en el .tab, no aquí */
+  padding: 0;
+  position: relative;
+}
+
+/* Cada tab rellena el body y hace scroll internamente */
+.vehicle-sheet .vehicle-body .tab {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 10px 14px;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+  /* Scrollbar aqua */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(107, 182, 255, 0.55) rgba(26, 62, 92, 0.3);
+}
+
+
+
+/* WebKit scrollbar — tabs del vehículo */
+.vehicle-sheet .vehicle-body .tab::-webkit-scrollbar         { width: 7px; }
+.vehicle-sheet .vehicle-body .tab::-webkit-scrollbar-track   {
+  background: rgba(26, 62, 92, 0.3);
+  border-radius: 4px;
+  border: 1px solid rgba(107, 182, 255, 0.15);
+}
+.vehicle-sheet .vehicle-body .tab::-webkit-scrollbar-thumb   {
+  background: linear-gradient(135deg, rgba(107,182,255,0.6) 0%, rgba(64,224,208,0.6) 100%);
+  border-radius: 4px;
+  border: 1px solid rgba(107,182,255,0.3);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+.vehicle-sheet .vehicle-body .tab::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, rgba(107,182,255,0.85) 0%, rgba(64,224,208,0.85) 100%);
+  box-shadow: 0 0 8px rgba(107,182,255,0.45);
+}
+
+/* ── REMOTE ──────────────────────────────────────────────────────────────── */
+
+.remote-sheet.blue-planet-recontact {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Paneles fijos arriba */
+.remote-sheet .remote-header          { flex-shrink: 0; }
+.remote-sheet .remote-stats-panel     { flex-shrink: 0; }
+.remote-sheet .interface-bonuses-panel{ flex-shrink: 0; }
+.remote-sheet .cetacean-bonuses-panel { flex-shrink: 0; }
+
+/* Barra de tabs fija */
+.remote-sheet .remote-tabs            { flex-shrink: 0; }
+
+/* Body ocupa el espacio restante */
+.remote-sheet .remote-body {
+  flex: 1 1 0;
+  min-height: 0;
+  overflow: hidden;
+  padding: 0;
+  position: relative;
+}
+
+/* Cada tab rellena el body y hace scroll internamente */
+.remote-sheet .remote-body .tab {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 10px 14px;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(64, 224, 208, 0.55) rgba(26, 62, 92, 0.3);
+}
+
+
+
+/* WebKit scrollbar — tabs del remote (teal) */
+.remote-sheet .remote-body .tab::-webkit-scrollbar         { width: 7px; }
+.remote-sheet .remote-body .tab::-webkit-scrollbar-track   {
+  background: rgba(26, 62, 92, 0.3);
+  border-radius: 4px;
+  border: 1px solid rgba(64, 224, 208, 0.15);
+}
+.remote-sheet .remote-body .tab::-webkit-scrollbar-thumb   {
+  background: linear-gradient(135deg, rgba(107,182,255,0.6) 0%, rgba(64,224,208,0.6) 100%);
+  border-radius: 4px;
+  border: 1px solid rgba(64,224,208,0.3);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+.remote-sheet .remote-body .tab::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, rgba(107,182,255,0.85) 0%, rgba(64,224,208,0.85) 100%);
+  box-shadow: 0 0 8px rgba(64,224,208,0.45);
+}
+
+/* ── Scroll interno de las sub-zonas (crew-roster, operators-roster) ─────── */
+/* Estas zonas YA tienen max-height propio; ajustamos para no competir con el tab */
+
+.vehicle-sheet .crew-roster {
+  max-height: none;   /* quitar límite fijo — el tab padre ya hace scroll */
+}
+
+.remote-sheet .operators-roster {
+  max-height: none;
+}

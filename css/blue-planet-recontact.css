@@ -193,6 +193,1583 @@
   transform: scale(1.1);
 }
 
+/* Armor inline tracker styles */
+.armor-inline .durability-bar { background: rgba(53, 122, 189, 0.25); border: 1px solid rgba(53,122,189,0.5); border-radius: 3px; overflow: hidden; }
+.armor-inline .durability-fill { background: linear-gradient(90deg, #4a90e2 0%, #40e0d0 100%); height: 100%; }
+.armor-inline .durability-input-group input.armor-dura-input, .armor-inline .armor-dura-input,
+.armor-inline .armor-dura-max-input { background: #1f2a38; border: 1px solid #357abd; color: #e6f1ff; border-radius: 3px; }
+
+/* ================================== */
+/* CAPACITIES TAB STYLING */
+/* ================================== */
+
+/* Main capacities section */
+.tab.capacities {
+  background: linear-gradient(135deg, #0d1f2d 0%, #1a3e5c 50%, #0d1f2d 100%);
+  color: #ffffff !important;
+  padding: 12px 16px 12px 12px;
+  /* scroll gestionado por scrollbars-unified.css */
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 8px;
+  scroll-behavior: smooth;
+}
+
+/* Capacities section container */
+.capacities-section {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+/* Section headers */
+.biomods-section h3,
+.cyberware-section h3,
+.capacity-summary h3 {
+  color: #6bb6ff !important;
+  text-shadow: 0 0 8px rgba(107, 182, 255, 0.4);
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  border-bottom: 2px solid rgba(107, 182, 255, 0.3);
+  padding-bottom: 8px;
+}
+
+/* Section descriptions */
+.biomods-description p,
+.cyberware-description p {
+  color: #b8d4f0 !important;
+  font-style: italic;
+  font-size: 14px;
+  margin-bottom: 15px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Individual item containers */
+.biomod-item,
+.cyberware-item {
+  background: linear-gradient(135deg, rgba(26, 62, 92, 0.6) 0%, rgba(43, 90, 128, 0.4) 100%);
+  border: 1px solid rgba(107, 182, 255, 0.3);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.biomod-item:hover,
+.cyberware-item:hover {
+  border-color: rgba(107, 182, 255, 0.6);
+  box-shadow: 0 4px 12px rgba(107, 182, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+/* Item names */
+.biomod-name,
+.cyberware-name {
+  color: #ffffff !important;
+  font-weight: bold;
+  font-size: 16px;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+  margin: 0;
+}
+
+/* Type badges */
+.biomod-type-badge,
+.cyberware-type-badge {
+  background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+  color: #ffffff !important;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Effects preview */
+.biomod-effects-preview,
+.cyberware-effects-preview {
+  color: #b8d4f0 !important;
+  font-size: 12px;
+}
+
+.effects-count {
+  color: #40e0d0 !important;
+  font-weight: bold;
+}
+
+/* Attribute bonuses */
+.biomod-attributes .attr-bonus,
+.cyberware-attributes .attr-bonus {
+  background: rgba(74, 144, 226, 0.2);
+  color: #ffffff !important;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: bold;
+  margin-right: 6px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.attr-bonus.positive {
+  background: rgba(40, 167, 69, 0.3);
+  border: 1px solid rgba(40, 167, 69, 0.5);
+  color: #90ee90 !important;
+}
+
+.attr-bonus.negative {
+  background: rgba(220, 53, 69, 0.3);
+  border: 1px solid rgba(220, 53, 69, 0.5);
+  color: #ffb3b3 !important;
+}
+
+/* Cost display */
+.biomod-cost,
+.cyberware-cost {
+  color: #ffd700 !important;
+  font-weight: bold;
+  font-size: 14px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+/* No items messages */
+.no-items-message {
+  background: rgba(26, 62, 92, 0.3);
+  border: 2px dashed rgba(107, 182, 255, 0.4);
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+}
+
+.no-items-message p {
+  color: #b8d4f0 !important;
+  font-style: italic;
+  font-size: 14px;
+  margin: 0;
+}
+
+/* Create buttons */
+.item-create-button {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  border: 2px solid #40e0d0;
+  color: #ffffff !important;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 2px 8px rgba(40, 224, 208, 0.2);
+}
+
+.item-create-button:hover {
+  background: linear-gradient(135deg, #20c997 0%, #17a2b8 100%);
+  border-color: #6bb6ff;
+  box-shadow: 0 4px 12px rgba(40, 224, 208, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Capacity Summary */
+.capacity-summary {
+  background: linear-gradient(135deg, rgba(43, 90, 128, 0.4) 0%, rgba(26, 62, 92, 0.6) 100%);
+  border: 2px solid rgba(107, 182, 255, 0.4);
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-top: 15px;
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(26, 62, 92, 0.4);
+  padding: 10px 15px;
+  border-radius: 6px;
+  border: 1px solid rgba(107, 182, 255, 0.2);
+}
+
+.summary-item label {
+  color: #b8d4f0 !important;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+.summary-value {
+  color: #ffffff !important;
+  font-weight: bold;
+  font-size: 16px;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+.summary-value.strain-cost {
+  color: #ffd700 !important;
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
+}
+
+/* Inactive items styling */
+.biomod-item.inactive,
+.cyberware-item.inactive {
+  opacity: 0.6;
+  background: linear-gradient(135deg, rgba(60, 60, 60, 0.6) 0%, rgba(80, 80, 80, 0.4) 100%);
+  border-color: rgba(150, 150, 150, 0.3);
+}
+
+.biomod-item.inactive .biomod-name,
+.cyberware-item.inactive .cyberware-name {
+  color: #cccccc !important;
+}
+
+/* Item controls styling */
+.capacities-section .item-controls a {
+  color: #6bb6ff !important;
+  transition: all 0.2s ease;
+}
+
+.capacities-section .item-controls a:hover {
+  color: #40e0d0 !important;
+  text-shadow: 0 0 8px rgba(64, 224, 208, 0.6);
+  transform: scale(1.1);
+}
+
+.capacities-section .item-activate {
+  color: #28a745 !important;
+}
+
+.capacities-section .item-deactivate {
+  color: #dc3545 !important;
+}
+
+/* ================================== */
+/* CAPACITIES SCROLLBAR STYLING */
+/* ================================== */
+
+/* Estilo de la scrollbar para la tab de CAPACITIES - Webkit (Chrome, Safari, Edge) */
+.tab.capacities::-webkit-scrollbar {
+  width: 8px;
+}
+
+.tab.capacities::-webkit-scrollbar-track {
+  background: rgba(26, 62, 92, 0.3);
+  border-radius: 4px;
+  border: 1px solid rgba(107, 182, 255, 0.2);
+}
+
+.tab.capacities::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, rgba(107, 182, 255, 0.6) 0%, rgba(64, 224, 208, 0.6) 100%);
+  border-radius: 4px;
+  border: 1px solid rgba(107, 182, 255, 0.3);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.tab.capacities::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, rgba(107, 182, 255, 0.8) 0%, rgba(64, 224, 208, 0.8) 100%);
+  box-shadow: 0 0 8px rgba(107, 182, 255, 0.4);
+}
+
+.tab.capacities::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(135deg, rgba(107, 182, 255, 1.0) 0%, rgba(64, 224, 208, 1.0) 100%);
+}
+
+/* Para Firefox */
+.tab.capacities {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(107, 182, 255, 0.6) rgba(26, 62, 92, 0.3);
+}
+
+/* Asegurar que las secciones se ajusten bien al scroll */
+.capacities-section {
+  flex-shrink: 0;
+  margin-bottom: 16px;
+}
+
+.biomods-section,
+.cyberware-section,
+.capacity-summary {
+  flex-shrink: 0;
+  margin-bottom: 20px;
+}
+
+/* Aplicar scrollbar a todos los tipos de actor sheets */
+.character-sheet .tab.capacities,
+.npc-sheet .tab.capacities,
+.cetacean-sheet .tab.capacities {
+  /* scroll gestionado por scrollbars-unified.css */
+}
+
+/* Ajustar altura según el tamaño de la ventana */
+@media (min-height: 600px) {
+  .tab.capacities {
+    max-height: 450px;
+  }
+}
+
+@media (min-height: 800px) {
+  .tab.capacities {
+    max-height: 500px;
+  }
+}
+
+@media (max-height: 500px) {
+  .tab.capacities {
+    max-height: 250px;
+  }
+}
+
+/* Estilo especial para cuando la scrollbar es visible */
+.tab.capacities.scrolling {
+  border-right: 1px solid rgba(107, 182, 255, 0.2);
+}
+
+/* Responsive adjustments */
+@media (max-width: 800px) {
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .biomods-section,
+  .cyberware-section {
+    padding: 15px;
+  }
+}
+
+/* ================================== */
+/* ITEMS & PROFILE TAB STYLING - Same as CAPACITIES */
+/* ================================== */
+
+/* Apply same background and text styling to ITEMS and PROFILE tabs */
+.tab.items,
+.tab.profile {
+  background: linear-gradient(135deg, #0d1f2d 0%, #1a3e5c 50%, #0d1f2d 100%) !important;
+  color: #ffffff !important;
+  padding: 12px 16px 12px 12px;
+  /* scroll gestionado por scrollbars-unified.css */
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 8px;
+  scroll-behavior: smooth;
+}
+
+/* Section headers for ITEMS and PROFILE */
+.tab.items h3,
+.tab.profile h3 {
+  color: #6bb6ff !important;
+  text-shadow: 0 0 8px rgba(107, 182, 255, 0.4);
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  border-bottom: 2px solid rgba(107, 182, 255, 0.3);
+  padding-bottom: 8px;
+}
+
+/* All text elements in ITEMS and PROFILE tabs */
+.tab.items *,
+.tab.profile * {
+  color: #ffffff !important;
+}
+
+/* Item names and important text */
+.tab.items .weapon-name,
+.tab.items .equipment-name,
+.tab.items .ammo-name,
+.tab.profile .character-concept,
+.tab.profile input,
+.tab.profile textarea,
+.tab.profile select {
+  color: #ffffff !important;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+/* Item sections styling */
+.tab.items .items-section {
+  background: linear-gradient(135deg, rgba(26, 62, 92, 0.4) 0%, rgba(43, 90, 128, 0.3) 100%);
+  border: 1px solid rgba(107, 182, 255, 0.3);
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Profile sections styling */
+.tab.profile .profile-section {
+  background: linear-gradient(135deg, rgba(26, 62, 92, 0.4) 0%, rgba(43, 90, 128, 0.3) 100%);
+  border: 1px solid rgba(107, 182, 255, 0.3);
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Individual item styling */
+.tab.items .weapon-item,
+.tab.items .equipment-item,
+.tab.items .ammunition-item-compact {
+  background: linear-gradient(135deg, rgba(26, 62, 92, 0.6) 0%, rgba(43, 90, 128, 0.4) 100%);
+  border: 1px solid rgba(107, 182, 255, 0.3);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.tab.items .weapon-item:hover,
+.tab.items .equipment-item:hover,
+.tab.items .ammunition-item-compact:hover {
+  border-color: rgba(107, 182, 255, 0.6);
+  box-shadow: 0 4px 12px rgba(107, 182, 255, 0.15);
+  transform: translateY(-2px);
+}
+
+/* Unequipped items styling */
+.tab.items .weapon-item.unequipped,
+.tab.items .equipment-item.unequipped {
+  opacity: 0.6;
+  background: linear-gradient(135deg, rgba(60, 60, 60, 0.6) 0%, rgba(80, 80, 80, 0.4) 100%);
+  border-color: rgba(150, 150, 150, 0.3);
+}
+
+/* Stats and badges */
+.tab.items .weapon-type,
+.tab.items .equipment-type,
+.tab.items .ammo-type {
+  background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+  color: #ffffff !important;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Cost displays */
+.tab.items .weapon-cost,
+.tab.items .equipment-cost,
+.tab.items .weapon-damage,
+.tab.items .weapon-range {
+  color: #ffd700 !important;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+/* Ammo displays */
+.tab.items .weapon-ammo {
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+/* Create buttons in ITEMS */
+.tab.items .item-create-button {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  border: 2px solid #40e0d0;
+  color: #ffffff !important;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+  box-shadow: 0 2px 8px rgba(40, 224, 208, 0.2);
+}
+
+.tab.items .item-create-button:hover {
+  background: linear-gradient(135deg, #20c997 0%, #17a2b8 100%);
+  border-color: #6bb6ff;
+  box-shadow: 0 4px 12px rgba(40, 224, 208, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Item controls styling */
+.tab.items .item-controls a,
+.tab.profile .item-controls a {
+  color: #6bb6ff !important;
+  transition: all 0.2s ease;
+}
+
+.tab.items .item-controls a:hover,
+.tab.profile .item-controls a:hover {
+  color: #40e0d0 !important;
+  text-shadow: 0 0 8px rgba(64, 224, 208, 0.6);
+  transform: scale(1.1);
+}
+
+/* Profile specific elements */
+.tab.profile input,
+.tab.profile textarea,
+.tab.profile select {
+  background: rgba(26, 62, 92, 0.6) !important;
+  border: 1px solid rgba(107, 182, 255, 0.4) !important;
+  color: #ffffff !important;
+  border-radius: 4px;
+  padding: 6px 10px;
+}
+
+/* Mejorar legibilidad del texto en inputs de profile */
+.tab.profile input::placeholder,
+.tab.profile textarea::placeholder {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+/* Mejoras visuales para munición */
+.ammo-mags {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-right: 15px;
+}
+
+.ammo-quantity {
+  font-weight: bold;
+  color: #40e0d0 !important;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+.ammo-type {
+  margin-left: 15px;
+}
+
+/* Mejoras visuales para equipment */
+.equipment-name {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+}
+
+.equipment-quantity {
+  color: #40e0d0 !important;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+  flex-shrink: 0;
+}
+
+.equipment-title {
+  color: #ffffff !important;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+/* Botón de chat styling */
+.item-control.item-chat {
+  color: #ffd700 !important;
+  transition: all 0.2s ease;
+}
+
+.item-control.item-chat:hover {
+  color: #ffed4a !important;
+  text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+  transform: scale(1.15);
+}
+
+/* ================================== */
+/* CAPACITIES - BIOMOD & CYBERWARE INFO STYLING */
+/* ================================== */
+
+/* Basic info section (type and availability) */
+.biomod-basic-info,
+.cyberware-basic-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+/* Type and availability badges */
+.biomod-type-badge,
+.cyberware-type-badge {
+  background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+  color: #ffffff !important;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.biomod-availability-badge,
+.cyberware-availability-badge {
+  background: linear-gradient(135deg, #9c27b0 0%, #7b1fa2 100%);
+  color: #ffffff !important;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Mechanics compact display */
+.biomod-mechanics-compact,
+.cyberware-mechanics-compact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 6px 0;
+}
+
+.mechanics-bonus {
+  background: rgba(40, 167, 69, 0.2);
+  color: #ffffff !important;
+  padding: 2px 6px;
+  border-radius: 8px;
+  font-size: 10px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  border: 1px solid rgba(40, 167, 69, 0.4);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+.mechanics-bonus.init-bonus {
+  background: rgba(255, 193, 7, 0.2);
+  border-color: rgba(255, 193, 7, 0.4);
+  color: #ffc107 !important;
+}
+
+.mechanics-bonus.armor-bonus {
+  background: rgba(74, 144, 226, 0.2);
+  border-color: rgba(74, 144, 226, 0.4);
+  color: #4a90e2 !important;
+}
+
+.mechanics-bonus.damage-bonus {
+  background: rgba(220, 53, 69, 0.2);
+  border-color: rgba(220, 53, 69, 0.4);
+  color: #dc3545 !important;
+}
+
+.mechanics-bonus.wound-bonus {
+  background: rgba(40, 224, 208, 0.2);
+  border-color: rgba(40, 224, 208, 0.4);
+  color: #40e0d0 !important;
+}
+
+/* Reorganize biomod/cyberware stats layout */
+.biomod-stats,
+.cyberware-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+/* Biomod compact single-line display */
+.biomod-stats-compact {
+  margin-top: 4px;
+  font-size: 10px;
+  flex: 1;
+}
+
+.biomod-info-inline {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+  line-height: 1.2;
+}
+
+.info-badge {
+  padding: 2px 5px;
+  border-radius: 8px;
+  font-size: 9px;
+  font-weight: bold;
+  white-space: nowrap;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.type-badge {
+  background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+  color: #ffffff !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.avail-badge {
+  background: linear-gradient(135deg, #9c27b0 0%, #7b1fa2 100%);
+  color: #ffffff !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.attr-compact {
+  padding: 1px 4px;
+  border-radius: 6px;
+  font-size: 8px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.2px;
+}
+
+.attr-compact.pos {
+  background: rgba(72, 187, 120, 0.3);
+  color: #68d391 !important;
+  border: 1px solid rgba(72, 187, 120, 0.5);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+.attr-compact.neg {
+  background: rgba(245, 101, 101, 0.3);
+  color: #fc8181 !important;
+  border: 1px solid rgba(245, 101, 101, 0.5);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+.mech-compact {
+  background: rgba(40, 167, 69, 0.25);
+  color: #ffffff !important;
+  padding: 1px 4px;
+  border-radius: 6px;
+  font-size: 8px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.2px;
+  border: 1px solid rgba(40, 167, 69, 0.4);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+.mech-compact.init {
+  background: rgba(255, 193, 7, 0.25);
+  border-color: rgba(255, 193, 7, 0.4);
+  color: #ffc107 !important;
+}
+
+.mech-compact.armor {
+  background: rgba(74, 144, 226, 0.25);
+  border-color: rgba(74, 144, 226, 0.4);
+  color: #4a90e2 !important;
+}
+
+.mech-compact.dmg {
+  background: rgba(220, 53, 69, 0.25);
+  border-color: rgba(220, 53, 69, 0.4);
+  color: #dc3545 !important;
+}
+
+.mech-compact.wound {
+  background: rgba(40, 224, 208, 0.25);
+  border-color: rgba(40, 224, 208, 0.4);
+  color: #40e0d0 !important;
+}
+
+.effects-badge {
+  background: rgba(159, 122, 234, 0.3);
+  color: #b794f6 !important;
+  border: 1px solid rgba(159, 122, 234, 0.5);
+}
+
+.cost-badge {
+  background: rgba(246, 224, 94, 0.2);
+  color: #f6e05e !important;
+  font-weight: bold;
+  border: 1px solid rgba(246, 224, 94, 0.4);
+}
+
+/* Ensure proper spacing and alignment */
+.biomod-info-row,
+.cyberware-info-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 12px;
+  align-items: start;
+  width: 100%;
+}
+
+.biomod-basic,
+.cyberware-basic {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+/* Responsive layout for smaller screens */
+@media (max-width: 600px) {
+  .biomod-info-row,
+  .cyberware-info-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  
+  .biomod-mechanics-compact,
+  .cyberware-mechanics-compact {
+    justify-content: flex-start;
+  }
+  
+  .mechanics-bonus {
+    font-size: 9px;
+    padding: 1px 4px;
+  }
+}
+
+/* ================================== */
+/* CYBERWARE SHEET TEXT LEGIBILITY */
+/* ================================== */
+
+/* Main cyberware sheet layout and text styling */
+.cyberware-sheet {
+  color: #ffffff !important;
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100%;
+  height: 100%;
+}
+
+.cyberware-sheet .sheet-main {
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1;
+  width: 100%;
+}
+
+.cyberware-sheet * {
+  color: #ffffff !important;
+}
+
+/* Sheet header styling */
+.cyberware-sheet .sheet-header {
+  background: linear-gradient(135deg, #1a3e5c 0%, #2b5a80 50%, #1a3e5c 100%);
+  border-bottom: 3px solid #4a90e2;
+}
+
+/* Tab navigation styling - Force horizontal layout */
+.cyberware-sheet .sheet-tabs {
+  background: rgba(26, 62, 92, 0.8);
+  border-bottom: 2px solid rgba(107, 182, 255, 0.4);
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: flex-start;
+}
+
+.cyberware-sheet .sheet-tabs .item {
+  color: #b8d4f0 !important;
+  border-color: rgba(107, 182, 255, 0.3);
+  flex: 0 0 auto;
+  display: inline-block !important;
+  padding: 8px 16px;
+  margin-right: 2px;
+  border-bottom: 2px solid transparent;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.cyberware-sheet .sheet-tabs .item.active {
+  color: #ffffff !important;
+  background: rgba(107, 182, 255, 0.2);
+  border-color: #6bb6ff;
+  border-bottom-color: #6bb6ff;
+}
+
+.cyberware-sheet .sheet-tabs .item:hover {
+  color: #ffffff !important;
+  background: rgba(107, 182, 255, 0.1);
+}
+
+/* Tab content backgrounds - Force full width layout */
+.cyberware-sheet .sheet-body {
+  width: 100% !important;
+  display: block !important;
+  flex-direction: column !important;
+}
+
+.cyberware-sheet .tab {
+  background: linear-gradient(135deg, #0d1f2d 0%, #1a3e5c 50%, #0d1f2d 100%);
+  color: #ffffff !important;
+  padding: 20px;
+  width: 100% !important;
+  display: none;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.cyberware-sheet .tab.active {
+  display: block !important;
+}
+
+/* Headers and labels */
+.cyberware-sheet h1,
+.cyberware-sheet h2,
+.cyberware-sheet h3,
+.cyberware-sheet h4,
+.cyberware-sheet h5,
+.cyberware-sheet h6 {
+  color: #6bb6ff !important;
+  text-shadow: 0 0 8px rgba(107, 182, 255, 0.4);
+}
+
+.cyberware-sheet label {
+  color: #b8d4f0 !important;
+  font-weight: bold;
+}
+
+/* Input fields */
+.cyberware-sheet input[type="text"],
+.cyberware-sheet input[type="number"],
+.cyberware-sheet textarea,
+.cyberware-sheet select {
+  background: rgba(26, 62, 92, 0.8) !important;
+  border: 1px solid rgba(107, 182, 255, 0.4) !important;
+  color: #ffffff !important;
+  border-radius: 4px;
+  padding: 6px 10px;
+}
+
+.cyberware-sheet input:focus,
+.cyberware-sheet textarea:focus,
+.cyberware-sheet select:focus {
+  border-color: #6bb6ff !important;
+  box-shadow: 0 0 8px rgba(107, 182, 255, 0.3);
+}
+
+.cyberware-sheet input::placeholder,
+.cyberware-sheet textarea::placeholder {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+/* Buttons */
+.cyberware-sheet button {
+  background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
+  border: 2px solid #6bb6ff;
+  color: #ffffff !important;
+  border-radius: 6px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+.cyberware-sheet button:hover {
+  background: linear-gradient(135deg, #357abd 0%, #2a5d8f 100%);
+  border-color: #40e0d0;
+  box-shadow: 0 4px 12px rgba(107, 182, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Special button types */
+.cyberware-sheet .attribute-increase,
+.cyberware-sheet .attribute-decrease {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+.cyberware-sheet .effect-add {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  border-color: #40e0d0;
+}
+
+.cyberware-sheet .effect-add:hover {
+  background: linear-gradient(135deg, #20c997 0%, #17a2b8 100%);
+}
+
+.cyberware-sheet .effect-delete {
+  background: rgba(220, 53, 69, 0.8);
+  border-color: #dc3545;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  font-size: 10px;
+}
+
+.cyberware-sheet .effect-delete:hover {
+  background: rgba(220, 53, 69, 1);
+  transform: scale(1.1);
+}
+
+/* Feature inputs styling */
+.cyberware-sheet .feature-input {
+  background: rgba(26, 62, 92, 0.8) !important;
+  border: 1px solid rgba(107, 182, 255, 0.4) !important;
+  color: #ffffff !important;
+}
+
+.cyberware-sheet .feature-input:focus {
+  border-color: #6bb6ff !important;
+  box-shadow: 0 0 5px rgba(107, 182, 255, 0.3);
+}
+
+/* Drop zones */
+.cyberware-sheet .drop-zone {
+  border: 2px dashed rgba(107, 182, 255, 0.4);
+  background: rgba(26, 62, 92, 0.2);
+  color: #b8d4f0 !important;
+}
+
+.cyberware-sheet .drop-zone:hover,
+.cyberware-sheet .drop-zone.drag-over {
+  border-color: #6bb6ff;
+  background: rgba(107, 182, 255, 0.15);
+  box-shadow: 0 0 15px rgba(107, 182, 255, 0.3);
+}
+
+/* No features state */
+.cyberware-sheet .no-features {
+  color: #b8d4f0 !important;
+}
+
+.cyberware-sheet .no-features h4 {
+  color: #6bb6ff !important;
+}
+
+/* Mechanics sections */
+.cyberware-sheet .mechanics-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.cyberware-sheet .mechanics-field label {
+  min-width: 150px;
+  color: #b8d4f0 !important;
+}
+
+.cyberware-sheet .mechanics-group {
+  background: rgba(26, 62, 92, 0.4);
+  border: 1px solid rgba(107, 182, 255, 0.3);
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+/* Properties sections */
+.cyberware-sheet .properties-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.cyberware-sheet .properties-field label {
+  min-width: 120px;
+  color: #b8d4f0 !important;
+}
+
+.cyberware-sheet .properties-group {
+  background: rgba(26, 62, 92, 0.4);
+  border: 1px solid rgba(107, 182, 255, 0.3);
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+}
+
+/* Installation sections */
+.cyberware-sheet .installation-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-bottom: 15px;
+}
+
+.cyberware-sheet .installation-field label {
+  color: #b8d4f0 !important;
+  font-weight: bold;
+}
+
+/* Attributes tab layout - Match biomod exactly - HIGH SPECIFICITY */
+.cyberware-sheet.cyberware-sheet .tab.attributes {
+  padding: 15px !important;
+  background: rgba(13, 31, 45, 0.8) !important;
+  min-height: 400px !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow-x: hidden !important;
+}
+
+.cyberware-sheet.cyberware-sheet .attributes-section {
+  width: 100% !important;
+  max-width: 100% !important;
+  display: block !important;
+  box-sizing: border-box !important;
+}
+
+.cyberware-sheet.cyberware-sheet .attribute-controls {
+  width: 100% !important;
+  max-width: 100% !important;
+  display: block !important;
+  box-sizing: border-box !important;
+}
+
+.cyberware-sheet.cyberware-sheet .attribute-controls h3 {
+  color: #6bb6ff !important;
+  font-size: 18px !important;
+  margin: 0 0 15px 0 !important;
+  border-bottom: 2px solid rgba(107, 182, 255, 0.6) !important;
+  padding-bottom: 8px !important;
+  display: block !important;
+  width: 100% !important;
+  text-transform: none !important;
+  font-weight: bold !important;
+}
+
+.cyberware-sheet.cyberware-sheet .attribute-help {
+  color: #b8d4f0 !important;
+  font-size: 13px !important;
+  margin-bottom: 20px !important;
+  font-style: italic !important;
+  display: block !important;
+  width: 100% !important;
+  padding: 8px 12px !important;
+  background: rgba(13, 31, 45, 0.6) !important;
+  border-radius: 4px !important;
+  border-left: 3px solid rgba(107, 182, 255, 0.4) !important;
+}
+
+.cyberware-sheet.cyberware-sheet .attribute-list {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 12px !important;
+  margin-bottom: 25px !important;
+  flex-direction: unset !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.cyberware-sheet.cyberware-sheet .attribute-mod {
+  background: rgba(26, 62, 92, 0.4) !important;
+  border: 1px solid rgba(107, 182, 255, 0.3) !important;
+  border-radius: 8px !important;
+  padding: 12px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+  align-items: stretch !important;
+  box-sizing: border-box !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+}
+
+.cyberware-sheet.cyberware-sheet .attribute-mod label {
+  color: #6bb6ff !important;
+  font-weight: bold !important;
+  font-size: 14px !important;
+  text-align: center !important;
+  margin-bottom: 5px !important;
+  min-width: unset !important;
+}
+
+/* Contenedor específico de controles de atributo individual */
+.cyberware-sheet.cyberware-sheet .attribute-mod .attribute-controls {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+
+.cyberware-sheet.cyberware-sheet .tab.attributes .attribute-decrease,
+.cyberware-sheet.cyberware-sheet .tab.attributes .attribute-increase {
+  width: 28px !important;
+  height: 28px !important;
+  min-width: 28px !important;
+  background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%) !important;
+  border: 2px solid #6bb6ff !important;
+  color: #ffffff !important;
+  border-radius: 6px !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.3s ease !important;
+  font-size: 12px !important;
+  padding: 0 !important;
+  flex-shrink: 0 !important;
+}
+
+.cyberware-sheet.cyberware-sheet .tab.attributes .attribute-decrease:hover,
+.cyberware-sheet.cyberware-sheet .tab.attributes .attribute-increase:hover {
+  background: linear-gradient(135deg, #357abd 0%, #2a5d8f 100%) !important;
+  border-color: #40e0d0 !important;
+  transform: scale(1.1) !important;
+  box-shadow: 0 2px 8px rgba(107, 182, 255, 0.4) !important;
+}
+
+.cyberware-sheet.cyberware-sheet .tab.attributes .attribute-input {
+  width: 50px !important;
+  height: 28px !important;
+  min-width: 50px !important;
+  text-align: center !important;
+  font-size: 14px !important;
+  font-weight: bold !important;
+  background: rgba(26, 62, 92, 0.8) !important;
+  border: 2px solid rgba(107, 182, 255, 0.4) !important;
+  color: #ffffff !important;
+  border-radius: 4px !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+  flex-shrink: 0 !important;
+}
+
+.cyberware-sheet.cyberware-sheet .tab.attributes .attribute-input:focus {
+  border-color: #6bb6ff !important;
+  box-shadow: 0 0 8px rgba(107, 182, 255, 0.3) !important;
+}
+
+/* Attribute guidelines - HIGH SPECIFICITY */
+.cyberware-sheet.cyberware-sheet .tab.attributes .attribute-notes {
+  background: rgba(26, 62, 92, 0.4) !important;
+  border: 1px solid rgba(107, 182, 255, 0.3) !important;
+  border-radius: 8px !important;
+  padding: 15px !important;
+  margin-top: 20px !important;
+  border-left: 3px solid rgba(107, 182, 255, 0.6) !important;
+}
+
+.cyberware-sheet.cyberware-sheet .tab.attributes .attribute-notes h4 {
+  color: #6bb6ff !important;
+  font-size: 14px !important;
+  margin-bottom: 10px !important;
+  margin: 0 0 10px 0 !important;
+}
+
+.cyberware-sheet.cyberware-sheet .tab.attributes .attribute-notes ul {
+  color: #e8f4fd !important;
+  margin: 10px 0 !important;
+  padding-left: 20px !important;
+}
+
+.cyberware-sheet.cyberware-sheet .tab.attributes .attribute-notes li {
+  color: #e8f4fd !important;
+  margin-bottom: 5px !important;
+  font-size: 12px !important;
+}
+
+.cyberware-sheet.cyberware-sheet .tab.attributes .attribute-notes strong {
+  color: #6bb6ff !important;
+}
+
+/* Forzar visibilidad de todos los elementos principales */
+.cyberware-sheet.cyberware-sheet .tab.attributes > .attributes-section > .attribute-controls > h3,
+.cyberware-sheet.cyberware-sheet .tab.attributes > .attributes-section > .attribute-controls > .attribute-help,
+.cyberware-sheet.cyberware-sheet .tab.attributes > .attributes-section > .attribute-controls > .attribute-list,
+.cyberware-sheet.cyberware-sheet .tab.attributes > .attributes-section > .attribute-controls > .attribute-notes {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+/* Responsive layout for smaller screens - HIGH SPECIFICITY */
+@media (max-width: 900px) {
+  .cyberware-sheet.cyberware-sheet .attribute-list {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+  
+  .cyberware-sheet.cyberware-sheet .tab.attributes {
+    padding: 10px !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .cyberware-sheet.cyberware-sheet .tab.attributes .attribute-decrease,
+  .cyberware-sheet.cyberware-sheet .tab.attributes .attribute-increase {
+    width: 24px !important;
+    height: 24px !important;
+    min-width: 24px !important;
+    font-size: 10px !important;
+  }
+  
+  .cyberware-sheet.cyberware-sheet .tab.attributes .attribute-input {
+    width: 40px !important;
+    min-width: 40px !important;
+    font-size: 12px !important;
+  }
+  
+  .cyberware-sheet.cyberware-sheet .attribute-mod .attribute-controls {
+    gap: 4px !important;
+  }
+}
+
+/* ================================== */
+/* COMPACT FEATURE VISUALIZATION */
+/* ================================== */
+
+/* Compact feature item container */
+.feature-item-compact {
+  background: rgba(26, 62, 92, 0.4);
+  border: 1px solid rgba(107, 182, 255, 0.3);
+  border-radius: 6px;
+  margin-bottom: 8px;
+  transition: all 0.3s ease;
+}
+
+.feature-item-compact:hover {
+  border-color: rgba(107, 182, 255, 0.5);
+  background: rgba(26, 62, 92, 0.5);
+}
+
+/* Header row with name and actions */
+.feature-header-row {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  gap: 10px;
+}
+
+.feature-name-section {
+  flex: 1;
+}
+
+.feature-name-input {
+  width: 100% !important;
+  background: rgba(26, 62, 92, 0.6) !important;
+  border: 1px solid rgba(107, 182, 255, 0.3) !important;
+  color: #ffffff !important;
+  padding: 6px 10px;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.feature-name-input:focus {
+  border-color: #6bb6ff !important;
+  box-shadow: 0 0 5px rgba(107, 182, 255, 0.3);
+}
+
+.feature-name-input::placeholder {
+  color: rgba(255, 255, 255, 0.6) !important;
+  font-style: italic;
+}
+
+/* Action buttons container */
+.feature-actions {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.feature-expand-btn,
+.compact-btn {
+  width: 24px !important;
+  height: 24px !important;
+  padding: 0 !important;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  transition: all 0.2s ease;
+}
+
+.feature-expand-btn {
+  background: rgba(107, 182, 255, 0.2) !important;
+  color: #6bb6ff !important;
+  border: 1px solid rgba(107, 182, 255, 0.4) !important;
+}
+
+.feature-expand-btn:hover {
+  background: rgba(107, 182, 255, 0.3) !important;
+  color: #ffffff !important;
+  transform: scale(1.1);
+}
+
+.compact-btn.effect-edit {
+  background: rgba(40, 167, 69, 0.2) !important;
+  color: #28a745 !important;
+  border: 1px solid rgba(40, 167, 69, 0.4) !important;
+}
+
+.compact-btn.effect-edit:hover {
+  background: rgba(40, 167, 69, 0.3) !important;
+  color: #ffffff !important;
+  transform: scale(1.1);
+}
+
+.compact-btn.effect-delete {
+  background: rgba(220, 53, 69, 0.2) !important;
+  color: #dc3545 !important;
+  border: 1px solid rgba(220, 53, 69, 0.4) !important;
+}
+
+.compact-btn.effect-delete:hover {
+  background: rgba(220, 53, 69, 0.3) !important;
+  color: #ffffff !important;
+  transform: scale(1.1);
+}
+
+/* Details section (expandable) */
+.feature-details-section {
+  border-top: 1px solid rgba(107, 182, 255, 0.2);
+  padding: 10px 12px;
+  background: rgba(13, 31, 45, 0.6);
+}
+
+.feature-summary-input {
+  width: 100% !important;
+  min-height: 60px;
+  background: rgba(26, 62, 92, 0.8) !important;
+  border: 1px solid rgba(107, 182, 255, 0.3) !important;
+  color: #ffffff !important;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 13px;
+  resize: vertical;
+  font-family: inherit;
+}
+
+.feature-summary-input:focus {
+  border-color: #6bb6ff !important;
+  box-shadow: 0 0 5px rgba(107, 182, 255, 0.3);
+}
+
+.feature-summary-input::placeholder {
+  color: rgba(255, 255, 255, 0.5) !important;
+  font-style: italic;
+}
+
+/* Apply to both biomod and cyberware sheets */
+.biomod-sheet .feature-item-compact,
+.cyberware-sheet .feature-item-compact {
+  /* Inherit all the styles above */
+}
+
+.biomod-sheet .feature-name-input,
+.cyberware-sheet .feature-name-input,
+.biomod-sheet .feature-summary-input,
+.cyberware-sheet .feature-summary-input {
+  /* Ensure text color consistency */
+  color: #ffffff !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .feature-header-row {
+    padding: 6px 8px;
+    gap: 6px;
+  }
+  
+  .feature-actions {
+    gap: 2px;
+  }
+  
+  .feature-expand-btn,
+  .compact-btn {
+    width: 20px !important;
+    height: 20px !important;
+    font-size: 10px;
+  }
+  
+  .feature-details-section {
+    padding: 8px;
+  }
+}
+
+/* Predefined effects */
+.cyberware-sheet .predefined-effects {
+  background: rgba(26, 62, 92, 0.4);
+  border: 1px solid rgba(107, 182, 255, 0.3);
+  border-radius: 8px;
+  padding: 15px;
+  margin-top: 15px;
+}
+
+.cyberware-sheet .predefined-tag {
+  background: rgba(107, 182, 255, 0.2);
+  color: #e8f4fd !important;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  margin: 2px;
+  display: inline-block;
+  border: 1px solid rgba(107, 182, 255, 0.4);
+}
+
+.tab.profile input:focus,
+.tab.profile textarea:focus,
+.tab.profile select:focus {
+  border-color: rgba(107, 182, 255, 0.8) !important;
+  box-shadow: 0 0 8px rgba(107, 182, 255, 0.3);
+}
+
+/* Scrollbar styling for ITEMS and PROFILE - same as CAPACITIES */
+.tab.items::-webkit-scrollbar,
+.tab.profile::-webkit-scrollbar {
+  width: 8px;
+}
+
+.tab.items::-webkit-scrollbar-track,
+.tab.profile::-webkit-scrollbar-track {
+  background: rgba(26, 62, 92, 0.3);
+  border-radius: 4px;
+  border: 1px solid rgba(107, 182, 255, 0.2);
+}
+
+.tab.items::-webkit-scrollbar-thumb,
+.tab.profile::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, rgba(107, 182, 255, 0.6) 0%, rgba(64, 224, 208, 0.6) 100%);
+  border-radius: 4px;
+  border: 1px solid rgba(107, 182, 255, 0.3);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.tab.items::-webkit-scrollbar-thumb:hover,
+.tab.profile::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, rgba(107, 182, 255, 0.8) 0%, rgba(64, 224, 208, 0.8) 100%);
+  box-shadow: 0 0 8px rgba(107, 182, 255, 0.4);
+}
+
+/* Firefox scrollbar */
+.tab.items,
+.tab.profile {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(107, 182, 255, 0.6) rgba(26, 62, 92, 0.3);
+}
+
+/* Responsive adjustments for ITEMS and PROFILE */
+@media (min-height: 600px) {
+  .tab.items,
+  .tab.profile {
+    max-height: 450px;
+  }
+}
+
+@media (min-height: 800px) {
+  .tab.items,
+  .tab.profile {
+    max-height: 500px;
+  }
+}
+
+@media (max-height: 500px) {
+  .tab.items,
+  .tab.profile {
+    max-height: 250px;
+  }
+}
+.armor-inline .durability-input-group button { background: #357abd; color: #fff; border: none; border-radius: 3px; }
+.armor-inline .durability-input-group button:hover { filter: brightness(1.1); }
+
+/* Armor pip styling */
+.armor-pip { width: 10px; height: 12px; border: 1px solid rgba(53,122,189,0.6); background: rgba(31,42,56,0.6); border-radius: 2px; display: inline-block; }
+.armor-pip.filled { background: linear-gradient(135deg, #4a90e2 0%, #40e0d0 100%); border-color: #40e0d0; box-shadow: 0 0 3px rgba(64, 224, 208, 0.5); }
+
 /* Reputation Track - Blue/Purple theme */
 .reputation-pip {
   background: rgba(50, 50, 50, 0.8);
@@ -801,6 +2378,35 @@
   gap: 8px;
 }
 
+/* Biomod effects row compact buttons */
+.biomod-sheet .feature-input-group {
+  gap: 6px;
+}
+
+.biomod-sheet .feature-input-group .effect-edit,
+.biomod-sheet .feature-input-group .effect-delete {
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #cfd8e3;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.biomod-sheet .feature-input-group .effect-edit i,
+.biomod-sheet .feature-input-group .effect-delete i {
+  font-size: 9px;
+}
+
+.biomod-sheet .feature-input-group .effect-edit:hover,
+.biomod-sheet .feature-input-group .effect-delete:hover {
+  color: #ffffff;
+}
+
 .feature-input {
   flex: 1;
   background: rgba(26, 62, 92, 0.8);
@@ -820,6 +2426,21 @@
   text-align: center;
   color: #b8d4f0;
   font-style: italic;
+}
+
+/* Biomod tabs scroll and color overrides */
+.biomod-sheet .tab.effects .effects-section,
+.biomod-sheet .tab.mechanics .mechanics-section {
+  max-height: 400px;
+}
+
+.biomod-sheet .tab.mechanics,
+.biomod-sheet .tab.mechanics h3,
+.biomod-sheet .tab.mechanics h4,
+.biomod-sheet .tab.mechanics label,
+.biomod-sheet .tab.mechanics .help-text,
+.biomod-sheet .tab.mechanics .property-group label {
+  color: #e0e8f5;
 }
 
 .no-features-content {
@@ -1229,9 +2850,39 @@
   color: inherit;
 }
 
+/* Rollable weapon name styling */
+.weapon-name.rollable {
+  color: #4a90e2 !important;
+  cursor: pointer !important;
+  text-decoration: underline !important;
+  margin: 0 !important;
+  transition: all 0.2s ease;
+}
+
+.weapon-name.rollable:hover {
+  color: #357abd !important;
+  text-shadow: 0 0 4px rgba(74, 144, 226, 0.3);
+  transform: translateX(2px);
+}
+
 .weapon-header h4 {
   margin: 0;
   flex-grow: 1;
+}
+
+/* Clickeable weapon name styling */
+.weapon-name-roll {
+  color: #4a90e2 !important;
+  cursor: pointer !important;
+  text-decoration: underline !important;
+  margin: 0 !important;
+  transition: all 0.2s ease;
+}
+
+.weapon-name-roll:hover {
+  color: #357abd !important;
+  text-shadow: 0 0 4px rgba(74, 144, 226, 0.3);
+  transform: translateX(2px);
 }
 
 .creature-attribute-group .attribute-header {
@@ -2899,7 +4550,7 @@
   z-index: 1;
   background: rgba(255, 255, 255, 0.01);
   backdrop-filter: blur(1px);
-  max-height: calc(100vh - 180px);
+  /* max-height quitado: el scroll va en cada .tab individual */
 }
 
 .tab {
@@ -3791,6 +5442,191 @@
   color: #7cc7ff;
   background: rgba(107, 182, 255, 0.2);
   transform: scale(1.05);
+}
+
+/* ==============================================
+   BLUE PLANET INITIATIVE SYSTEM
+   ============================================== */
+
+/* Initiative Roll Chat Card */
+.blue-planet-initiative-roll {
+  background: linear-gradient(145deg, #f0f8ff, #e6f3ff);
+  border: 2px solid #4a90e2;
+  border-radius: 8px;
+  padding: 12px;
+  margin: 8px 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.blue-planet-initiative-roll .roll-header h3 {
+  color: #2c5aa0;
+  margin: 0 0 8px 0;
+  font-size: 14px;
+  font-weight: bold;
+  text-align: center;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.blue-planet-initiative-roll .roll-header h3 strong {
+  color: #2c5aa0;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.blue-planet-initiative-roll .roll-details {
+  display: grid;
+  gap: 4px;
+  font-size: 12px;
+}
+
+.blue-planet-initiative-roll .roll-details > div {
+  display: flex;
+  justify-content: space-between;
+  padding: 2px 0;
+}
+
+.blue-planet-initiative-roll .action-value {
+  background: rgba(74, 144, 226, 0.1);
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-weight: bold;
+  color: #2c5aa0;
+}
+
+/* Initiative Dialog */
+.blue-planet-initiative-dialog {
+  font-family: "Roboto", sans-serif;
+}
+
+.blue-planet-initiative-dialog .form-group {
+  margin-bottom: 12px;
+}
+
+.blue-planet-initiative-dialog label {
+  display: block;
+  margin-bottom: 4px;
+  font-weight: bold;
+  color: #333;
+}
+
+.blue-planet-initiative-dialog select {
+  width: 100%;
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: white;
+  font-size: 13px;
+}
+
+.blue-planet-initiative-dialog .initiative-preview {
+  background: rgba(74, 144, 226, 0.1);
+  border: 1px solid #4a90e2;
+  border-radius: 4px;
+  padding: 8px;
+  margin-top: 12px;
+}
+
+.blue-planet-initiative-dialog .initiative-preview p {
+  margin: 4px 0;
+  font-size: 12px;
+}
+
+.blue-planet-initiative-dialog .initiative-preview strong {
+  color: #2c5aa0;
+}
+
+.blue-planet-initiative-dialog .initiative-preview em {
+  color: #666;
+  font-style: italic;
+}
+
+/* Combat Tracker Blue Planet Button */
+.combat-control#bp-roll-initiative {
+  background: linear-gradient(145deg, #4a90e2, #357abd);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: bold;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.2s ease;
+  margin-left: 4px;
+}
+
+.combat-control#bp-roll-initiative:hover {
+  background: linear-gradient(145deg, #357abd, #2c5aa0);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.combat-control#bp-roll-initiative i {
+  font-size: 14px;
+}
+
+/* Combat Tracker Action Value Display */
+.combat-tracker .combatant .token-initiative {
+  font-weight: bold;
+  color: #2c5aa0;
+}
+
+.combat-tracker .combatant .token-initiative::after {
+  content: " AV";
+  font-size: 10px;
+  color: #666;
+  font-weight: normal;
+}
+
+/* Individual Initiative Buttons */
+.bp-individual-initiative {
+  background: rgba(74, 144, 226, 0.8);
+  color: white;
+  border: none;
+  border-radius: 3px;
+  padding: 2px 4px;
+  font-size: 10px;
+  margin-left: 4px;
+  opacity: 0.7;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.bp-individual-initiative:hover {
+  opacity: 1;
+  background: rgba(74, 144, 226, 1);
+  transform: scale(1.05);
+}
+
+.combatant:hover .bp-individual-initiative {
+  opacity: 1;
+}
+
+/* New Round Button Styles */
+.combat-control#bp-new-round-initiative {
+  background: linear-gradient(145deg, #28a745, #218838);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: bold;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.2s ease;
+  margin-left: 4px;
+}
+
+.combat-control#bp-new-round-initiative:hover {
+  background: linear-gradient(145deg, #218838, #1e7e34);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
 .skill-roll:hover {
@@ -6661,54 +8497,57 @@
 
 /* Chat Scrolling Improvements - Fix Layout Structure */
 
-/* Ensure chat sidebar has proper flex layout */
+/* =====================================================
+   CHAT SCROLL FIX — Foundry VTT v13
+   The JS in chat-layout-fixer.js sets the explicit
+   pixel heights at runtime. CSS here provides the
+   structural baseline and prevents conflicts.
+   ===================================================== */
+
+/* Chat tab container */
 #chat {
   display: flex;
   flex-direction: column;
   height: 100%;
-}
-
-/* Make chat log container flexible but constrained */
-#chat-log {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-height: 0; /* Important for flex shrinking */
   overflow: hidden;
+  position: relative;
 }
 
-/* Create fixed-height scrollable messages container */
-#chat-log ol.chat-messages,
-#chat-log .chat-message-list,
-#chat-log .messages,
-#chat-log .chat-messages {
-  flex: 1;
+/* v13 uses .chat-scroll (not #chat-log) as the scrollable area.
+   Height is set dynamically by chat-layout-fixer.js.
+   We only set the mandatory non-overridable properties here. */
+#chat .chat-scroll {
+  flex: 1 1 auto;
   overflow-y: auto;
   overflow-x: hidden;
-  scroll-behavior: smooth;
-  max-height: calc(100vh - 200px); /* Adjust based on your layout */
   min-height: 200px;
+  scroll-behavior: smooth;
+  /* DO NOT set height/max-height here — JS controls it */
 }
 
-/* Ensure chat form stays at bottom */
-#chat-form,
+/* The messages list itself must not constrain height */
+#chat .chat-scroll ol.chat-messages,
+#chat .chat-scroll .chat-messages,
+#chat .chat-scroll ol,
+#chat .chat-scroll ul {
+  height: auto;
+  max-height: none;
+  overflow: visible;
+}
+
+/* Form is absolutely positioned by JS; CSS just ensures visibility */
 #chat .chat-form,
-.chat-form {
+#chat-form {
   flex-shrink: 0;
-  position: sticky;
-  bottom: 0;
-  background: var(--color-bg);
-  border-top: 1px solid var(--color-border-light);
+  box-sizing: border-box;
+  background: var(--color-bg, #1a1a1a);
   z-index: 100;
 }
 
-/* Fix dice tray position */
-#chat .dice-tray,
-.dice-tray {
+/* Dice tray */
+#chat .dice-tray {
   flex-shrink: 0;
-  position: sticky;
-  bottom: 0;
-  background: var(--color-bg);
+  position: relative;
   z-index: 99;
 }
 
@@ -6775,7 +8614,8 @@
 }
 
 /* Strain Recovery Buttons */
-.strain-recovery {
+.strain-recovery,
+.strain-recovery-controls {
   display: flex;
   gap: 4px;
   margin-top: 8px;

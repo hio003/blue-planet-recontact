@@ -1,0 +1,495 @@
+<form class="{{cssClass}} flexcol weapon-sheet" autocomplete="off">
+
+  {{!-- Header --}}
+  <header class="sheet-header">
+    <div class="header-fields">
+      <div class="name-section">
+        <input name="name" type="text" value="{{item.name}}" placeholder="Weapon Name" class="item-name"/>
+        <div class="weapon-type-line">
+          <select name="system.weapon_type">
+            {{#each weaponTypes as |label key|}}
+              <option value="{{key}}" {{#if (eq ../system.weapon_type key)}}selected{{/if}}>{{label}}</option>
+            {{/each}}
+          </select>
+          <span class="range-display">{{rangeDisplay}}</span>
+        </div>
+      </div>
+      
+      <div class="weapon-stats">
+        <div class="stat-group">
+          <label>Damage Rating:</label>
+          <div class="damage-controls">
+            <input type="number" name="system.damage" value="{{system.damage}}" min="0" max="25" class="damage-input">
+          </div>
+        </div>
+        
+        {{#if (ne system.weapon_type "melee")}}
+        <div class="stat-group">
+          <label>Effective Range:</label>
+          <div class="range-controls">
+            <input type="number" name="system.effective_range" value="{{system.effective_range}}" min="0" class="range-input">
+            <span class="unit">m</span>
+          </div>
+        </div>
+        {{/if}}
+      </div>
+    </div>
+  </header>
+
+  {{!-- Main Content --}}
+  <section class="sheet-main">
+    
+    {{!-- Navigation Tabs --}}
+    <nav class="sheet-tabs" data-group="primary">
+      <a class="item active" data-tab="description">DESCRIPTION</a>
+      <a class="item" data-tab="ammunition">AMMUNITION</a>
+      <a class="item" data-tab="features">FEATURES</a>
+      <a class="item" data-tab="technical">TECHNICAL</a>
+      <a class="item" data-tab="properties">PROPERTIES</a>
+    </nav>
+
+    {{!-- Tab Content --}}
+    <section class="sheet-body">
+      
+      {{!-- Description Tab --}}
+      <div class="tab description active" data-group="primary" data-tab="description">
+        <div class="description-section">
+          <label>Description:</label>
+          <textarea name="system.description" placeholder="Weapon description and appearance">{{system.description}}</textarea>
+        </div>
+      </div>
+
+      {{!-- Ammunition Tab --}}
+      <div class="tab ammunition" data-group="primary" data-tab="ammunition">
+        <div class="ammunition-section">
+          
+          <div class="ammunition-header">
+            <h3><i class="fas fa-bullseye"></i> Ammunition Management</h3>
+            <p class="section-description">Manage ammunition capacity, loaded rounds, and compatible ammunition types.</p>
+          </div>
+          
+          {{#if (ne system.weapon_type "melee")}}
+          <div class="ammo-capacity-section">
+            <h4>Magazine/Chamber Configuration</h4>
+            
+            <div class="capacity-row">
+              <div class="capacity-group">
+                <label>Magazine Capacity:</label>
+                <input type="number" name="system.magazine_capacity" value="{{system.magazine_capacity}}" min="1" max="200" placeholder="30">
+                <span class="unit">rounds</span>
+              </div>
+              
+              <div class="capacity-group">
+                <label>Current Ammo:</label>
+                <input type="number" name="system.current_ammo" value="{{system.current_ammo}}" min="0" max="{{system.magazine_capacity}}" placeholder="30">
+                <span class="unit">rounds</span>
+              </div>
+            </div>
+            
+            <div class="ammo-status">
+              <div class="ammo-bar">
+                <div class="ammo-fill" style="width: {{multiply (divide system.current_ammo system.magazine_capacity) 100}}%;"></div>
+              </div>
+              <div class="ammo-percentage">
+                {{#if system.magazine_capacity}}
+                  {{decimal (multiply (divide system.current_ammo system.magazine_capacity) 100) 0}}% Full
+                {{else}}
+                  No capacity set
+                {{/if}}
+              </div>
+            </div>
+          </div>
+          
+          <div class="loaded-ammo-section">
+            <h4>Currently Loaded Ammunition</h4>
+            
+            {{#if system.loaded_ammunition}}
+            <div class="loaded-ammo-display">
+              <div class="ammo-info">
+                <div class="ammo-name">
+                  <i class="fas fa-circle-dot"></i>
+                  <strong>{{system.loaded_ammunition.name}}</strong>
+                </div>
+                <div class="ammo-details">
+                  <span class="ammo-type">{{titleCase system.loaded_ammunition.ammo_type}}</span>
+                  {{#if system.loaded_ammunition.attack_modifier}}
+                    <span class="modifier attack-mod">Attack {{#if (gte system.loaded_ammunition.attack_modifier 0)}}+{{/if}}{{system.loaded_ammunition.attack_modifier}}</span>
+                  {{/if}}
+                  {{#if system.loaded_ammunition.damage_modifier}}
+                    <span class="modifier damage-mod">Damage {{#if (gte system.loaded_ammunition.damage_modifier 0)}}+{{/if}}{{system.loaded_ammunition.damage_modifier}}</span>
+                  {{/if}}
+                  {{#if system.loaded_ammunition.penetration}}
+                    <span class="modifier penetration-mod">Pen {{system.loaded_ammunition.penetration}}</span>
+                  {{/if}}
+                </div>
+              </div>
+              <div class="ammo-actions">
+                <button type="button" class="unload-ammo-btn">
+                  <i class="fas fa-eject"></i> Unload
+                </button>
+              </div>
+            </div>
+            {{else}}
+            <div class="no-loaded-ammo ammo-drop-zone" data-drop="ammunition">
+              <div class="empty-chamber">
+                <i class="fas fa-circle-notch"></i>
+                <p><em>No ammunition loaded</em></p>
+                <p class="load-hint">Drop ammunition items here or select from available ammo</p>
+                <div class="drop-indicators">
+                  <i class="fas fa-bullseye"></i>
+                  <span>Drop Zone for Ammunition</span>
+                </div>
+              </div>
+            </div>
+            {{/if}}
+          </div>
+          
+          <div class="ammo-loading-section">
+            <h4>Load Ammunition</h4>
+            <div class="ammo-loading-controls">
+              <div class="available-ammo-list">
+                {{#if availableAmmunition.length}}
+                  {{#each availableAmmunition as |ammo|}}
+                  <div class="available-ammo-item">
+                    <div class="ammo-item-info">
+                      <span class="ammo-item-name">{{ammo.name}}</span>
+                      <span class="ammo-item-count">({{ammo.system.remaining_rounds}} rounds)</span>
+                      <span class="ammo-item-type">{{titleCase ammo.system.ammo_type}}</span>
+                    </div>
+                    <button type="button" class="load-ammo-btn" data-ammo-id="{{ammo.id}}">
+                      <i class="fas fa-arrow-right"></i> Load
+                    </button>
+                  </div>
+                  {{/each}}
+                {{else}}
+                  <div class="no-available-ammo ammo-drop-zone" data-drop="ammunition">
+                    <div class="ammo-drop-area">
+                      <i class="fas fa-bullseye ammo-drop-icon"></i>
+                      <p><em>No compatible ammunition found in inventory</em></p>
+                      <p class="create-ammo-hint">Create ammunition items or drag them from compendiums</p>
+                      <div class="drop-indicators">
+                        <i class="fas fa-download"></i>
+                        <span>Drop Ammunition Here</span>
+                      </div>
+                    </div>
+                  </div>
+                {{/if}}
+              </div>
+            </div>
+          </div>
+          
+          <div class="ammo-quick-actions">
+            <h4>Quick Actions</h4>
+            <div class="quick-actions-grid">
+              <button type="button" class="quick-action-btn reload-btn">
+                <i class="fas fa-redo"></i>
+                <span>Reload Full</span>
+              </button>
+              <button type="button" class="quick-action-btn fire-single-btn">
+                <i class="fas fa-bullseye"></i>
+                <span>Fire Single</span>
+              </button>
+              {{#if (includes system.rate_of_fire "burst")}}
+              <button type="button" class="quick-action-btn fire-burst-btn">
+                <i class="fas fa-crosshairs"></i>
+                <span>Fire Burst</span>
+              </button>
+              {{/if}}
+              {{#if (includes system.rate_of_fire "full")}}
+              <button type="button" class="quick-action-btn fire-auto-btn">
+                <i class="fas fa-stream"></i>
+                <span>Full Auto</span>
+              </button>
+              {{/if}}
+            </div>
+          </div>
+          
+          {{else}}
+          <div class="melee-weapon-info">
+            <div class="melee-notice">
+              <i class="fas fa-sword"></i>
+              <h4>Melee Weapon</h4>
+              <p>This weapon does not use ammunition.</p>
+            </div>
+          </div>
+          {{/if}}
+          
+        </div>
+      </div>
+
+      {{!-- Features Tab --}}
+      <div class="tab features" data-group="primary" data-tab="features">
+        <div class="features-section">
+          <div class="features-header">
+            <h3>Weapon Features</h3>
+            <p class="features-description">Special properties and characteristics that modify how this weapon functions.</p>
+          </div>
+          
+          <div class="features-list">
+            {{#if weaponFeatures.length}}
+            {{!-- Features List when there are features --}}
+            <div class="features-display-area drop-zone" data-drop="features">
+              <div class="features-header-info">
+                <div class="features-status">
+                  <p class="features-count"><i class="fas fa-list"></i> {{weaponFeatures.length}} feature{{#unless (eq weaponFeatures.length 1)}}s{{/unless}} defined</p>
+                </div>
+                <div class="drop-hint">
+                  <i class="fas fa-download"></i>
+                  <span>Drop additional features here</span>
+                </div>
+              </div>
+              
+              <div class="features-items-list">
+                {{#each weaponFeatures as |feature index|}}
+                <div class="feature-item">
+                  <div class="feature-input-group">
+                    <input type="text" name="system.features.{{index}}" value="{{feature}}" placeholder="Feature name or description" class="feature-input">
+                    <button type="button" class="feature-delete" data-index="{{index}}" title="Delete Feature"><i class="fas fa-trash"></i></button>
+                  </div>
+                </div>
+                {{/each}}
+              </div>
+            </div>
+            {{else}}
+            {{!-- Empty state with drop zone --}}
+            <div class="no-features drop-zone" data-drop="features">
+              <div class="no-features-content">
+                <i class="fas fa-download features-drop-icon"></i>
+                <h4>No special features defined</h4>
+                <p><em>Drag features from your compendium or inventory here</em></p>
+                <p class="no-features-hint">Features modify weapon behavior, such as "Automatic", "Concealed", or "Armor Piercing".</p>
+                <div class="drop-indicators">
+                  <div class="drop-indicator">
+                    <i class="fas fa-mouse-pointer"></i>
+                    <span>Drag & Drop</span>
+                  </div>
+                  <div class="drop-separator">or</div>
+                  <div class="drop-indicator">
+                    <i class="fas fa-plus"></i>
+                    <span>Add Manually</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {{/if}}
+            
+            {{!-- Add Feature button --}}
+            <div class="features-controls">
+              <button type="button" class="feature-add-button">
+                <i class="fas fa-plus"></i>
+                <span class="add-text">Add Feature Manually</span>
+              </button>
+            </div>
+          </div>
+          
+          <div class="feature-quick-add">
+            <h4><i class="fas fa-plus-square"></i> Quick Add Common Features:</h4>
+            <div class="quick-features-grid">
+              {{#each predefinedFeatures as |feature|}}
+              <button type="button" class="quick-feature-btn" data-feature="{{feature}}">{{feature}}</button>
+              {{/each}}
+            </div>
+            <p class="quick-add-help"><em>Click buttons above to quickly add common weapon features, or use "Add Feature Manually" for custom ones.</em></p>
+          </div>
+          
+          <div class="feature-examples">
+            <h4><i class="fas fa-lightbulb"></i> Feature Descriptions:</h4>
+            <div class="examples-grid">
+              <div class="example-item">
+                <strong>Close Combat:</strong>
+                <span style="color: #ccc;">Only effective within hand-to-hand range</span>
+              </div>
+              <div class="example-item">
+                <strong>Indirect:</strong>
+                <span style="color: #ccc;">Can effectively shoot over/around obstacles</span>
+              </div>
+              <div class="example-item">
+                <strong>Optics:</strong>
+                <span style="color: #ccc;">+2 target number for to-hit tests</span>
+              </div>
+              <div class="example-item">
+                <strong>Sniper:</strong>
+                <span style="color: #ccc;">Quadruples effective range</span>
+              </div>
+              <div class="example-item">
+                <strong>Suppressive:</strong>
+                <span style="color: #ccc;">Targets get -2 to action target numbers</span>
+              </div>
+              <div class="example-item">
+                <strong>Two-Handed:</strong>
+                <span style="color: #ccc;">Requires both hands to operate effectively</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {{!-- Technical Tab --}}
+      <div class="tab technical" data-group="primary" data-tab="technical">
+        <div class="technical-section">
+          
+          <div class="technical-row">
+            <div class="property-group">
+              <label>Durability:</label>
+              <input type="number" name="system.durability" value="{{system.durability}}" min="-10" max="10" step="1">
+              <span class="help-text">Resistance to damage (-10 to +10)</span>
+            </div>
+            
+            <div class="property-group">
+              <label>Dimensions:</label>
+              <select name="system.dimensions">
+                <option value="" {{#unless system.dimensions}}selected{{/unless}}>Select Size...</option>
+                {{#each dimensionsOptions as |label key|}}
+                  <option value="{{key}}" {{#if (eq ../system.dimensions key)}}selected{{/if}}>{{label}}</option>
+                {{/each}}
+              </select>
+            </div>
+          </div>
+          
+          <div class="technical-row">
+            <div class="property-group">
+              <label>Ammo Capacity:</label>
+              <select name="system.ammo_capacity">
+                {{#each ammoCapacityOptions as |label key|}}
+                  <option value="{{key}}" {{#if (eq ../system.ammo_capacity key)}}selected{{/if}}>{{label}}</option>
+                {{/each}}
+              </select>
+            </div>
+            
+            <div class="property-group">
+              <label>Rate of Fire:</label>
+              <select name="system.rate_of_fire">
+                {{#each rateOfFireOptions as |label key|}}
+                  <option value="{{key}}" {{#if (eq ../system.rate_of_fire key)}}selected{{/if}}>{{label}}</option>
+                {{/each}}
+              </select>
+            </div>
+          </div>
+          
+          <div class="technical-row">
+            <div class="property-group">
+              <label>Recoil Penalty:</label>
+              <input type="number" name="system.recoil_penalty" value="{{system.recoil_penalty}}" min="0" max="10" step="1">
+              <span class="help-text">Penalty to accuracy when firing</span>
+            </div>
+          </div>
+          
+          <div class="ammo-types-section">
+            <div class="ammo-types-header">
+              <h4>Supported Ammunition Types:</h4>
+              <p class="ammo-types-description">Specify ammunition this weapon can use. Drag ammunition items here or add manually.</p>
+            </div>
+            
+            {{#if system.compatible_ammo.length}}
+            {{!-- Ammo types list when there are types --}}
+            <div class="ammo-types-display-area ammo-drop-zone" data-drop="ammo_types">
+              <div class="ammo-types-header-info">
+                <div class="ammo-types-status">
+                  <p class="ammo-types-count"><i class="fas fa-bullseye"></i> {{system.compatible_ammo.length}} ammunition{{#unless (eq system.compatible_ammo.length 1)}}s{{/unless}} supported</p>
+                </div>
+                <div class="drop-hint">
+                  <i class="fas fa-download"></i>
+                  <span>Drop additional ammunition here</span>
+                </div>
+              </div>
+              
+              <div class="ammo-types-items-list">
+                {{#each system.compatible_ammo as |ammoName index|}}
+                <div class="ammo-type-item">
+                  <div class="ammo-input-group">
+                    <input type="text" name="system.compatible_ammo.{{index}}" value="{{ammoName}}" placeholder="Ammunition name" class="ammo-input">
+                    <button type="button" class="ammo-type-delete" data-index="{{index}}" title="Delete Compatible Ammo"><i class="fas fa-trash"></i></button>
+                  </div>
+                </div>
+                {{/each}}
+              </div>
+            </div>
+            {{else}}
+            {{!-- Empty state with drop zone --}}
+            <div class="no-ammo-types ammo-drop-zone" data-drop="ammo_types">
+              <div class="no-ammo-types-content">
+                <i class="fas fa-download ammo-drop-icon"></i>
+                <h4>No ammunition defined</h4>
+                <p><em>Drag ammunition from your compendium or inventory here</em></p>
+                <p class="no-ammo-types-hint">Specify what ammunition this weapon can use, such as specific ammunition items.</p>
+                <div class="drop-indicators">
+                  <div class="drop-indicator">
+                    <i class="fas fa-mouse-pointer"></i>
+                    <span>Drag & Drop</span>
+                  </div>
+                  <div class="drop-separator">or</div>
+                  <div class="drop-indicator">
+                    <i class="fas fa-plus"></i>
+                    <span>Add Manually</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {{/if}}
+            
+            <div class="ammo-types-controls">
+              <button type="button" class="ammo-type-add">
+                <i class="fas fa-plus"></i>
+                <span class="add-text">Add Ammunition Manually</span>
+              </button>
+            </div>
+          </div>
+          
+          <div class="models-section">
+            <div class="property-group">
+              <label>Manufacturers/Models:</label>
+              <textarea name="system.models" placeholder="List specific weapon models and manufacturers (e.g., MacLeod Enforcement Hunter Series, Hanover Arms Jäger Line)">{{system.models}}</textarea>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+
+      {{!-- Properties Tab --}}
+      <div class="tab properties" data-group="primary" data-tab="properties">
+        <div class="properties-section">
+          
+          <div class="property-group">
+            <label>Cost:</label>
+            <input type="number" name="system.cost" value="{{system.cost}}" min="0" step="0.01">
+          </div>
+          
+          <div class="property-group">
+            <label>Availability:</label>
+            <select name="system.availability">
+              {{#each availabilityOptions as |label key|}}
+                <option value="{{key}}" {{#if (eq ../system.availability key)}}selected{{/if}}>{{label}}</option>
+              {{/each}}
+            </select>
+          </div>
+          
+          <div class="property-group">
+            <label>Legality:</label>
+            <select name="system.legality">
+              {{#each legalityOptions as |label key|}}
+                <option value="{{key}}" {{#if (eq ../system.legality key)}}selected{{/if}}>{{label}}</option>
+              {{/each}}
+            </select>
+          </div>
+          
+          <div class="weapon-notes">
+            <h4>Damage System Notes:</h4>
+            <div class="damage-explanation">
+              <p><strong>Damage Tests:</strong> Roll 3d10 vs Damage Rating</p>
+              <ul>
+                <li>Each die ≤ Damage Rating = 1 success</li>
+                <li>1 success = Minor wound</li>
+                <li>2 successes = Major wound</li>
+                <li>3+ successes = Mortal wound</li>
+              </ul>
+              <p><strong>Target Number Modifiers:</strong> Target's Physique and armor reduce the effective Damage Rating.</p>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+
+    </section>
+  </section>
+
+</form>

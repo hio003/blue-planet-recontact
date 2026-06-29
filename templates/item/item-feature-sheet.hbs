@@ -1,0 +1,236 @@
+<form class="{{cssClass}} flexcol feature-sheet" autocomplete="off">
+
+  {{!-- Header --}}
+  <header class="sheet-header">
+    <div class="header-fields">
+      <div class="name-section">
+        <input name="name" type="text" value="{{item.name}}" placeholder="Feature Name" class="item-name"/>
+        <div class="feature-category-line">
+          <select name="system.category" class="category-select">
+            {{#each categoryOptions as |label key|}}
+              <option value="{{key}}" {{#if (eq ../system.category key)}}selected{{/if}}>{{label}}</option>
+            {{/each}}
+          </select>
+        </div>
+      </div>
+      
+      <div class="feature-stats">
+        <div class="stat-group">
+          <label>Type:</label>
+          <select name="system.feature_type" class="feature-type-select">
+            {{#each currentFeatureTypes as |label key|}}
+              <option value="{{key}}" {{#if (eq ../system.feature_type key)}}selected{{/if}}>{{label}}</option>
+            {{/each}}
+          </select>
+        </div>
+        
+        <div class="stat-group">
+          <label>Bonus Type:</label>
+          <select name="system.bonus_type" class="bonus-type-select">
+            {{#each bonusTypeOptions as |label key|}}
+              <option value="{{key}}" {{#if (eq ../system.bonus_type key)}}selected{{/if}}>{{label}}</option>
+            {{/each}}
+          </select>
+        </div>
+        
+        {{#unless (eq system.bonus_type "none")}}
+        <div class="stat-group">
+          <label>Value:</label>
+          <input type="number" name="system.bonus_value" value="{{system.bonus_value}}" min="-10" max="10" step="1" class="bonus-value-input">
+        </div>
+        {{/unless}}
+      </div>
+    </div>
+  </header>
+
+  {{!-- Main Content --}}
+  <section class="sheet-main">
+    
+    {{!-- Navigation Tabs --}}
+    <nav class="sheet-tabs" data-group="primary">
+      <a class="item active" data-tab="description">DESCRIPTION</a>
+      <a class="item" data-tab="details">DETAILS</a>
+      <a class="item" data-tab="properties">PROPERTIES</a>
+    </nav>
+
+    {{!-- Tab Content --}}
+    <section class="sheet-body">
+      
+      {{!-- Description Tab --}}
+      <div class="tab description active" data-group="primary" data-tab="description">
+        <div class="description-section">
+          <label>Description:</label>
+          <textarea name="system.description" placeholder="Feature description and appearance">{{system.description}}</textarea>
+        </div>
+        
+        <div class="effect-section">
+          <label>Game Effect:</label>
+          <textarea name="system.effect" placeholder="Mechanical game effect of this feature">{{system.effect}}</textarea>
+          <small class="help-text">Describe the specific mechanical effect this feature provides (e.g., "+2 bonus on tests to hide or disguise it")</small>
+        </div>
+        
+        <div class="rules-section">
+          <label>Game Rules:</label>
+          <textarea name="system.game_rules" placeholder="Detailed rules implementation">{{system.game_rules}}</textarea>
+          <small class="help-text">Provide detailed rules for how this feature works in gameplay</small>
+        </div>
+      </div>
+
+      {{!-- Details Tab --}}
+      <div class="tab details" data-group="primary" data-tab="details">
+        <div class="details-section">
+          
+          {{!-- Technology Feature Subtypes --}}
+          {{#if (eq system.category "technology")}}
+          
+            {{#if (eq system.feature_type "interfacing_type")}}
+            <div class="subtype-section">
+              <label>Interfacing Subtype:</label>
+              <select name="system.subtype">
+                {{#each interfacingSubtypes as |label key|}}
+                  <option value="{{key}}" {{#if (eq ../system.subtype key)}}selected{{/if}}>{{label}}</option>
+                {{/each}}
+              </select>
+            </div>
+            {{/if}}
+            
+            {{#if (eq system.feature_type "power_type")}}
+            <div class="subtype-section">
+              <label>Power Subtype:</label>
+              <select name="system.subtype">
+                {{#each powerSubtypes as |label key|}}
+                  <option value="{{key}}" {{#if (eq ../system.subtype key)}}selected{{/if}}>{{label}}</option>
+                {{/each}}
+              </select>
+            </div>
+            {{/if}}
+            
+            <div class="technology-info">
+              <h4>Technology Feature Guidelines:</h4>
+              <div class="feature-examples">
+                <div class="example-item">
+                  <strong>Concealable:</strong> +2 bonus on tests to hide or disguise the device
+                </div>
+                <div class="example-item">
+                  <strong>Hardened:</strong> Damage tests are rolled twice, lower result is used
+                </div>
+                <div class="example-item">
+                  <strong>Hot Interfacing:</strong> +2 target number when connected through neural interface
+                </div>
+                <div class="example-item">
+                  <strong>Premium:</strong> +1 bonus to any tests dependent on its use
+                </div>
+              </div>
+            </div>
+            
+          {{/if}}
+          
+          {{!-- Weapon Feature Subtypes --}}
+          {{#if (eq system.category "weapon")}}
+          
+            {{#if (eq system.feature_type "ammo_type")}}
+            <div class="subtype-section">
+              <label>Ammo Subtype:</label>
+              <select name="system.subtype">
+                {{#each ammoSubtypes as |label key|}}
+                  <option value="{{key}}" {{#if (eq ../system.subtype key)}}selected{{/if}}>{{label}}</option>
+                {{/each}}
+              </select>
+            </div>
+            {{/if}}
+            
+            {{#if (eq system.feature_type "rate_of_fire")}}
+            <div class="subtype-section">
+              <label>Rate of Fire Subtype:</label>
+              <select name="system.subtype">
+                {{#each rateOfFireSubtypes as |label key|}}
+                  <option value="{{key}}" {{#if (eq ../system.subtype key)}}selected{{/if}}>{{label}}</option>
+                {{/each}}
+              </select>
+            </div>
+            {{/if}}
+            
+            {{#if (eq system.feature_type "ammo_capacity")}}
+            <div class="subtype-section">
+              <label>Capacity Subtype:</label>
+              <select name="system.subtype">
+                {{#each ammoCapacitySubtypes as |label key|}}
+                  <option value="{{key}}" {{#if (eq ../system.subtype key)}}selected{{/if}}>{{label}}</option>
+                {{/each}}
+              </select>
+            </div>
+            {{/if}}
+            
+            <div class="weapon-info">
+              <h4>Weapon Feature Guidelines:</h4>
+              <div class="feature-examples">
+                <div class="example-item">
+                  <strong>Optics:</strong> +2 target number for to-hit tests
+                </div>
+                <div class="example-item">
+                  <strong>Sniper:</strong> Quadruples effective range
+                </div>
+                <div class="example-item">
+                  <strong>Suppressive:</strong> Targets get -2 to action target numbers
+                </div>
+                <div class="example-item">
+                  <strong>Burst Fire:</strong> +2 damage rating or shoot at two clustered targets
+                </div>
+              </div>
+            </div>
+            
+          {{/if}}
+          
+        </div>
+      </div>
+
+      {{!-- Properties Tab --}}
+      <div class="tab properties" data-group="primary" data-tab="properties">
+        <div class="properties-section">
+          
+          <div class="property-row">
+            <div class="property-group">
+              <label>Cost:</label>
+              <div class="cost-input">
+                <input type="number" name="system.cost" value="{{system.cost}}" min="0" step="0.01">
+                <span class="unit">credits</span>
+              </div>
+            </div>
+            
+            <div class="property-group">
+              <label>Availability:</label>
+              <select name="system.availability">
+                {{#each availabilityOptions as |label key|}}
+                  <option value="{{key}}" {{#if (eq ../system.availability key)}}selected{{/if}}>{{label}}</option>
+                {{/each}}
+              </select>
+            </div>
+          </div>
+          
+          <div class="property-row">
+            <div class="property-group">
+              <label>Legality:</label>
+              <select name="system.legality">
+                {{#each legalityOptions as |label key|}}
+                  <option value="{{key}}" {{#if (eq ../system.legality key)}}selected{{/if}}>{{label}}</option>
+                {{/each}}
+              </select>
+            </div>
+          </div>
+          
+          <div class="feature-usage">
+            <h4>Feature Usage:</h4>
+            <div class="usage-info">
+              <p><strong>Technology Features:</strong> Apply to equipment items, modify their capabilities and functionality.</p>
+              <p><strong>Weapon Features:</strong> Apply to weapons, modify damage, accuracy, range, and combat mechanics.</p>
+              <p><strong>Drag & Drop:</strong> Features can be dragged onto compatible items to apply their effects.</p>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+
+    </section>
+  </section>
+
+</form>

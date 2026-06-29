@@ -2,39 +2,40 @@
   "TYPES": {
     "Actor": {
       "character": "Character",
-      "npc": "NPC", 
       "cetacean": "Cetacean",
-      "creature": "Creature"
+      "npc": "NPC",
+      "creature": "Creature",
+      "vehicle": "Vehicle",
+      "remote": "Remote"
     },
     "Item": {
       "weapon": "Weapon",
-      "equipment": "Equipment", 
+      "equipment": "Equipment",
       "biomod": "Biomod",
+      "cyberware": "Cyberware",
       "skill": "Skill",
       "feature": "Feature",
-      "species": "Species"
+      "species": "Species",
+      "sensor": "Sensor",
+      "ammunition": "Ammunition"
     }
   },
-  
   "BP": {
     "ActorName": "Actor Name",
     "ItemName": "Item Name",
-    
     "Attributes": {
       "Cognition": "Cognition",
-      "Psyche": "Psyche", 
+      "Psyche": "Psyche",
       "Coordination": "Coordination",
       "Physique": "Physique",
       "Awareness": "Awareness"
     },
-    
     "Skills": {
       "General": "General",
       "Core": "Core",
       "Specialty": "Specialty",
       "Rank": "Rank"
     },
-    
     "Character": {
       "Concept": "Concept",
       "Tier": "Tier",
@@ -50,21 +51,18 @@
       "Goal": "Goal",
       "Features": "Features"
     },
-    
     "Wounds": {
       "Minor": "Minor",
-      "Major": "Major", 
+      "Major": "Major",
       "Mortal": "Mortal",
       "Penalty": "Penalty",
       "TotalPenalty": "Total Penalty"
     },
-    
     "Strain": {
       "Mental": "Mental",
-      "Physical": "Physical", 
+      "Physical": "Physical",
       "Spend": "Spend"
     },
-    
     "Creature": {
       "Description": "Description",
       "Behavior": "Behavior",
@@ -81,7 +79,6 @@
       "Effect": "Effect",
       "Onset": "Onset"
     },
-    
     "Equipment": {
       "Cost": "Cost",
       "Availability": "Availability",
@@ -90,14 +87,12 @@
       "Quantity": "Quantity",
       "Durability": "Durability"
     },
-    
     "Weapon": {
       "DamageRating": "Damage Rating",
       "EffectiveRange": "Effective Range",
       "WeaponType": "Weapon Type",
       "Features": "Features"
     },
-    
     "Biomod": {
       "Type": "Type",
       "Effects": "Effects",
@@ -105,25 +100,22 @@
       "Cybernetic": "Cybernetic",
       "Surgical": "Surgical"
     },
-    
     "Rolls": {
       "SkillTest": "Skill Test",
-      "AttributeTest": "Attribute Test", 
+      "AttributeTest": "Attribute Test",
       "DamageTest": "Damage Test",
       "Target": "Target",
       "Success": "Success",
       "Failure": "Failure",
       "ActionValue": "Action Value"
     },
-    
     "Tabs": {
       "Skills": "SKILLS",
-      "Items": "ITEMS", 
+      "Items": "ITEMS",
       "Profile": "PROFILE",
       "Biology": "BIOLOGY",
       "Combat": "COMBAT"
     },
-    
     "Buttons": {
       "Roll": "Roll",
       "Edit": "Edit",
@@ -131,7 +123,6 @@
       "Create": "Create",
       "Add": "Add"
     },
-    
     "Labels": {
       "Name": "Name",
       "Value": "Value",

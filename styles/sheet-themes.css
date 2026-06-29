@@ -1,0 +1,231 @@
+/* ==========================================================
+   BLUE PLANET RECONTACT — Sheet Themes
+   Dos temas para las fichas de personaje:
+   · bpr-theme-blue-planet  (oceánico, por defecto)
+   · bpr-theme-dark         (tema oscuro neutro)
+   ========================================================== */
+
+/* ── Botón selector de tema ──────────────────────────────── */
+
+.theme-toggle-btn {
+  align-self: flex-start;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 10px;
+  line-height: 1;
+  padding: 3px 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  white-space: nowrap;
+  margin-top: 4px;
+}
+
+.theme-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.35);
+  color: #fff;
+}
+
+.bpr-theme-dark .theme-toggle-btn {
+  border-color: rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.bpr-theme-dark .theme-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #ccc;
+}
+
+/* ── TEMA BLUE PLANET (por defecto) ──────────────────────── */
+/* El tema BP ya está definido en blue-planet-recontact.css  */
+/* Solo aseguramos que la clase no altere nada               */
+.bpr-theme-blue-planet.blue-planet-recontact {
+  /* hereda todos los estilos del CSS base — sin cambios */
+}
+
+/* ── TEMA DARK ────────────────────────────────────────────── */
+
+.bpr-theme-dark.blue-planet-recontact {
+  background: linear-gradient(135deg, #111111 0%, #1c1c1c 40%, #222222 60%, #1c1c1c 80%, #111111 100%) !important;
+  color: #d4d4d4 !important;
+  border-color: #3a3a3a !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5) !important;
+}
+
+.bpr-theme-dark.blue-planet-recontact::before {
+  background: none !important;
+}
+
+/* Header */
+.bpr-theme-dark .sheet-header {
+  background: linear-gradient(135deg, #1a1a1a 0%, #242424 50%, #1a1a1a 100%) !important;
+  border-bottom-color: #3a3a3a !important;
+}
+
+/* Texto general */
+.bpr-theme-dark .character-name,
+.bpr-theme-dark .character-concept,
+.bpr-theme-dark input[type="text"],
+.bpr-theme-dark input[type="number"],
+.bpr-theme-dark textarea,
+.bpr-theme-dark select,
+.bpr-theme-dark label,
+.bpr-theme-dark .stat-value,
+.bpr-theme-dark .attribute-value,
+.bpr-theme-dark .skill-roll-btn,
+.bpr-theme-dark h1,
+.bpr-theme-dark h2,
+.bpr-theme-dark h3,
+.bpr-theme-dark h4,
+.bpr-theme-dark p,
+.bpr-theme-dark span {
+  color: #d4d4d4 !important;
+}
+
+/* Inputs */
+.bpr-theme-dark input[type="text"],
+.bpr-theme-dark input[type="number"],
+.bpr-theme-dark textarea,
+.bpr-theme-dark select {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-color: #3a3a3a !important;
+  color: #d4d4d4 !important;
+}
+
+.bpr-theme-dark input:focus,
+.bpr-theme-dark textarea:focus,
+.bpr-theme-dark select:focus {
+  border-color: #666 !important;
+  box-shadow: 0 0 4px rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Sidebar */
+.bpr-theme-dark .sidebar {
+  background: rgba(0, 0, 0, 0.3) !important;
+  border-right-color: #2a2a2a !important;
+}
+
+/* Tabs */
+.bpr-theme-dark .sheet-tabs {
+  background: rgba(0, 0, 0, 0.3) !important;
+  border-bottom-color: #2a2a2a !important;
+}
+
+.bpr-theme-dark .sheet-tabs .item {
+  color: #888 !important;
+  border-bottom-color: transparent !important;
+}
+
+.bpr-theme-dark .sheet-tabs .item.active,
+.bpr-theme-dark .sheet-tabs .item:hover {
+  color: #ccc !important;
+  border-bottom-color: #666 !important;
+}
+
+/* Secciones / cards */
+.bpr-theme-dark .attribute-card,
+.bpr-theme-dark .skill-item,
+.bpr-theme-dark .item-summary,
+.bpr-theme-dark .wound-section,
+.bpr-theme-dark .strain-section,
+.bpr-theme-dark .chips-section,
+.bpr-theme-dark .capacities-section,
+.bpr-theme-dark .items-section {
+  background: rgba(255, 255, 255, 0.04) !important;
+  border-color: #2a2a2a !important;
+}
+
+.bpr-theme-dark .attribute-card:hover,
+.bpr-theme-dark .skill-item:hover {
+  background: rgba(255, 255, 255, 0.07) !important;
+  border-color: #444 !important;
+}
+
+/* Pips — track oscuro */
+.bpr-theme-dark .pip {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-color: #3a3a3a !important;
+}
+
+.bpr-theme-dark .pip.filled {
+  background: #555 !important;
+  border-color: #777 !important;
+  box-shadow: none !important;
+}
+
+/* Pip tracks de C.H.I.P.S, wounds, strain — colores propios atenuados */
+.bpr-theme-dark .chip-pip.filled         { background: #3d6b3d !important; border-color: #4e8a4e !important; }
+.bpr-theme-dark .reputation-pip.filled   { background: #3a5080 !important; border-color: #4e6aa0 !important; }
+.bpr-theme-dark .wound-pip.filled        { background: #6b3333 !important; border-color: #8a4444 !important; }
+.bpr-theme-dark .strain-pip.filled       { background: #4a5a6a !important; border-color: #5a6a7a !important; }
+
+/* Botones de acción */
+.bpr-theme-dark button,
+.bpr-theme-dark .control-btn,
+.bpr-theme-dark .item-control {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border-color: #3a3a3a !important;
+  color: #aaa !important;
+}
+
+.bpr-theme-dark button:hover,
+.bpr-theme-dark .control-btn:hover,
+.bpr-theme-dark .item-control:hover {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border-color: #555 !important;
+  color: #ddd !important;
+}
+
+/* Skill roll buttons */
+.bpr-theme-dark .skill-roll-btn {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-color: #333 !important;
+}
+
+.bpr-theme-dark .skill-roll-btn:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-color: #555 !important;
+}
+
+/* Attribute roll */
+.bpr-theme-dark .attribute-card .roll-btn {
+  background: rgba(255, 255, 255, 0.07) !important;
+  border-color: #3a3a3a !important;
+}
+
+/* Separadores */
+.bpr-theme-dark hr,
+.bpr-theme-dark .section-divider {
+  border-color: #2a2a2a !important;
+}
+
+/* Sección de heridas — mantener rojo atenuado */
+.bpr-theme-dark .wounds-header { color: #c06060 !important; }
+.bpr-theme-dark .strain-header  { color: #7090a0 !important; }
+
+/* Título de sección */
+.bpr-theme-dark .section-title,
+.bpr-theme-dark .tab-title {
+  color: #888 !important;
+  border-bottom-color: #2a2a2a !important;
+}
+
+/* Portrait frame */
+.bpr-theme-dark .portrait-frame {
+  border-color: #3a3a3a !important;
+  background: rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Nota y descripción */
+.bpr-theme-dark .notes-content,
+.bpr-theme-dark .description-content {
+  background: rgba(0, 0, 0, 0.3) !important;
+  border-color: #2a2a2a !important;
+  color: #bbb !important;
+}

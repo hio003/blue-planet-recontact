@@ -17,6 +17,15 @@
       <div class="name-section">
         <input name="name" type="text" value="{{actor.name}}" placeholder="Character Name" class="character-name"/>
         <input name="system.profile.concept" type="text" value="{{system.profile.concept}}" placeholder="Concept" class="character-concept"/>
+        {{!-- Theme toggle --}}
+        <button type="button" class="theme-toggle-btn" data-current-theme="{{sheetTheme}}"
+                title="Toggle sheet theme">
+          {{#if (eq sheetTheme "dark")}}
+            <i class="fas fa-sun"></i> Blue Planet
+          {{else}}
+            <i class="fas fa-moon"></i> Dark
+          {{/if}}
+        </button>
       </div>
       
       {{!-- Right Stats Section --}}
@@ -143,6 +152,7 @@
       {{!-- Navigation Tabs --}}
       <nav class="sheet-tabs" data-group="primary">
         <a class="item active" data-tab="abilities">ABILITIES</a>
+        <a class="item" data-tab="capacities">CAPACITIES</a>
         <a class="item" data-tab="items">ITEMS</a>
         <a class="item" data-tab="profile">PROFILE</a>
       </nav>
@@ -242,6 +252,219 @@
             </div>
           </div>
         </div>
+        
+        {{!-- Capacities Tab (Biomods & Cyberware) --}}
+        <div class="tab capacities" data-group="primary" data-tab="capacities">
+          <div class="capacities-section">
+            
+            {{!-- Biomods Section --}}
+            <div class="biomods-section">
+              <h3><i class="fas fa-dna"></i> Biomodifications</h3>
+              <div class="biomods-description">
+                <p><em>Biological enhancements and genetic modifications that alter the character's physiology.</em></p>
+              </div>
+              
+              {{#if biomods.length}}
+              <ol class="item-list biomod-list">
+                {{#each biomods as |item id|}}
+                <li class="item flexrow biomod-item {{#unless item.system.active}}inactive{{/unless}}" data-item-id="{{item._id}}">
+                  <div class="biomod-info-row">
+                    <div class="biomod-basic">
+                      <div class="item-image"><img src="{{item.img}}" title="{{item.name}}" width="24" height="24"/></div>
+                      <h4 class="biomod-name">{{item.name}}</h4>
+                      {{#if item.system.type}}
+                      <span class="biomod-type-badge">{{capitalize item.system.type}}</span>
+                      {{/if}}
+                    </div>
+                    
+                    <div class="biomod-stats-compact">
+                      {{!-- Single line compact info --}}
+                      <div class="biomod-info-inline">
+                        {{#if item.system.type}}<span class="info-badge type-badge">{{capitalize item.system.type}}</span>{{/if}}
+                        {{#if item.system.availability}}<span class="info-badge avail-badge">{{capitalize item.system.availability}}</span>{{/if}}
+                        
+                        {{!-- Attribute bonuses (abbreviated) --}}
+                        {{#if item.system.attributes}}
+                          {{#each item.system.attributes as |bonus attr|}}
+                            {{#if (ne bonus 0)}}
+                            <span class="attr-compact {{#if (gt bonus 0)}}pos{{else}}neg{{/if}}">
+                              {{#if (eq attr "cognition")}}COG{{else if (eq attr "psyche")}}PSY{{else if (eq attr "coordination")}}COO{{else if (eq attr "physique")}}PHY{{else}}{{capitalize attr}}{{/if}}{{#if (gt bonus 0)}}+{{/if}}{{bonus}}
+                            </span>
+                            {{/if}}
+                          {{/each}}
+                        {{/if}}
+                        
+                        {{!-- Mechanics (ultra compact) --}}
+                        {{#if (hasMechanics item)}}
+                          {{#if (gt (safeGet item.system "mechanics.initiative_bonus") 0)}}<span class="mech-compact init">I+{{safeGet item.system "mechanics.initiative_bonus"}}</span>{{/if}}
+                          {{#if (gt (safeGet item.system "mechanics.natural_armor") 0)}}<span class="mech-compact armor">A{{safeGet item.system "mechanics.natural_armor"}}</span>{{/if}}
+                          {{#if (gt (safeGet item.system "mechanics.unarmed_damage_bonus") 0)}}<span class="mech-compact dmg">D+{{safeGet item.system "mechanics.unarmed_damage_bonus"}}</span>{{/if}}
+                          {{#if (gt (safeGet item.system "mechanics.wound_penalty_reduction.major") 0)}}<span class="mech-compact wound">Maj-{{safeGet item.system "mechanics.wound_penalty_reduction.major"}}</span>{{/if}}
+                          {{#if (gt (safeGet item.system "mechanics.wound_penalty_reduction.mortal") 0)}}<span class="mech-compact wound">Mor-{{safeGet item.system "mechanics.wound_penalty_reduction.mortal"}}</span>{{/if}}
+                        {{/if}}
+                        
+                        {{!-- Effects and cost --}}
+                        {{#if item.system.effects}}<span class="info-badge effects-badge">{{item.system.effects.length}}fx</span>{{/if}}
+                        {{#if item.system.cost}}<span class="info-badge cost-badge">¤{{item.system.cost}}</span>{{/if}}
+                      </div>
+                    </div>
+                    
+                    <div class="item-controls">
+                      {{#if item.system.active}}
+                      <a class="item-control item-deactivate" data-item-id="{{item._id}}" title="Deactivate Biomod"><i class="fas fa-toggle-on"></i></a>
+                      {{else}}
+                      <a class="item-control item-activate" data-item-id="{{item._id}}" title="Activate Biomod"><i class="fas fa-toggle-off"></i></a>
+                      {{/if}}
+                      <a class="item-control item-chat" data-item-id="{{item._id}}" title="Show in Chat"><i class="fas fa-comment"></i></a>
+                      <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                      <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+                    </div>
+                  </div>
+                </li>
+                {{/each}}
+              </ol>
+              {{else}}
+              <div class="no-items-message">
+                <p><em>No biomodifications installed. Drag biomod items here or create new ones.</em></p>
+              </div>
+              {{/if}}
+              
+              <div class="item-controls">
+                <a class="item-control item-create item-create-button" data-type="biomod" title="Create Biomod"><i class="fas fa-plus"></i> Add Biomod</a>
+              </div>
+            </div>
+            
+            {{!-- Cyberware Section --}}
+            <div class="cyberware-section">
+              <h3><i class="fas fa-microchip"></i> Cyberware</h3>
+              <div class="cyberware-description">
+                <p><em>Technological implants and cybernetic enhancements that augment the character's capabilities.</em></p>
+              </div>
+              
+              {{#if cyberware.length}}
+              <ol class="item-list cyberware-list">
+                {{#each cyberware as |item id|}}
+                <li class="item flexrow cyberware-item {{#unless item.system.active}}inactive{{/unless}}" data-item-id="{{item._id}}">
+                  <div class="cyberware-info-row">
+                    <div class="cyberware-basic">
+                      <div class="item-image"><img src="{{item.img}}" title="{{item.name}}" width="24" height="24"/></div>
+                      <h4 class="cyberware-name">{{item.name}}</h4>
+                      {{#if item.system.type}}
+                      <span class="cyberware-type-badge">{{capitalize item.system.type}}</span>
+                      {{/if}}
+                    </div>
+                    
+                    <div class="cyberware-stats">
+                      {{!-- Type and Availability --}}
+                      <div class="cyberware-basic-info">
+                        {{#if item.system.type}}
+                        <span class="cyberware-type-badge">{{capitalize item.system.type}}</span>
+                        {{/if}}
+                        {{#if item.system.availability}}
+                        <span class="cyberware-availability-badge">{{capitalize item.system.availability}}</span>
+                        {{/if}}
+                      </div>
+                      
+                      {{!-- Show attribute bonuses if any --}}
+                      {{#if item.system.attributes}}
+                      <div class="cyberware-attributes">
+                        {{#each item.system.attributes as |bonus attr|}}
+                          {{#if (ne bonus 0)}}
+                          <span class="attr-bonus {{#if (gt bonus 0)}}positive{{else}}negative{{/if}}">
+                            {{capitalize attr}}: {{#if (gt bonus 0)}}+{{/if}}{{bonus}}
+                          </span>
+                          {{/if}}
+                        {{/each}}
+                      </div>
+                      {{/if}}
+                      
+                      {{!-- Mechanics (simplified, only show non-zero values) --}}
+                      {{#if (hasMechanics item)}}
+                      <div class="cyberware-mechanics-compact">
+                        {{#if (gt (safeGet item.system "mechanics.initiative_bonus") 0)}}
+                        <span class="mechanics-bonus init-bonus">Init: +{{safeGet item.system "mechanics.initiative_bonus"}}</span>
+                        {{/if}}
+                        {{#if (gt (safeGet item.system "mechanics.natural_armor") 0)}}
+                        <span class="mechanics-bonus armor-bonus">Armor: {{safeGet item.system "mechanics.natural_armor"}}</span>
+                        {{/if}}
+                        {{#if (gt (safeGet item.system "mechanics.unarmed_damage_bonus") 0)}}
+                        <span class="mechanics-bonus damage-bonus">Dmg: +{{safeGet item.system "mechanics.unarmed_damage_bonus"}}</span>
+                        {{/if}}
+                        {{#if (gt (safeGet item.system "mechanics.wound_penalty_reduction.major") 0)}}
+                        <span class="mechanics-bonus wound-bonus">Major: -{{safeGet item.system "mechanics.wound_penalty_reduction.major"}}</span>
+                        {{/if}}
+                        {{#if (gt (safeGet item.system "mechanics.wound_penalty_reduction.mortal") 0)}}
+                        <span class="mechanics-bonus wound-bonus">Mortal: -{{safeGet item.system "mechanics.wound_penalty_reduction.mortal"}}</span>
+                        {{/if}}
+                      </div>
+                      {{/if}}
+                      
+                      {{!-- Effects count --}}
+                      {{#if item.system.effects}}
+                      <div class="cyberware-effects-preview">
+                        <span class="effects-count">{{item.system.effects.length}} effect{{#unless (eq item.system.effects.length 1)}}s{{/unless}}</span>
+                      </div>
+                      {{/if}}
+                      
+                      {{#if item.system.cost}}
+                      <span class="cyberware-cost">¤{{item.system.cost}}</span>
+                      {{/if}}
+                    </div>
+                    
+                    <div class="item-controls">
+                      {{#if item.system.active}}
+                      <a class="item-control item-deactivate" data-item-id="{{item._id}}" title="Deactivate Cyberware"><i class="fas fa-toggle-on"></i></a>
+                      {{else}}
+                      <a class="item-control item-activate" data-item-id="{{item._id}}" title="Activate Cyberware"><i class="fas fa-toggle-off"></i></a>
+                      {{/if}}
+                      <a class="item-control item-chat" data-item-id="{{item._id}}" title="Show in Chat"><i class="fas fa-comment"></i></a>
+                      <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                      <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+                    </div>
+                  </div>
+                </li>
+                {{/each}}
+              </ol>
+              {{else}}
+              <div class="no-items-message">
+                <p><em>No cyberware installed. Drag cyberware items here or create new ones.</em></p>
+              </div>
+              {{/if}}
+              
+              <div class="item-controls">
+                <a class="item-control item-create item-create-button" data-type="cyberware" title="Create Cyberware"><i class="fas fa-plus"></i> Add Cyberware</a>
+              </div>
+            </div>
+            
+            {{!-- Capacity Summary --}}
+            <div class="capacity-summary">
+              <h3><i class="fas fa-chart-bar"></i> Capacity Summary</h3>
+              <div class="summary-grid">
+                <div class="summary-item">
+                  <label>Total Biomods:</label>
+                  <span class="summary-value">{{biomods.length}}</span>
+                </div>
+                <div class="summary-item">
+                  <label>Active Biomods:</label>
+                  <span class="summary-value">{{activeBiomodCount}}</span>
+                </div>
+                <div class="summary-item">
+                  <label>Total Cyberware:</label>
+                  <span class="summary-value">{{cyberware.length}}</span>
+                </div>
+                <div class="summary-item">
+                  <label>Active Cyberware:</label>
+                  <span class="summary-value">{{activeCyberwareCount}}</span>
+                </div>
+                <div class="summary-item">
+                  <label>Total Strain Cost:</label>
+                  <span class="summary-value strain-cost">{{totalCapacityStrainCost}}</span>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+        </div>
 
         {{!-- Profile Tab --}}
         <div class="tab profile" data-group="primary" data-tab="profile">
@@ -334,13 +557,18 @@
               <li class="item flexrow weapon-item {{#unless item.system.equipped}}unequipped{{/unless}}" data-item-id="{{item._id}}">
                 <div class="weapon-info-row">
                   <div class="weapon-basic">
+                    {{#if item.system.equipped}}
+                    <a class="weapon-attack-roll" data-item-id="{{item._id}}" title="Roll Attack" style="color: #4a90e2; margin-right: 3px;"><i class="fas fa-sword"></i></a>
+                    {{else}}
+                    <span class="weapon-attack-roll-disabled" title="Weapon not equipped" style="color: #666; margin-right: 3px;"><i class="fas fa-sword"></i></span>
+                    {{/if}}
                     {{#if (and item.system.damage item.system.equipped)}}
-                    <a class="weapon-damage-roll" data-item-id="{{item._id}}" title="Roll Damage"><i class="fas fa-dice-d10"></i></a>
+                    <a class="weapon-damage-roll" data-item-id="{{item._id}}" title="Roll Damage" style="color: #dc3545; margin-right: 3px;"><i class="fas fa-dice-d10"></i></a>
                     {{else if item.system.damage}}
-                    <span class="weapon-damage-roll-disabled" title="Weapon not equipped"><i class="fas fa-dice-d10"></i></span>
+                    <span class="weapon-damage-roll-disabled" title="Weapon not equipped" style="color: #666; margin-right: 3px;"><i class="fas fa-dice-d10"></i></span>
                     {{/if}}
                     <div class="item-image"><img src="{{item.img}}" title="{{item.name}}" width="20" height="20"/></div>
-                    <h4 class="weapon-name">{{item.name}}</h4>
+                    <h4 class="weapon-name rollable" data-roll-type="item" title="Click to Attack" style="cursor: pointer; color: #4a90e2; text-decoration: underline;">{{item.name}}</h4>
                   </div>
                   
                   <div class="weapon-stats-compact">
@@ -350,6 +578,14 @@
                     {{/if}}
                     {{#if (and item.system.effective_range (ne item.system.weapon_type "melee"))}}
                     <span class="weapon-range">{{item.system.effective_range}}m</span>
+                    {{/if}}
+                    {{#if (ne item.system.weapon_type "melee")}}
+                      {{#if item.system.loaded_ammunition}}
+                      <span class="weapon-ammo" style="color: #32cd32;">{{item.system.current_ammo}}/{{item.system.magazine_capacity}}</span>
+                      <span class="weapon-ammo-type" style="color: #87ceeb; font-size: 10px;">({{titleCase item.system.loaded_ammunition.ammo_type}})</span>
+                      {{else}}
+                      <span class="weapon-ammo" style="color: #dc3545;">No ammo loaded</span>
+                      {{/if}}
                     {{/if}}
                     {{#if item.system.cost}}
                     <span class="weapon-cost">¤{{item.system.cost}}</span>
@@ -362,6 +598,7 @@
                     {{else}}
                     <a class="item-control item-equip" data-item-id="{{item._id}}" title="Equip Weapon"><i class="fas fa-toggle-off"></i></a>
                     {{/if}}
+                    <a class="item-control item-chat" data-item-id="{{item._id}}" title="Show in Chat"><i class="fas fa-comment"></i></a>
                     <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
                     <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
                   </div>
@@ -375,6 +612,84 @@
           </div>
 
           <div class="items-section">
+            <h3>Ammunition</h3>
+            <ol class="item-list ammunition-list-compact">
+              {{#each ammunition as |item id|}}
+              <li class="item flexrow ammunition-item-compact" data-item-id="{{item._id}}">
+                <div class="ammunition-compact-row">
+                  {{!-- Item Image --}}
+                  <div class="item-image"><img src="{{item.img}}" title="{{item.name}}" width="20" height="20"/></div>
+                  
+                  {{!-- Name and Type --}}
+                  <div class="ammo-info">
+                    <h4 class="ammo-name">{{item.name}}</h4>
+                    <span class="ammo-type">{{titleCase item.system.ammo_type}}</span>
+                  </div>
+                  
+                  {{!-- Magazines --}}
+                  <div class="ammo-mags">
+                    <i class="fas fa-archive" title="Magazines"></i>
+                    <span class="ammo-quantity">{{item.system.quantity}}</span>
+                  </div>
+                  
+                  {{!-- Capacity --}}
+                  <div class="ammo-cap">
+                    <input type="number" class="ammo-capacity-input" name="system.package_size" value="{{item.system.package_size}}" min="1" max="1000" data-item-id="{{item._id}}">
+                  </div>
+                  
+                  {{!-- Current Ammo --}}
+                  <div class="ammo-current">
+                    <input type="number" class="current-ammo-input" value="{{subtract (multiply item.system.quantity item.system.package_size) item.system.rounds_fired}}" min="0" max="{{multiply item.system.quantity item.system.package_size}}" data-item-id="{{item._id}}">
+                    <span class="total-rounds">/{{multiply item.system.quantity item.system.package_size}}</span>
+                  </div>
+                  
+                  {{!-- Bonuses (Compact) --}}
+                  <div class="ammo-bonuses-compact">
+                    {{#if (hasBonus item.system.attack_modifier)}}
+                    <span class="bonus-compact attack-bonus" title="Attack Bonus">AB{{#if (gte item.system.attack_modifier 0)}}+{{/if}}{{item.system.attack_modifier}}</span>
+                    {{/if}}
+                    {{#if (hasBonus item.system.damage_modifier)}}
+                    <span class="bonus-compact damage-bonus" title="Damage Rating Bonus">DR{{#if (gte item.system.damage_modifier 0)}}+{{/if}}{{item.system.damage_modifier}}</span>
+                    {{/if}}
+                    {{#if (hasBonus item.system.range_modifier)}}
+                    <span class="bonus-compact range-bonus" title="Range Modifier">RNG{{item.system.range_modifier}}%</span>
+                    {{/if}}
+                    {{#if (hasBonus item.system.penetration)}}
+                    <span class="bonus-compact penetration-bonus" title="Penetration">PEN{{item.system.penetration}}</span>
+                    {{/if}}
+                  </div>
+                  
+                  {{!-- Load Button --}}
+                  <div class="ammo-load">
+                    <select class="compatible-weapon-select-compact" data-item-id="{{item._id}}">
+                      <option value="">Load...</option>
+                      {{#each ../weapons as |weapon|}}
+                        {{#if (isCompatibleAmmo item weapon)}}
+                        <option value="{{weapon._id}}">{{weapon.name}}</option>
+                        {{/if}}
+                      {{/each}}
+                    </select>
+                    <button type="button" class="load-ammo-btn-compact" data-ammo-id="{{item._id}}" title="Load weapon">
+                      <i class="fas fa-arrow-right"></i>
+                    </button>
+                  </div>
+                  
+                  {{!-- Controls --}}
+                  <div class="item-controls">
+                    <a class="item-control item-chat" data-item-id="{{item._id}}" title="Show in Chat"><i class="fas fa-comment"></i></a>
+                    <a class="item-control item-edit" title="Edit"><i class="fas fa-edit"></i></a>
+                    <a class="item-control item-delete" title="Delete"><i class="fas fa-trash"></i></a>
+                  </div>
+                </div>
+              </li>
+              {{/each}}
+            </ol>
+            <div class="item-controls">
+              <a class="item-control item-create item-create-button" data-type="ammunition" title="Create Ammunition"><i class="fas fa-plus"></i> Add Ammunition</a>
+            </div>
+          </div>
+
+          <div class="items-section">
             <h3>Equipment</h3>
             <ol class="item-list equipment-list">
               {{#each equipment as |item id|}}
@@ -382,7 +697,14 @@
                 <div class="equipment-info-row">
                   <div class="equipment-basic">
                     <div class="item-image"><img src="{{item.img}}" title="{{item.name}}" width="20" height="20"/></div>
-                    <h4 class="equipment-name">{{item.name}}</h4>
+                    <div class="equipment-name-section">
+                      <h4 class="equipment-name">
+                        {{#if item.system.quantity}}
+                        <span class="equipment-quantity">[{{item.system.quantity}}]</span>
+                        {{/if}}
+                        <span class="equipment-title">{{item.name}}</span>
+                      </h4>
+                    </div>
                   </div>
                   
                   <div class="equipment-stats-compact">
@@ -392,10 +714,35 @@
                     {{#if item.system.cost}}
                     <span class="equipment-cost">¤{{item.system.cost}}</span>
                     {{/if}}
-                    {{#if item.system.weight}}
+                    {{#if (and item.system.weight (not (or (includes item.system.category "armor") (eq item.system.type "armor") (eq item.system.type "protection"))))}}
                     <span class="equipment-weight">{{item.system.weight}}kg</span>
                     {{/if}}
                   </div>
+
+                  {{!-- Armor & Protection compact tracker --}}
+{{#if (or (includes item.system.category "armor") (or (eq item.system.type "armor") (eq item.system.type "protection")))}}
+                  <div class="armor-inline" style="display: flex; align-items: center; gap: 8px;">
+                    <!-- Pips tracker -->
+                    <div class="pip-track armor-dura-track" data-item-id="{{item._id}}">
+                      {{#each (pips item.system.durability item.system.max_durability) as |pip|}}
+                      <span class="pip armor-pip {{#if pip.checked}}filled{{/if}}" data-index="{{pip.index}}"></span>
+                      {{/each}}
+                    </div>
+                    <!-- Controls and inputs -->
+                    <div class="durability-input-group" style="display: flex; align-items: center; gap: 6px;">
+                      <button type="button" class="armor-dura-minus" data-item-id="{{item._id}}" title="Reduce durability" style="width: 20px; height: 20px; line-height: 20px; padding: 0; display: inline-flex; align-items: center; justify-content: center;"><i class="fas fa-minus" style="font-size: 10px;"></i></button>
+                      <input type="number" class="armor-dura-input" data-item-id="{{item._id}}" value="{{item.system.durability}}" min="0" style="width: 36px; height: 20px; text-align: center;">
+                      <span style="font-size: 11px; color: #bbb;">/</span>
+                      <input type="number" class="armor-dura-max-input" data-item-id="{{item._id}}" value="{{item.system.max_durability}}" min="1" style="width: 36px; height: 20px; text-align: center;">
+                      <button type="button" class="armor-dura-plus" data-item-id="{{item._id}}" title="Increase durability" style="width: 20px; height: 20px; line-height: 20px; padding: 0; display: inline-flex; align-items: center; justify-content: center;"><i class="fas fa-plus" style="font-size: 10px;"></i></button>
+                    </div>
+                    <!-- Dimensions & weight -->
+                    <div class="armor-weight" style="font-size: 11px; color: #bbb; white-space: nowrap;">
+                      {{#if item.system.dimensions}}<span class="dim-label">{{capitalize item.system.dimensions}}</span>{{/if}}
+                      {{#if item.system.weight}}<span class="dim-weight"> - {{item.system.weight}}kg</span>{{/if}}
+                    </div>
+                  </div>
+                  {{/if}}
                   
                   <div class="item-controls">
                     {{#if item.system.equipped}}
@@ -403,6 +750,7 @@
                     {{else}}
                     <a class="item-control item-equip" data-item-id="{{item._id}}" title="Equip Equipment"><i class="fas fa-toggle-off"></i></a>
                     {{/if}}
+                    <a class="item-control item-chat" data-item-id="{{item._id}}" title="Show in Chat"><i class="fas fa-comment"></i></a>
                     <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
                     <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
                   </div>
@@ -415,46 +763,6 @@
             </div>
           </div>
 
-          <div class="items-section">
-            <h3>Biomods</h3>
-            <ol class="item-list biomod-list">
-              {{#each biomods as |item id|}}
-              <li class="item flexrow biomod-item {{#unless item.system.active}}inactive{{/unless}}" data-item-id="{{item._id}}">
-                <div class="biomod-info-row">
-                  <div class="biomod-basic">
-                    <div class="item-image"><img src="{{item.img}}" title="{{item.name}}" width="20" height="20"/></div>
-                    <h4 class="biomod-name">{{item.name}}</h4>
-                  </div>
-                  
-                  <div class="biomod-stats-compact">
-                    {{#if item.system.type}}
-                    <span class="biomod-type">{{capitalize item.system.type}}</span>
-                    {{/if}}
-                    {{#if item.system.strain_cost}}
-                    <span class="biomod-strain">{{item.system.strain_cost}} Strain</span>
-                    {{/if}}
-                    {{#if item.system.cost}}
-                    <span class="biomod-cost">¤{{item.system.cost}}</span>
-                    {{/if}}
-                  </div>
-                  
-                  <div class="item-controls">
-                    {{#if item.system.active}}
-                    <a class="item-control item-deactivate" data-item-id="{{item._id}}" title="Deactivate Biomod"><i class="fas fa-toggle-on"></i></a>
-                    {{else}}
-                    <a class="item-control item-activate" data-item-id="{{item._id}}" title="Activate Biomod"><i class="fas fa-toggle-off"></i></a>
-                    {{/if}}
-                    <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
-                    <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
-                  </div>
-                </div>
-              </li>
-              {{/each}}
-            </ol>
-            <div class="item-controls">
-              <a class="item-control item-create item-create-button" data-type="biomod" title="Create Biomod"><i class="fas fa-plus"></i> Add Biomod</a>
-            </div>
-          </div>
         </div>
 
 

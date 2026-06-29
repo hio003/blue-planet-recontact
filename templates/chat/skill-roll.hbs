@@ -1,0 +1,159 @@
+{{!-- Blue Planet Skill Roll Chat Message Template --}}
+<div class="blue-planet-roll-message">
+  <div class="roll-header">
+    <h4 class="roll-title">
+      <i class="fas fa-dice-d10"></i>
+      {{#if skill}}
+        {{skill}} Roll
+      {{else}}
+        {{attribute}} Roll
+      {{/if}}
+    </h4>
+    <div class="roll-target">
+      Target: {{target}}
+    </div>
+  </div>
+  
+  <div class="roll-details">
+    <div class="dice-result">
+      <span class="roll-formula">{{roll.formula}}</span>
+      <span class="roll-total {{#if success}}success{{else}}failure{{/if}}">
+        = {{roll.total}}
+      </span>
+    </div>
+    
+    {{#if success}}
+      <div class="result success">
+        <i class="fas fa-check-circle"></i>
+        Success{{#if criticalSuccess}} - Critical!{{/if}}
+      </div>
+    {{else}}
+      <div class="result failure">
+        <i class="fas fa-times-circle"></i>
+        Failure{{#if criticalFailure}} - Critical!{{/if}}
+      </div>
+    {{/if}}
+    
+    {{#if margin}}
+      <div class="margin">
+        Margin: {{margin}}
+      </div>
+    {{/if}}
+  </div>
+  
+  {{#if flavor}}
+    <div class="flavor-text">
+      {{flavor}}
+    </div>
+  {{/if}}
+</div>
+
+<style>
+.blue-planet-roll-message {
+  background: linear-gradient(135deg, rgba(26, 62, 92, 0.8) 0%, rgba(43, 90, 128, 0.8) 100%);
+  border: 2px solid #4a90e2;
+  border-radius: 8px;
+  padding: 12px;
+  margin: 5px 0;
+  color: #e8f4fd;
+  box-shadow: 0 2px 8px rgba(74, 144, 226, 0.2);
+}
+
+.blue-planet-roll-message .roll-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  border-bottom: 1px solid rgba(107, 182, 255, 0.3);
+  padding-bottom: 5px;
+}
+
+.blue-planet-roll-message .roll-title {
+  margin: 0;
+  color: #6bb6ff;
+  font-size: 14px;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.blue-planet-roll-message .roll-title i {
+  margin-right: 5px;
+  color: #4a90e2;
+}
+
+.blue-planet-roll-message .roll-target {
+  font-size: 12px;
+  color: #b8d4f0;
+  font-weight: bold;
+}
+
+.blue-planet-roll-message .roll-details {
+  margin: 8px 0;
+}
+
+.blue-planet-roll-message .dice-result {
+  text-align: center;
+  margin: 8px 0;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.blue-planet-roll-message .roll-formula {
+  color: #b8d4f0;
+  margin-right: 8px;
+}
+
+.blue-planet-roll-message .roll-total {
+  font-size: 18px;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+}
+
+.blue-planet-roll-message .roll-total.success {
+  color: #5cb85c;
+}
+
+.blue-planet-roll-message .roll-total.failure {
+  color: #d9534f;
+}
+
+.blue-planet-roll-message .result {
+  text-align: center;
+  padding: 6px;
+  border-radius: 4px;
+  font-weight: bold;
+  margin: 5px 0;
+}
+
+.blue-planet-roll-message .result.success {
+  background: rgba(92, 184, 92, 0.2);
+  border: 1px solid #5cb85c;
+  color: #5cb85c;
+}
+
+.blue-planet-roll-message .result.failure {
+  background: rgba(217, 83, 79, 0.2);
+  border: 1px solid #d9534f;
+  color: #d9534f;
+}
+
+.blue-planet-roll-message .result i {
+  margin-right: 5px;
+}
+
+.blue-planet-roll-message .margin {
+  text-align: center;
+  font-size: 12px;
+  color: #b8d4f0;
+  margin-top: 5px;
+}
+
+.blue-planet-roll-message .flavor-text {
+  font-style: italic;
+  color: #a0c4e8;
+  text-align: center;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(107, 182, 255, 0.2);
+  font-size: 12px;
+}
+</style>

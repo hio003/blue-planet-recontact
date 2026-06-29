@@ -1,0 +1,48 @@
+{{!-- Blue Planet Attribute Roll Chat Message Template --}}
+<div class="blue-planet-roll-message">
+  <div class="roll-header">
+    <h4 class="roll-title">
+      <i class="fas fa-dice-d10"></i>
+      {{attribute}} Roll
+      {{#if focus}}
+        - {{focus}}
+      {{/if}}
+    </h4>
+    <div class="roll-target">
+      Target: {{target}}
+    </div>
+  </div>
+  
+  <div class="roll-details">
+    <div class="dice-result">
+      <span class="roll-formula">{{roll.formula}}</span>
+      <span class="roll-total {{#if success}}success{{else}}failure{{/if}}">
+        = {{roll.total}}
+      </span>
+    </div>
+    
+    {{#if success}}
+      <div class="result success">
+        <i class="fas fa-check-circle"></i>
+        Success{{#if criticalSuccess}} - Critical!{{/if}}
+      </div>
+    {{else}}
+      <div class="result failure">
+        <i class="fas fa-times-circle"></i>
+        Failure{{#if criticalFailure}} - Critical!{{/if}}
+      </div>
+    {{/if}}
+    
+    {{#if margin}}
+      <div class="margin">
+        Margin: {{margin}}
+      </div>
+    {{/if}}
+  </div>
+  
+  {{#if flavor}}
+    <div class="flavor-text">
+      {{flavor}}
+    </div>
+  {{/if}}
+</div>

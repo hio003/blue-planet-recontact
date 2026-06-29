@@ -1,0 +1,402 @@
+<form class="{{cssClass}} flexcol ammunition-sheet" autocomplete="off">
+
+  {{!-- Header --}}
+  <header class="sheet-header">
+    <div class="header-fields">
+      <div class="name-section">
+        <input name="name" type="text" value="{{item.name}}" placeholder="Ammunition Name" class="item-name"/>
+        <div class="ammo-info-line">
+          <select name="system.ammo_type">
+            <option value="">Select Type...</option>
+            {{#each ammoTypeOptions as |label key|}}
+              <option value="{{key}}" {{#if (eq ../system.ammo_type key)}}selected{{/if}}>{{label}}</option>
+            {{/each}}
+          </select>
+        </div>
+      </div>
+      
+      <div class="ammo-quantity-stats">
+        <div class="stat-group">
+          <label>Quantity:</label>
+          <div class="quantity-controls">
+            <button type="button" class="qty-minus" data-action="decrease-qty"><i class="fas fa-minus"></i></button>
+            <input type="number" name="system.quantity" value="{{system.quantity}}" min="0" max="9999" class="quantity-input">
+            <button type="button" class="qty-plus" data-action="increase-qty"><i class="fas fa-plus"></i></button>
+          </div>
+        </div>
+        
+        <div class="stat-group">
+          <label>Package Size:</label>
+          <input type="number" name="system.package_size" value="{{system.package_size}}" min="1" max="1000" class="package-input">
+          <span class="unit">rounds</span>
+        </div>
+        
+        <div class="stat-group total-rounds">
+          <label>Total Rounds:</label>
+          <span class="total-display">{{multiply system.quantity system.package_size}}</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  {{!-- Main Content --}}
+  <section class="sheet-main">
+    
+    {{!-- Navigation Tabs --}}
+    <nav class="sheet-tabs" data-group="primary">
+      <a class="item active" data-tab="description">DESCRIPTION</a>
+      <a class="item" data-tab="weapons">COMPATIBLE WEAPONS</a>
+      <a class="item" data-tab="properties">PROPERTIES</a>
+      <a class="item" data-tab="usage">USAGE TRACKING</a>
+    </nav>
+
+    {{!-- Tab Content --}}
+    <section class="sheet-body">
+      
+      {{!-- Description Tab --}}
+      <div class="tab description active" data-group="primary" data-tab="description">
+        <div class="description-section">
+          
+          <div class="ammo-overview-section">
+            <h3>Ammunition Overview</h3>
+            <div class="overview-stats">
+              
+              <div class="stat-display-row">
+                <div class="stat-display">
+                  <i class="fas fa-bullseye"></i>
+                  <div class="stat-info">
+                    <label>Attack Bonus</label>
+                    <span class="stat-value">{{#if system.attack_modifier}}{{#if (gte system.attack_modifier 0)}}+{{/if}}{{system.attack_modifier}}{{else}}0{{/if}}</span>
+                  </div>
+                </div>
+                
+                <div class="stat-display">
+                  <i class="fas fa-skull-crossbones"></i>
+                  <div class="stat-info">
+                    <label>Damage Bonus</label>
+                    <span class="stat-value">{{#if system.damage_modifier}}{{#if (gte system.damage_modifier 0)}}+{{/if}}{{system.damage_modifier}}{{else}}0{{/if}}</span>
+                  </div>
+                </div>
+                
+                <div class="stat-display">
+                  <i class="fas fa-crosshairs"></i>
+                  <div class="stat-info">
+                    <label>Range Modifier</label>
+                    <span class="stat-value">{{#if system.range_modifier}}{{system.range_modifier}}%{{else}}0%{{/if}}</span>
+                  </div>
+                </div>
+                
+                <div class="stat-display">
+                  <i class="fas fa-shield-alt"></i>
+                  <div class="stat-info">
+                    <label>Penetration</label>
+                    <span class="stat-value">{{#if system.penetration}}{{system.penetration}}{{else}}0{{/if}}</span>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+          
+          <div class="description-text-section">
+            <label>Description:</label>
+            <textarea name="system.description" placeholder="Ammunition description, special properties, and tactical notes">{{system.description}}</textarea>
+          </div>
+          
+        </div>
+      </div>
+      
+      {{!-- Compatible Weapons Tab --}}
+      <div class="tab weapons" data-group="primary" data-tab="weapons">
+        <div class="weapons-compatibility-section">
+          
+          <div class="weapons-header">
+            <h3><i class="fas fa-crosshairs"></i> Weapon Compatibility</h3>
+            <p class="section-description">Manage which weapons can use this ammunition type. Empty list means universal compatibility.</p>
+          </div>
+          
+          <div class="compatible-weapons-management">
+            
+            {{!-- Current Compatible Weapons --}}
+            <div class="current-weapons-section">
+              <h4>Currently Compatible Weapons</h4>
+              
+              {{#if hasCompatibleWeapons}}
+                <div class="weapons-list">
+                  {{#each system.compatible_weapons as |weapon index|}}
+                    {{#if weapon.name}}
+                      {{!-- Weapon Item Reference --}}
+                      <div class="weapon-item" data-weapon-id="{{weapon.id}}">
+                        <div class="weapon-info">
+                          <i class="fas fa-gun"></i>
+                          <strong>{{weapon.name}}</strong>
+                          <span class="weapon-type">({{titleCase weapon.weapon_type}})</span>
+                        </div>
+                        <div class="weapon-actions">
+                          <button type="button" class="remove-weapon-item" data-index="{{index}}">
+                            <i class="fas fa-times"></i>
+                          </button>
+                        </div>
+                      </div>
+                    {{else}}
+                      {{!-- Text-based Weapon Type --}}
+                      <div class="weapon-text-entry">
+                        <div class="weapon-input-group">
+                          <i class="fas fa-tag"></i>
+                          <input type="text" name="system.compatible_weapons.{{index}}" value="{{weapon}}" placeholder="Weapon name or type (e.g., 'Assault Rifle', 'Pistol')">
+                          <button type="button" class="remove-weapon" data-index="{{index}}">
+                            <i class="fas fa-trash"></i>
+                          </button>
+                        </div>
+                      </div>
+                    {{/if}}
+                  {{/each}}
+                </div>
+              {{else}}
+                <div class="no-weapons-display">
+                  <div class="universal-compatibility">
+                    <i class="fas fa-globe"></i>
+                    <p><strong>Universal Compatibility</strong></p>
+                    <p class="help-text">This ammunition can be used with any compatible weapon. Add specific weapons below to restrict usage.</p>
+                  </div>
+                </div>
+              {{/if}}
+              
+            </div>
+            
+            {{!-- Add Weapons Section --}}
+            <div class="add-weapons-section">
+              <h4>Add Compatible Weapons</h4>
+              
+              <div class="add-weapons-controls">
+                
+                {{!-- Drop Zone for Weapon Items --}}
+                <div class="weapon-drop-zone" data-drop="weapon">
+                  <div class="drop-zone-content">
+                    <i class="fas fa-download"></i>
+                    <p><strong>Drag & Drop Weapon Items</strong></p>
+                    <p class="help-text">Drop weapon items from your inventory or compendium here</p>
+                    <div class="drop-indicators">
+                      <i class="fas fa-gun"></i>
+                      <span>Weapon Drop Zone</span>
+                    </div>
+                  </div>
+                </div>
+                
+                {{!-- Manual Controls --}}
+                <div class="manual-add-controls">
+                  <div class="control-row">
+                    <button type="button" class="add-text-weapon-btn">
+                      <i class="fas fa-plus"></i> Add Weapon Type (Text)
+                    </button>
+                    <button type="button" class="select-weapon-modal-btn">
+                      <i class="fas fa-search"></i> Browse Available Weapons
+                    </button>
+                  </div>
+                  <p class="help-text">Add weapon types manually or browse available weapon items</p>
+                </div>
+                
+              </div>
+              
+            </div>
+            
+          </div>
+          
+        </div>
+      </div>
+
+      {{!-- Properties Tab --}}
+      <div class="tab properties" data-group="primary" data-tab="properties">
+        <div class="properties-section">
+          
+          <div class="modifiers-section">
+            <h3>Combat Modifiers</h3>
+            
+            <div class="modifier-row">
+              <div class="modifier-group">
+                <label>Attack Modifier:</label>
+                <input type="number" name="system.attack_modifier" value="{{system.attack_modifier}}" min="-10" max="10" step="1">
+                <span class="help-text">Bonus/penalty to attack rolls</span>
+              </div>
+              
+              <div class="modifier-group">
+                <label>Damage Modifier:</label>
+                <input type="number" name="system.damage_modifier" value="{{system.damage_modifier}}" min="-10" max="10" step="1">
+                <span class="help-text">Bonus/penalty to damage rating</span>
+              </div>
+            </div>
+            
+            <div class="modifier-row">
+              <div class="modifier-group">
+                <label>Range Modifier:</label>
+                <input type="number" name="system.range_modifier" value="{{system.range_modifier}}" min="-100" max="200" step="5">
+                <span class="unit">%</span>
+                <span class="help-text">Percentage change to effective range</span>
+              </div>
+              
+              <div class="modifier-group">
+                <label>Penetration Rating:</label>
+                <input type="number" name="system.penetration" value="{{system.penetration}}" min="0" max="20" step="1">
+                <span class="help-text">Armor penetration capability</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="physical-properties">
+            <h3>Physical Properties</h3>
+            
+            <div class="property-row">
+              <div class="property-group">
+                <label>Weight per Round:</label>
+                <input type="number" name="system.weight_per_round" value="{{system.weight_per_round}}" min="0" step="0.001">
+                <span class="unit">kg</span>
+              </div>
+              
+              <div class="property-group">
+                <label>Total Weight:</label>
+                <span class="calculated-weight">{{multiply (multiply system.quantity system.package_size) system.weight_per_round}} kg</span>
+              </div>
+            </div>
+            
+            <div class="property-row">
+              <div class="property-group">
+                <label>Cost per Round:</label>
+                <input type="number" name="system.cost_per_round" value="{{system.cost_per_round}}" min="0" step="0.01">
+                <span class="unit">credits</span>
+              </div>
+              
+              <div class="property-group">
+                <label>Total Value:</label>
+                <span class="calculated-value">{{multiply (multiply system.quantity system.package_size) system.cost_per_round}} credits</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="availability-section">
+            <div class="property-row">
+              <div class="property-group">
+                <label>Availability:</label>
+                <select name="system.availability">
+                  <option value="common" {{#if (eq system.availability "common")}}selected{{/if}}>Common</option>
+                  <option value="uncommon" {{#if (eq system.availability "uncommon")}}selected{{/if}}>Uncommon</option>
+                  <option value="rare" {{#if (eq system.availability "rare")}}selected{{/if}}>Rare</option>
+                  <option value="restricted" {{#if (eq system.availability "restricted")}}selected{{/if}}>Restricted</option>
+                </select>
+              </div>
+              
+              <div class="property-group">
+                <label>Legality:</label>
+                <select name="system.legality">
+                  <option value="legal" {{#if (eq system.legality "legal")}}selected{{/if}}>Legal</option>
+                  <option value="controlled" {{#if (eq system.legality "controlled")}}selected{{/if}}>Controlled</option>
+                  <option value="restricted" {{#if (eq system.legality "restricted")}}selected{{/if}}>Restricted</option>
+                  <option value="illegal" {{#if (eq system.legality "illegal")}}selected{{/if}}>Illegal</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+
+      {{!-- Usage Tracking Tab --}}
+      <div class="tab usage" data-group="primary" data-tab="usage">
+        <div class="usage-section">
+          
+          <div class="usage-stats">
+            <h3><i class="fas fa-chart-line"></i> Usage Statistics</h3>
+            
+            <div class="usage-overview">
+              <div class="usage-stat-grid">
+                <div class="usage-stat">
+                  <div class="stat-icon">
+                    <i class="fas fa-boxes"></i>
+                  </div>
+                  <div class="stat-details">
+                    <label>Total Rounds:</label>
+                    <span class="usage-value total">{{multiply system.quantity system.package_size}}</span>
+                  </div>
+                </div>
+                
+                <div class="usage-stat">
+                  <div class="stat-icon">
+                    <i class="fas fa-fire"></i>
+                  </div>
+                  <div class="stat-details">
+                    <label>Rounds Fired:</label>
+                    <span class="usage-value fired">{{system.rounds_fired}}</span>
+                  </div>
+                </div>
+                
+                <div class="usage-stat">
+                  <div class="stat-icon">
+                    <i class="fas fa-bullseye"></i>
+                  </div>
+                  <div class="stat-details">
+                    <label>Remaining:</label>
+                    <span class="usage-value remaining">{{subtract (multiply system.quantity system.package_size) system.rounds_fired}}</span>
+                  </div>
+                </div>
+                
+                <div class="usage-stat percentage">
+                  <div class="stat-icon">
+                    <i class="fas fa-percentage"></i>
+                  </div>
+                  <div class="stat-details">
+                    <label>Usage:</label>
+                    <span class="usage-value percent">{{decimal (multiply (divide system.rounds_fired (multiply system.quantity system.package_size)) 100) 1}}%</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="usage-progress">
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width: {{multiply (divide system.rounds_fired (multiply system.quantity system.package_size)) 100}}%;"></div>
+                </div>
+                <div class="progress-labels">
+                  <span>0</span>
+                  <span>{{multiply system.quantity system.package_size}}</span>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+          
+          <div class="usage-actions-section">
+            <h4>Fire Ammunition</h4>
+            <p class="section-desc">Track ammunition usage during combat or training.</p>
+            
+            <div class="usage-actions">
+              <button type="button" class="usage-btn fire-round" data-action="fire-round">
+                <i class="fas fa-bullseye"></i> Fire 1 Round
+              </button>
+              <button type="button" class="usage-btn fire-burst" data-action="fire-burst">
+                <i class="fas fa-crosshairs"></i> Fire Burst (3 rounds)
+              </button>
+              <button type="button" class="usage-btn fire-full-auto" data-action="fire-auto">
+                <i class="fas fa-stream"></i> Full Auto (10 rounds)
+              </button>
+              <button type="button" class="usage-btn reset-fired" data-action="reset-fired">
+                <i class="fas fa-undo"></i> Reset Counter
+              </button>
+            </div>
+            
+            <div class="custom-fire-section">
+              <h5>Custom Amount</h5>
+              <div class="custom-fire-controls">
+                <input type="number" class="custom-rounds-input" min="1" max="{{subtract (multiply system.quantity system.package_size) system.rounds_fired}}" placeholder="Number of rounds">
+                <button type="button" class="usage-btn fire-custom" data-action="fire-custom">
+                  <i class="fas fa-fire"></i> Fire Custom Amount
+                </button>
+              </div>
+            </div>
+            
+          </div>
+          
+        </div>
+      </div>
+
+    </section>
+  </section>
+
+</form>

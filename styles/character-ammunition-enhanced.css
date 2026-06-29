@@ -1,0 +1,412 @@
+/* =================================== */
+/*     ENHANCED AMMUNITION LAYOUT      */
+/* =================================== */
+
+/* Enhanced ammunition list container */
+.ammunition-list-enhanced {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+/* Custom scrollbar for ammunition list */
+.ammunition-list-enhanced::-webkit-scrollbar {
+  width: 6px;
+}
+
+.ammunition-list-enhanced::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+}
+
+.ammunition-list-enhanced::-webkit-scrollbar-thumb {
+  background: #4a90a4;
+  border-radius: 3px;
+}
+
+.ammunition-list-enhanced::-webkit-scrollbar-thumb:hover {
+  background: #87ceeb;
+}
+
+/* Enhanced ammunition item layout */
+.ammunition-item-enhanced {
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px solid #4a90a4;
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin-bottom: 6px;
+  transition: all 0.2s ease;
+}
+
+.ammunition-item-enhanced:hover {
+  background: rgba(74, 144, 164, 0.1);
+  border-color: #87ceeb;
+  box-shadow: 0 2px 8px rgba(74, 144, 164, 0.2);
+}
+
+/* Main ammunition row layout */
+.ammunition-enhanced-row {
+  display: grid;
+  grid-template-columns: 60px 1fr 140px 200px 180px 80px;
+  gap: 12px;
+  align-items: center;
+  min-height: 36px;
+}
+
+/* Magazine count section */
+.magazine-count-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.magazine-display {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: bold;
+  color: #87ceeb;
+}
+
+.magazine-display i {
+  font-size: 14px;
+}
+
+.magazine-count {
+  font-size: 16px;
+  min-width: 20px;
+  text-align: center;
+}
+
+.magazine-label {
+  font-size: 10px;
+  color: #b0c4de;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+/* Identity section (image + name + type) */
+.ammo-identity {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ammo-identity .item-image img {
+  border-radius: 3px;
+  border: 1px solid #4a90a4;
+}
+
+.ammo-name-section {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ammo-name {
+  margin: 0;
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
+  line-height: 1.2;
+}
+
+.ammo-type-badge {
+  font-size: 10px;
+  color: #87ceeb;
+  text-transform: uppercase;
+  font-weight: bold;
+  background: rgba(135, 206, 235, 0.2);
+  padding: 1px 4px;
+  border-radius: 2px;
+  align-self: flex-start;
+}
+
+/* Capacity section */
+.ammo-capacity-section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.capacity-group,
+.current-ammo-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.capacity-group label,
+.current-ammo-group label {
+  font-size: 10px;
+  color: #b0c4de;
+  min-width: 32px;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.ammo-capacity-input,
+.current-ammo-input {
+  width: 50px;
+  height: 20px;
+  padding: 2px 4px;
+  border: 1px solid #4a90a4;
+  background: rgba(0, 0, 0, 0.2);
+  color: white;
+  border-radius: 2px;
+  text-align: center;
+  font-size: 11px;
+}
+
+.ammo-capacity-input:focus,
+.current-ammo-input:focus {
+  border-color: #87ceeb;
+  background: rgba(135, 206, 235, 0.1);
+  outline: none;
+}
+
+.total-rounds {
+  font-size: 10px;
+  color: #8fbc8f;
+  margin-left: 2px;
+}
+
+/* Bonuses section */
+.ammo-bonuses {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  align-items: center;
+}
+
+.bonus-badge {
+  font-size: 9px;
+  font-weight: bold;
+  padding: 2px 4px;
+  border-radius: 2px;
+  text-transform: uppercase;
+  line-height: 1;
+  min-width: 32px;
+  text-align: center;
+  border: 1px solid;
+}
+
+.bonus-badge.attack-bonus {
+  color: #32cd32;
+  background: rgba(50, 205, 50, 0.2);
+  border-color: #32cd32;
+}
+
+.bonus-badge.damage-bonus {
+  color: #ff6b6b;
+  background: rgba(255, 107, 107, 0.2);
+  border-color: #ff6b6b;
+}
+
+.bonus-badge.range-bonus {
+  color: #87ceeb;
+  background: rgba(135, 206, 235, 0.2);
+  border-color: #87ceeb;
+}
+
+.bonus-badge.penetration-bonus {
+  color: #dda0dd;
+  background: rgba(221, 160, 221, 0.2);
+  border-color: #dda0dd;
+}
+
+/* Ammunition actions section */
+.ammo-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.compatible-weapons-dropdown {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.compatible-weapon-select {
+  flex: 1;
+  min-width: 120px;
+  height: 22px;
+  font-size: 10px;
+  padding: 2px 4px;
+  border: 1px solid #4a90a4;
+  background: rgba(0, 0, 0, 0.2);
+  color: white;
+  border-radius: 2px;
+}
+
+.compatible-weapon-select:focus {
+  border-color: #87ceeb;
+  background: rgba(135, 206, 235, 0.1);
+  outline: none;
+}
+
+.compatible-weapon-select option {
+  background: #1e3a5f;
+  color: white;
+}
+
+.load-ammo-btn {
+  width: 24px;
+  height: 22px;
+  padding: 0;
+  border: 1px solid #32cd32;
+  background: rgba(50, 205, 50, 0.2);
+  color: #32cd32;
+  border-radius: 2px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  transition: all 0.2s ease;
+}
+
+.load-ammo-btn:hover:not(.disabled) {
+  background: rgba(50, 205, 50, 0.4);
+  transform: scale(1.05);
+}
+
+.load-ammo-btn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  border-color: #666;
+  color: #666;
+  background: rgba(102, 102, 102, 0.2);
+}
+
+/* Item controls - standard edit/delete buttons */
+.ammunition-item-enhanced .item-controls {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.ammunition-item-enhanced .item-control {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  border-radius: 2px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.ammunition-item-enhanced .item-edit {
+  color: #4a90e2;
+  border: 1px solid #4a90e2;
+  background: rgba(74, 144, 226, 0.1);
+}
+
+.ammunition-item-enhanced .item-edit:hover {
+  background: rgba(74, 144, 226, 0.3);
+  transform: scale(1.05);
+}
+
+.ammunition-item-enhanced .item-delete {
+  color: #dc3545;
+  border: 1px solid #dc3545;
+  background: rgba(220, 53, 69, 0.1);
+}
+
+.ammunition-item-enhanced .item-delete:hover {
+  background: rgba(220, 53, 69, 0.3);
+  transform: scale(1.05);
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 1200px) {
+  .ammunition-enhanced-row {
+    grid-template-columns: 50px 1fr 120px 160px 140px 60px;
+    gap: 8px;
+  }
+  
+  .ammo-bonuses {
+    flex-direction: column;
+    gap: 2px;
+  }
+  
+  .bonus-badge {
+    font-size: 8px;
+    padding: 1px 3px;
+  }
+}
+
+@media (max-width: 900px) {
+  .ammunition-enhanced-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    padding: 8px;
+  }
+  
+  .magazine-count-section,
+  .ammo-identity,
+  .ammo-capacity-section,
+  .ammo-bonuses,
+  .ammo-actions,
+  .item-controls {
+    justify-self: stretch;
+  }
+  
+  .ammo-identity {
+    justify-content: flex-start;
+  }
+  
+  .ammo-bonuses {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+  
+  .compatible-weapons-dropdown {
+    justify-content: stretch;
+  }
+  
+  .compatible-weapon-select {
+    min-width: 0;
+    flex: 1;
+  }
+  
+  .item-controls {
+    justify-content: flex-end;
+  }
+}
+
+/* Enhanced visual feedback */
+.ammunition-item-enhanced.loading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.ammunition-item-enhanced.empty {
+  opacity: 0.6;
+}
+
+.ammunition-item-enhanced.empty .magazine-count {
+  color: #dc3545;
+}
+
+.ammunition-item-enhanced.low-ammo .magazine-count {
+  color: #ffa500;
+}
+
+/* Tooltip styles for bonus badges */
+.bonus-badge[title] {
+  cursor: help;
+}
+
+.bonus-badge[title]:hover {
+  filter: brightness(1.2);
+  transform: scale(1.05);
+}

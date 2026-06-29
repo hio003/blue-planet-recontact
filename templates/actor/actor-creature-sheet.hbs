@@ -153,6 +153,44 @@
         {{/if}}
       </section>
 
+      {{!-- Wounds/Injuries --}}
+      <section class="wounds">
+        <h3>HERIDAS</h3>
+        <div class="wound-type">
+          <label>Minor (-1 each):</label>
+          <div class="pip-track wound-track">
+            {{#each (range 5) as |i|}}
+              <div class="pip wound-pip minor-wound {{#if (gte system.wounds.minor (add i 1))}}filled{{/if}}" data-value="{{add i 1}}" data-type="minor"></div>
+            {{/each}}
+            <span class="wound-penalty">(-{{system.wounds.minor}})</span>
+          </div>
+        </div>
+        
+        <div class="wound-type">
+          <label>Major (-2 each):</label>
+          <div class="pip-track wound-track">
+            {{#each (range 4) as |i|}}
+              <div class="pip wound-pip major-wound {{#if (gte system.wounds.major (add i 1))}}filled{{/if}}" data-value="{{add i 1}}" data-type="major"></div>
+            {{/each}}
+            <span class="wound-penalty">(-{{multiply system.wounds.major 2}})</span>
+          </div>
+        </div>
+        
+        <div class="wound-type">
+          <label>Mortal (-3 each):</label>
+          <div class="pip-track wound-track">
+            {{#each (range 3) as |i|}}
+              <div class="pip wound-pip mortal-wound {{#if (gte system.wounds.mortal (add i 1))}}filled{{/if}}" data-value="{{add i 1}}" data-type="mortal"></div>
+            {{/each}}
+            <span class="wound-penalty">(-{{multiply system.wounds.mortal 3}})</span>
+          </div>
+        </div>
+        
+        <div class="total-penalty">
+          <strong>Total Penalty: {{system.totalWoundPenalty}}</strong>
+        </div>
+      </section>
+
       {{!-- Physical Stats --}}
       <section class="physical-stats">
         <h3>PHYSICAL DATA</h3>
@@ -177,6 +215,42 @@
           <input type="text" name="system.biology.encounter_rate" value="{{system.biology.encounter_rate}}" placeholder="e.g., 2d6 per day" class="encounter-input">
         </div>
       </section>
+
+      {{!-- Strain (if creature uses strain system) --}}
+      {{#if system.strain}}
+      <section class="strain">
+        <h3>STRAIN</h3>
+        <div class="strain-type">
+          <label>Mental:</label>
+          <div class="pip-track strain-track">
+            {{#each (range system.strain.mental.max) as |i|}}
+              <div class="pip strain-pip mental-strain {{#if (gte system.strain.mental.value (add i 1))}}filled{{/if}}" data-value="{{add i 1}}" data-type="mental"></div>
+            {{/each}}
+            <span class="pip-value">{{system.strain.mental.value}}/{{system.strain.mental.max}}</span>
+          </div>
+        </div>
+        
+        <div class="strain-type">
+          <label>Physical:</label>
+          <div class="pip-track strain-track">
+            {{#each (range system.strain.physical.max) as |i|}}
+              <div class="pip strain-pip physical-strain {{#if (gte system.strain.physical.value (add i 1))}}filled{{/if}}" data-value="{{add i 1}}" data-type="physical"></div>
+            {{/each}}
+            <span class="pip-value">{{system.strain.physical.value}}/{{system.strain.physical.max}}</span>
+          </div>
+        </div>
+        
+        {{!-- Strain Recovery Buttons --}}
+        <div class="strain-recovery">
+          <button type="button" class="strain-recover" title="Partial Recovery - Rest and medical attention">
+            <i class="fas fa-heart"></i> Recover
+          </button>
+          <button type="button" class="strain-recover-all" title="Full Recovery - Extended rest with proper care">
+            <i class="fas fa-spa"></i> Full Rest
+          </button>
+        </div>
+      </section>
+      {{/if}}
 
       {{!-- Status --}}
       <section class="status">

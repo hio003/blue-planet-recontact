@@ -17,7 +17,7 @@ export class BluePlanetRollCard extends Application {
       width: 850,
       height: 600,
       resizable: true,
-      classes: ["blue-planet", "roll-card"],
+      classes: ["blue-planet", "roll-card", "bpr-dialog"],
       tabs: [
         {
           navSelector: ".tabs",
@@ -241,7 +241,10 @@ export class BluePlanetRollCard extends Application {
         }
       },
       default: "roll"
-    });
+    }, {
+    classes: ["bpr-dialog", "dialog"],
+    resizable: true
+  });
     
     dialog.render(true);
   }
@@ -267,7 +270,10 @@ export class BluePlanetRollCard extends Application {
         }
       },
       default: "roll"
-    });
+    }, {
+    classes: ["bpr-dialog", "dialog"],
+    resizable: true
+  });
     
     dialog.render(true);
   }

@@ -1,0 +1,454 @@
+{{!-- BLUE PLANET RECONTACT — Vehicle Sheet v2 --}}
+<form class="blue-planet-recontact vehicle-sheet vtype-{{system.vehicle_type}}" autocomplete="off">
+
+  {{!-- ══ HEADER ═══════════════════════════════════════════════════════════ --}}
+  <header class="vehicle-header">
+    <div class="vehicle-portrait-wrap">
+      <img src="{{actor.img}}" alt="{{actor.name}}" data-edit="img" title="Change Image" class="vehicle-portrait-img"/>
+      <div class="vehicle-type-badge vbadge-{{system.vehicle_type}}">
+        {{#if (eq system.vehicle_type "ground")}}GROUND
+        {{else if (eq system.vehicle_type "aquatic")}}SURFACE
+        {{else if (eq system.vehicle_type "submersible")}}SUB
+        {{else if (eq system.vehicle_type "aerial")}}AERIAL
+        {{else if (eq system.vehicle_type "space")}}SPACE
+        {{else}}VEHICLE{{/if}}
+      </div>
+    </div>
+
+    <div class="vehicle-header-info">
+      <div class="vehicle-name-row">
+        <input type="text" name="name" value="{{actor.name}}" class="vehicle-name-input" placeholder="Vehicle Name"/>
+        <select name="system.vehicle_type" class="vehicle-type-select">
+          <option value="ground"       {{#if (eq system.vehicle_type "ground")}}selected{{/if}}>Ground</option>
+          <option value="aquatic"      {{#if (eq system.vehicle_type "aquatic")}}selected{{/if}}>Surface Aquatic</option>
+          <option value="submersible"  {{#if (eq system.vehicle_type "submersible")}}selected{{/if}}>Submersible</option>
+          <option value="aerial"       {{#if (eq system.vehicle_type "aerial")}}selected{{/if}}>Aerial</option>
+          <option value="space"        {{#if (eq system.vehicle_type "space")}}selected{{/if}}>Spacecraft</option>
+        </select>
+      </div>
+
+      <div class="vehicle-meta-row">
+        <div class="meta-field">
+          <label>MANUFACTURER</label>
+          <input type="text" name="system.manufacturer" value="{{system.manufacturer}}" placeholder="Manufacturer"/>
+        </div>
+        <div class="meta-field">
+          <label>MODEL</label>
+          <input type="text" name="system.model" value="{{system.model}}" placeholder="Model"/>
+        </div>
+        <div class="meta-field">
+          <label>AVAILABILITY</label>
+          <select name="system.availability" class="avail-{{system.availability}}">
+            <option value="common"     {{#if (eq system.availability "common")}}selected{{/if}}>Common</option>
+            <option value="uncommon"   {{#if (eq system.availability "uncommon")}}selected{{/if}}>Uncommon</option>
+            <option value="rare"       {{#if (eq system.availability "rare")}}selected{{/if}}>Rare</option>
+            <option value="restricted" {{#if (eq system.availability "restricted")}}selected{{/if}}>⛔ Restricted</option>
+          </select>
+        </div>
+        <div class="meta-field">
+          <label>COST (cs)</label>
+          <input type="number" name="system.cost" value="{{system.cost}}" min="0"/>
+        </div>
+      </div>
+
+      <div class="vehicle-condition-row">
+        <label class="condition-label">CONDITION</label>
+        <select name="system.condition" class="condition-select condition-{{system.condition}}">
+          <option value="operational" {{#if (eq system.condition "operational")}}selected{{/if}}>🟢 Operational</option>
+          <option value="damaged"     {{#if (eq system.condition "damaged")}}selected{{/if}}>🟡 Damaged (−2 tests)</option>
+          <option value="critical"    {{#if (eq system.condition "critical")}}selected{{/if}}>🔴 Critical (−3 / GI offline)</option>
+          <option value="destroyed"   {{#if (eq system.condition "destroyed")}}selected{{/if}}>💀 Destroyed</option>
+        </select>
+        <div class="damage-track">
+          <div class="damage-pip {{#if (or (eq system.condition "damaged") (eq system.condition "critical") (eq system.condition "destroyed"))}}pip-hit{{/if}}" title="Damaged"></div>
+          <div class="damage-pip {{#if (or (eq system.condition "critical") (eq system.condition "destroyed"))}}pip-hit pip-critical{{/if}}" title="Critical"></div>
+          <div class="damage-pip {{#if (eq system.condition "destroyed")}}pip-hit pip-destroyed{{/if}}" title="Destroyed"></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  {{!-- ══ CORE STATS PANEL ═══════════════════════════════════════════════════ --}}
+  <div class="vehicle-stats-panel">
+
+    <div class="vstat-card hull-card">
+      <div class="vstat-card-title">HULL</div>
+      <div class="hull-stat-block">
+        <div class="hull-main">
+          <div class="hull-label">DURABILITY</div>
+          <input type="number" name="system.durability.value" value="{{system.durability.value}}"
+            class="hull-value {{#if (lt system.durability.value 0)}}fragile{{else if (gt system.durability.value 5)}}armored-val{{/if}}" min="-10" max="30"/>
+        </div>
+        <div class="hull-sub">
+          <div class="hull-armor-row">
+            <span class="armor-icon"><i class="fas fa-shield-alt"></i></span>
+            <label>ARMOR</label>
+            <input type="number" name="system.durability.armor" value="{{system.durability.armor}}" class="armor-value" min="0" max="20"/>
+          </div>
+          <div class="hull-rule-hint">DR − Armor − Physique = Damage Roll TN</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vstat-card autopilot-card">
+      <div class="vstat-card-title">AUTOPILOT</div>
+      <div class="autopilot-block">
+        <div class="auto-pair">
+          <div class="auto-stat">
+            <label title="Cognition: sensor acquisition, navigation">COG</label>
+            <input type="number" name="system.autonomy.cognition" value="{{system.autonomy.cognition}}" class="auto-val" min="0" max="10"/>
+          </div>
+          <div class="auto-divider">/</div>
+          <div class="auto-stat">
+            <label title="Coordination: maneuver tests when autopilot drives">COO</label>
+            <input type="number" name="system.autonomy.coordination" value="{{system.autonomy.coordination}}" class="auto-val" min="-12" max="10"/>
+          </div>
+        </div>
+        <div class="interface-row">
+          <label>INTERFACE</label>
+          <select name="system.interface_type" class="iface-select iface-{{system.interface_type}}">
+            <option value="cold" {{#if (eq system.interface_type "cold")}}selected{{/if}}>Cold (manual)</option>
+            <option value="warm" {{#if (eq system.interface_type "warm")}}selected{{/if}}>Warm (+1)</option>
+            <option value="hot"  {{#if (eq system.interface_type "hot")}}selected{{/if}}>Hot (+2 Jack)</option>
+            <option value="gi"   {{#if (eq system.interface_type "gi")}}selected{{/if}}>GI Autonomous</option>
+          </select>
+        </div>
+        <div class="power-row">
+          <label>POWER</label>
+          <select name="system.power_type">
+            <option value="integrated"   {{#if (eq system.power_type "integrated")}}selected{{/if}}>Integrated</option>
+            <option value="consumable"   {{#if (eq system.power_type "consumable")}}selected{{/if}}>Consumable</option>
+            <option value="rechargeable" {{#if (eq system.power_type "rechargeable")}}selected{{/if}}>Rechargeable</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="vstat-card perf-card">
+      <div class="vstat-card-title">PERFORMANCE</div>
+      <div class="perf-block">
+        <div class="perf-row">
+          <div class="perf-item">
+            <label>SAFE</label>
+            <div class="perf-input-unit">
+              <input type="number" name="system.performance.speed_safe" value="{{system.performance.speed_safe}}" min="0"/>
+              <span class="punit">kph</span>
+            </div>
+          </div>
+          <div class="perf-item">
+            <label>MAX</label>
+            <div class="perf-input-unit">
+              <input type="number" name="system.performance.speed_max" value="{{system.performance.speed_max}}" min="0"/>
+              <span class="punit">kph</span>
+            </div>
+          </div>
+          <div class="perf-item">
+            <label>RANGE</label>
+            <div class="perf-input-unit">
+              <input type="number" name="system.performance.range" value="{{system.performance.range}}" min="0"/>
+              <span class="punit">km</span>
+            </div>
+          </div>
+        </div>
+        {{#if (eq system.vehicle_type "aerial")}}
+        <div class="perf-extra">
+          <div class="perf-item">
+            <label>CEILING</label>
+            <div class="perf-input-unit">
+              <input type="number" name="system.performance.ceiling" value="{{system.performance.ceiling}}" min="0"/>
+              <span class="punit">m</span>
+            </div>
+          </div>
+        </div>
+        {{/if}}
+        {{#if (eq system.vehicle_type "submersible")}}
+        <div class="perf-extra">
+          <div class="perf-item">
+            <label>DEPTH LIMIT</label>
+            <div class="perf-input-unit">
+              <input type="number" name="system.performance.depth_limit" value="{{system.performance.depth_limit}}" min="0"/>
+              <span class="punit">m</span>
+            </div>
+          </div>
+        </div>
+        {{/if}}
+      </div>
+    </div>
+
+    <div class="vstat-card maneuvers-card">
+      <div class="vstat-card-title">MANEUVERS</div>
+      <div class="maneuvers-block">
+        <div class="mano-item {{#if (lt system.maneuvers.attack -10)}}mano-na{{/if}}">
+          <div class="mano-icon"><i class="fas fa-sword"></i></div>
+          <label>ATTACK</label>
+          {{#if (lt system.maneuvers.attack -10)}}
+            <span class="mano-na-text">N/A</span>
+            <input type="hidden" name="system.maneuvers.attack" value="-99"/>
+          {{else}}
+            <input type="number" name="system.maneuvers.attack" value="{{system.maneuvers.attack}}"
+              class="mano-val {{#if (gt system.maneuvers.attack 0)}}positive{{else if (lt system.maneuvers.attack 0)}}negative{{/if}}"/>
+          {{/if}}
+        </div>
+        <div class="mano-item">
+          <div class="mano-icon"><i class="fas fa-shield-alt"></i></div>
+          <label>DEFEND</label>
+          <input type="number" name="system.maneuvers.defend" value="{{system.maneuvers.defend}}"
+            class="mano-val {{#if (gt system.maneuvers.defend 0)}}positive{{else if (lt system.maneuvers.defend 0)}}negative{{/if}}"/>
+        </div>
+        <div class="mano-item">
+          <div class="mano-icon">💨</div>
+          <label>CHASE</label>
+          <input type="number" name="system.maneuvers.chase_evade" value="{{system.maneuvers.chase_evade}}"
+            class="mano-val {{#if (gt system.maneuvers.chase_evade 0)}}positive{{else if (lt system.maneuvers.chase_evade 0)}}negative{{/if}}"/>
+        </div>
+        <div class="mano-item">
+          <div class="mano-icon"><i class="fas fa-crosshairs"></i></div>
+          <label>PERF</label>
+          <input type="number" name="system.maneuvers.performance" value="{{system.maneuvers.performance}}"
+            class="mano-val {{#if (gt system.maneuvers.performance 0)}}positive{{else if (lt system.maneuvers.performance 0)}}negative{{/if}}"/>
+        </div>
+      </div>
+      <div class="maneuver-rule-hint">Modifier on driving/piloting opposed tests</div>
+    </div>
+
+    <div class="vstat-card dims-card">
+      <div class="vstat-card-title">LOAD</div>
+      <div class="dims-block">
+        <div class="dim-row">
+          <label>SIZE</label>
+          <select name="system.dimensions.size_category" class="size-select">
+            <option value="light"   {{#if (eq system.dimensions.size_category "light")}}selected{{/if}}>Light</option>
+            <option value="medium"  {{#if (eq system.dimensions.size_category "medium")}}selected{{/if}}>Medium</option>
+            <option value="heavy"   {{#if (eq system.dimensions.size_category "heavy")}}selected{{/if}}>Heavy</option>
+            <option value="massive" {{#if (eq system.dimensions.size_category "massive")}}selected{{/if}}>Massive</option>
+          </select>
+        </div>
+        <div class="dim-row">
+          <label>LENGTH</label>
+          <div class="dim-input-unit">
+            <input type="number" name="system.dimensions.length" value="{{system.dimensions.length}}" step="0.1" min="0"/>
+            <span class="punit">m</span>
+          </div>
+        </div>
+        <div class="dim-row">
+          <label>MASS</label>
+          <div class="dim-input-unit">
+            <input type="number" name="system.dimensions.mass" value="{{system.dimensions.mass}}" step="0.1" min="0"/>
+            <span class="punit">MT</span>
+          </div>
+        </div>
+        <div class="dim-row">
+          <label>CARGO</label>
+          <div class="dim-input-unit">
+            <input type="number" name="system.cargo.capacity" value="{{system.cargo.capacity}}" min="0"/>
+            <select name="system.cargo.unit" class="unit-select">
+              <option value="kg" {{#if (eq system.cargo.unit "kg")}}selected{{/if}}>kg</option>
+              <option value="MT" {{#if (eq system.cargo.unit "MT")}}selected{{/if}}>MT</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>{{!-- end stats-panel --}}
+
+  {{!-- ══ TABS ════════════════════════════════════════════════════════════ --}}
+  <nav class="sheet-tabs vehicle-tabs" data-group="primary">
+    <a class="item active" data-tab="crew"> CREW</a>
+    <a class="item" data-tab="systems">⚙ SYSTEMS</a>
+    <a class="item" data-tab="notes">📋 NOTES</a>
+  </nav>
+
+  <section class="sheet-body vehicle-body">
+
+    {{!-- ── CREW TAB ─────────────────────────────────────────────────────── --}}
+    <div class="tab crew active" data-group="primary" data-tab="crew">
+
+      <div class="crew-requirements-bar">
+        <div class="crew-req-item">
+          <label>MIN CREW</label>
+          <input type="number" name="system.crew.minimum" value="{{system.crew.minimum}}" min="0" max="1000"/>
+        </div>
+        <div class="crew-req-sep">→</div>
+        <div class="crew-req-item">
+          <label>MAX CREW</label>
+          <input type="number" name="system.crew.maximum" value="{{system.crew.maximum}}" min="0" max="100000"/>
+        </div>
+        <div class="crew-req-sep">+</div>
+        <div class="crew-req-item">
+          <label>PASSENGERS</label>
+          <input type="number" name="system.passengers.maximum" value="{{system.passengers.maximum}}" min="0" max="100000"/>
+        </div>
+      </div>
+
+      {{#if (or (eq system.vehicle_type "aquatic") (eq system.vehicle_type "submersible"))}}
+      <div class="cetacean-access-panel">
+        <h4>CETACEAN ACCESS SYSTEMS</h4>
+        <div class="cete-access-grid">
+          <label class="cete-acc-toggle {{#if system.features.slide_loader}}cete-acc-on{{/if}}">
+            <input type="checkbox" name="system.features.slide_loader" {{#if system.features.slide_loader}}checked{{/if}}/>
+            SLIDE-LOADER
+            <small>Ramp to waterline</small>
+          </label>
+          <label class="cete-acc-toggle {{#if system.features.travel_cradle}}cete-acc-on{{/if}}">
+            <input type="checkbox" name="system.features.travel_cradle" {{#if system.features.travel_cradle}}checked{{/if}}/>
+            TRAVEL CRADLE
+            <small>T-tank for transport</small>
+          </label>
+          <label class="cete-acc-toggle {{#if system.features.waterlock}}cete-acc-on{{/if}}">
+            <input type="checkbox" name="system.features.waterlock" {{#if system.features.waterlock}}checked{{/if}}/>
+            WATER LOCK
+            <small>Submersed access hatch</small>
+          </label>
+        </div>
+      </div>
+      {{/if}}
+
+      <div class="crew-panel">
+        <div class="crew-panel-header">
+          <h3>CREW & PASSENGERS ROSTER</h3>
+          <div class="drop-hint-badge">↓ Drop actors from sidebar</div>
+        </div>
+
+        <div class="crew-roster droppable-crew" data-drop-type="crew">
+          {{#if system.crew_members.length}}
+            {{#each system.crew_members as |member|}}
+            <div class="crew-card" data-actor-id="{{member.actorId}}">
+              <img src="{{member.img}}" alt="{{member.name}}" class="crew-avatar"/>
+              <div class="crew-card-body">
+                <div class="crew-card-name">{{member.name}}</div>
+                <div class="crew-card-type-badge ctype-{{member.type}}">{{uppercase member.type}}</div>
+                {{#if (eq member.type "cetacean")}}
+                  <div class="crew-extra-badge cete-badge">Requires aquatic access</div>
+                {{/if}}
+                {{#if (eq member.type "remote")}}
+                  <div class="crew-extra-badge remote-badge">Remote — relay capable</div>
+                {{/if}}
+                <input type="text" value="{{member.role}}" placeholder="Role: Pilot · Gunner · Engineer…"
+                  class="crew-role-input" data-actor-id="{{member.actorId}}"/>
+              </div>
+              <div class="crew-card-actions">
+                <a class="open-actor crew-btn" data-actor-id="{{member.actorId}}" title="Open Actor Sheet">📋</a>
+                <a class="remove-crew crew-btn" data-actor-id="{{member.actorId}}" title="Remove from Roster">✖</a>
+              </div>
+            </div>
+            {{/each}}
+          {{else}}
+            <div class="crew-empty-zone">
+              <div class="empty-icon">⬇</div>
+              <div class="empty-msg">No crew assigned</div>
+              <div class="empty-sub">Drag actor tokens here from the Actors sidebar</div>
+              <div class="empty-types">Accepts: Character · NPC · Cetacean · Remote</div>
+            </div>
+          {{/if}}
+        </div>
+      </div>
+
+    </div>{{!-- end crew tab --}}
+
+    {{!-- ── SYSTEMS TAB ──────────────────────────────────────────────────── --}}
+    <div class="tab systems" data-group="primary" data-tab="systems">
+
+      <div class="features-panel">
+        <h3>FEATURES & SYSTEMS</h3>
+        <div class="features-grid">
+          <label class="feat-tag {{#if system.features.hardened}}feat-on{{/if}}">
+            <input type="checkbox" name="system.features.hardened" {{#if system.features.hardened}}checked{{/if}}/>
+            <span class="feat-name">HARDENED</span>
+            <span class="feat-desc">EMP resistant</span>
+          </label>
+          <label class="feat-tag {{#if system.features.armored}}feat-on{{/if}}">
+            <input type="checkbox" name="system.features.armored" {{#if system.features.armored}}checked{{/if}}/>
+            <span class="feat-name">ARMORED</span>
+            <span class="feat-desc">Ceramic composite hull</span>
+          </label>
+          <label class="feat-tag {{#if system.features.sensors}}feat-on{{/if}}">
+            <input type="checkbox" name="system.features.sensors" {{#if system.features.sensors}}checked{{/if}}/>
+            <span class="feat-name">SENSORS</span>
+            <span class="feat-desc">Radar/sonar/lidar suite</span>
+          </label>
+          <label class="feat-tag {{#if system.features.weapons}}feat-on{{/if}}">
+            <input type="checkbox" name="system.features.weapons" {{#if system.features.weapons}}checked{{/if}}/>
+            <span class="feat-name">WEAPONS</span>
+            <span class="feat-desc">Hardpoints mounted</span>
+          </label>
+          <label class="feat-tag {{#if system.features.manipulators}}feat-on{{/if}}">
+            <input type="checkbox" name="system.features.manipulators" {{#if system.features.manipulators}}checked{{/if}}/>
+            <span class="feat-name">MANIPULATORS</span>
+            <span class="feat-desc">Waldos/crane arms</span>
+          </label>
+          <label class="feat-tag {{#if system.features.sealed}}feat-on{{/if}}">
+            <input type="checkbox" name="system.features.sealed" {{#if system.features.sealed}}checked{{/if}}/>
+            <span class="feat-name">SEALED</span>
+            <span class="feat-desc">Pressurized crew cabin</span>
+          </label>
+          <label class="feat-tag {{#if system.features.responsive}}feat-on{{/if}}">
+            <input type="checkbox" name="system.features.responsive" {{#if system.features.responsive}}checked{{/if}}/>
+            <span class="feat-name">RESPONSIVE</span>
+            <span class="feat-desc">Smart materials</span>
+          </label>
+          <label class="feat-tag {{#if system.features.smart}}feat-on{{/if}}">
+            <input type="checkbox" name="system.features.smart" {{#if system.features.smart}}checked{{/if}}/>
+            <span class="feat-name">SMART</span>
+            <span class="feat-desc">Onboard VI assist</span>
+          </label>
+          <label class="feat-tag {{#if system.features.gi}}feat-on{{/if}}">
+            <input type="checkbox" name="system.features.gi" {{#if system.features.gi}}checked{{/if}}/>
+            <span class="feat-name">GI AUTOPILOT</span>
+            <span class="feat-desc">General Intelligence</span>
+          </label>
+          <label class="feat-tag {{#if system.features.stealth}}feat-on{{/if}}">
+            <input type="checkbox" name="system.features.stealth" {{#if system.features.stealth}}checked{{/if}}/>
+            <span class="feat-name">STEALTH</span>
+            <span class="feat-desc">−4 enemy detection</span>
+          </label>
+          <label class="feat-tag {{#if system.features.evac_pods}}feat-on{{/if}}">
+            <input type="checkbox" name="system.features.evac_pods" {{#if system.features.evac_pods}}checked{{/if}}/>
+            <span class="feat-name">EVAC PODS</span>
+            <span class="feat-desc">Auto-deploying e-pods</span>
+          </label>
+          <label class="feat-tag {{#if system.features.crash_protection}}feat-on{{/if}}">
+            <input type="checkbox" name="system.features.crash_protection" {{#if system.features.crash_protection}}checked{{/if}}/>
+            <span class="feat-name">CRASH PROTECT</span>
+            <span class="feat-desc">Impact foam system</span>
+          </label>
+          <label class="feat-tag {{#if system.features.ecm}}feat-on{{/if}}">
+            <input type="checkbox" name="system.features.ecm" {{#if system.features.ecm}}checked{{/if}}/>
+            <span class="feat-name">ECM</span>
+            <span class="feat-desc">Electronic countermeasures</span>
+          </label>
+          <label class="feat-tag {{#if system.features.vr_cockpit}}feat-on{{/if}}">
+            <input type="checkbox" name="system.features.vr_cockpit" {{#if system.features.vr_cockpit}}checked{{/if}}/>
+            <span class="feat-name">VR COCKPIT</span>
+            <span class="feat-desc">360° sensor-fused view</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="systems-descriptions">
+        <div class="sys-desc-block {{#unless system.features.weapons}}sys-inactive{{/unless}}">
+          <h4>WEAPONS SYSTEMS</h4>
+          <textarea name="system.weapons_description" class="vehicle-textarea"
+            placeholder="Describe mounted weapons with Attack bonuses and DR. Examples: Dual rotary cannon (Attack +4, DR 14, 1200m), 2× torpedo tube (DR variable, guided), 8-missile pod (DR 22, 25km).">{{system.weapons_description}}</textarea>
+        </div>
+        <div class="sys-desc-block {{#unless system.features.sensors}}sys-inactive{{/unless}}">
+          <h4>SENSOR SUITE</h4>
+          <textarea name="system.sensors_description" class="vehicle-textarea"
+            placeholder="List sensors with ranges. Radar: 500km LOS. Lidar: 2.5km atmo / 500m sub. Sonar active: 30km / passive. DDF triangulation. MARNOC. Thermal.">{{system.sensors_description}}</textarea>
+        </div>
+      </div>
+
+    </div>{{!-- end systems tab --}}
+
+    {{!-- ── NOTES TAB ────────────────────────────────────────────────────── --}}
+    <div class="tab notes" data-group="primary" data-tab="notes">
+      <div class="notes-panel">
+        <h3>DESCRIPTION & NOTES</h3>
+        <textarea name="system.description" class="vehicle-textarea vehicle-notes"
+          placeholder="Vehicle history, damage notes, special modifications, known quirks, mission rules…">{{system.description}}</textarea>
+      </div>
+    </div>
+
+  </section>
+
+</form>

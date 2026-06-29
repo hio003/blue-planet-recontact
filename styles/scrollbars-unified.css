@@ -1,0 +1,216 @@
+/* ============================================================
+   BLUE PLANET RECONTACT — Scrollbars & Tab Layout Unificados
+   
+   SOLUCIÓN ESTRUCTURAL:
+   La cadena correcta es:
+     sheet-body { flex:1; overflow:hidden }
+       .tab.active { height:100%; overflow-y:auto }  ← scroll aquí
+   
+   Sin height:100% en el tab, overflow:auto no tiene límite
+   que respetar y el tab crece indefinidamente.
+   ============================================================ */
+
+/* ── VARIABLES del scrollbar aqua ─────────────────────────── */
+/* thumb: linear-gradient(rgba(107,182,255,0.6), rgba(64,224,208,0.6)) */
+/* track: rgba(26,62,92,0.3)  border: rgba(107,182,255,0.2) */
+
+/* ══════════════════════════════════════════════════════════
+   1. LAYOUT UNIVERSAL — todos los .tab de todas las fichas
+   ══════════════════════════════════════════════════════════ */
+
+/* sheet-body ya tiene flex:1 + overflow:hidden.
+   Hacemos que cada tab activo lo rellene y gestione su propio scroll. */
+.blue-planet-recontact .sheet-body {
+  overflow: hidden;       /* el scroll va dentro del .tab, no aquí */
+}
+
+.blue-planet-recontact .sheet-body .tab {
+  /* Cuando está activo (display:block lo pone Foundry), ocupa todo el body */
+  height: 100%;
+  box-sizing: border-box;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  /* Eliminar max-height fijos que impedían el scroll correcto */
+  max-height: none !important;
+  padding: 12px 16px 12px 12px;
+
+  /* Firefox scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(107, 182, 255, 0.6) rgba(26, 62, 92, 0.3);
+}
+
+/* WebKit scrollbar — aplicado a TODOS los tabs de todas las fichas */
+.blue-planet-recontact .sheet-body .tab::-webkit-scrollbar {
+  width: 8px;
+}
+.blue-planet-recontact .sheet-body .tab::-webkit-scrollbar-track {
+  background: rgba(26, 62, 92, 0.3);
+  border-radius: 4px;
+  border: 1px solid rgba(107, 182, 255, 0.2);
+}
+.blue-planet-recontact .sheet-body .tab::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg,
+    rgba(107, 182, 255, 0.6) 0%,
+    rgba(64, 224, 208, 0.6) 100%);
+  border-radius: 4px;
+  border: 1px solid rgba(107, 182, 255, 0.3);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+.blue-planet-recontact .sheet-body .tab::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg,
+    rgba(107, 182, 255, 0.85) 0%,
+    rgba(64, 224, 208, 0.85) 100%);
+  box-shadow: 0 0 8px rgba(107, 182, 255, 0.45);
+}
+
+/* ══════════════════════════════════════════════════════════
+   2. VEHICLE & REMOTE SHEETS — misma solución con sus clases propias
+   Los tabs se llaman .crew, .operators, .systems, .notes
+   y están dentro de .vehicle-body / .remote-body en lugar de .sheet-body
+   ══════════════════════════════════════════════════════════ */
+
+.vehicle-sheet .vehicle-body,
+.remote-sheet .remote-body {
+  overflow: hidden;
+}
+
+.vehicle-sheet .vehicle-body .tab,
+.remote-sheet .remote-body .tab {
+  height: 100%;
+  box-sizing: border-box;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  max-height: none !important;
+  padding: 10px 14px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(107, 182, 255, 0.6) rgba(26, 62, 92, 0.3);
+}
+
+.vehicle-sheet .vehicle-body .tab::-webkit-scrollbar,
+.remote-sheet .remote-body .tab::-webkit-scrollbar { width: 7px; }
+
+.vehicle-sheet .vehicle-body .tab::-webkit-scrollbar-track,
+.remote-sheet .remote-body .tab::-webkit-scrollbar-track {
+  background: rgba(26, 62, 92, 0.3);
+  border-radius: 4px;
+  border: 1px solid rgba(107, 182, 255, 0.15);
+}
+.vehicle-sheet .vehicle-body .tab::-webkit-scrollbar-thumb,
+.remote-sheet .remote-body .tab::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg,
+    rgba(107, 182, 255, 0.6) 0%,
+    rgba(64, 224, 208, 0.6) 100%);
+  border-radius: 4px;
+  border: 1px solid rgba(107, 182, 255, 0.3);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+.vehicle-sheet .vehicle-body .tab::-webkit-scrollbar-thumb:hover,
+.remote-sheet .remote-body .tab::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg,
+    rgba(107, 182, 255, 0.85) 0%,
+    rgba(64, 224, 208, 0.85) 100%);
+  box-shadow: 0 0 8px rgba(107, 182, 255, 0.4);
+}
+
+/* ══════════════════════════════════════════════════════════
+   3. WINDOW-CONTENT — scrollbar de la ventana de Foundry
+   Por si algo se desborda a nivel de window (fallback)
+   ══════════════════════════════════════════════════════════ */
+
+.blue-planet-recontact.sheet .window-content {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(107, 182, 255, 0.4) rgba(26, 62, 92, 0.2);
+}
+.blue-planet-recontact.sheet .window-content::-webkit-scrollbar { width: 8px; }
+.blue-planet-recontact.sheet .window-content::-webkit-scrollbar-track {
+  background: rgba(26, 62, 92, 0.3);
+  border-radius: 4px;
+  border: 1px solid rgba(107, 182, 255, 0.2);
+}
+.blue-planet-recontact.sheet .window-content::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg,
+    rgba(107, 182, 255, 0.6) 0%,
+    rgba(64, 224, 208, 0.6) 100%);
+  border-radius: 4px;
+  border: 1px solid rgba(107, 182, 255, 0.3);
+}
+.blue-planet-recontact.sheet .window-content::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg,
+    rgba(107, 182, 255, 0.8) 0%,
+    rgba(64, 224, 208, 0.8) 100%);
+  box-shadow: 0 0 8px rgba(107, 182, 255, 0.4);
+}
+
+/* ══════════════════════════════════════════════════════════
+   4. SUB-ZONAS con scroll propio (dentro de los tabs)
+   Crew-roster, operators-roster, listas de items, etc.
+   ══════════════════════════════════════════════════════════ */
+
+/* Listas y zonas de drop con scroll propio dentro de un tab */
+.crew-roster,
+.operators-roster,
+.item-list,
+.biomod-list,
+.cyberware-list,
+.skill-list,
+.cetacean-abilities,
+.creature-attributes,
+.accordion-content {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(107, 182, 255, 0.5) rgba(26, 62, 92, 0.25);
+}
+
+.crew-roster::-webkit-scrollbar,
+.operators-roster::-webkit-scrollbar,
+.item-list::-webkit-scrollbar,
+.biomod-list::-webkit-scrollbar,
+.cyberware-list::-webkit-scrollbar,
+.skill-list::-webkit-scrollbar,
+.cetacean-abilities::-webkit-scrollbar,
+.creature-attributes::-webkit-scrollbar,
+.accordion-content::-webkit-scrollbar { width: 6px; }
+
+.crew-roster::-webkit-scrollbar-track,
+.operators-roster::-webkit-scrollbar-track,
+.item-list::-webkit-scrollbar-track,
+.biomod-list::-webkit-scrollbar-track,
+.cyberware-list::-webkit-scrollbar-track,
+.skill-list::-webkit-scrollbar-track,
+.cetacean-abilities::-webkit-scrollbar-track,
+.creature-attributes::-webkit-scrollbar-track,
+.accordion-content::-webkit-scrollbar-track {
+  background: rgba(26, 62, 92, 0.2);
+  border-radius: 3px;
+}
+
+.crew-roster::-webkit-scrollbar-thumb,
+.operators-roster::-webkit-scrollbar-thumb,
+.item-list::-webkit-scrollbar-thumb,
+.biomod-list::-webkit-scrollbar-thumb,
+.cyberware-list::-webkit-scrollbar-thumb,
+.skill-list::-webkit-scrollbar-thumb,
+.cetacean-abilities::-webkit-scrollbar-thumb,
+.creature-attributes::-webkit-scrollbar-thumb,
+.accordion-content::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg,
+    rgba(107, 182, 255, 0.5) 0%,
+    rgba(64, 224, 208, 0.5) 100%);
+  border-radius: 3px;
+}
+
+.crew-roster::-webkit-scrollbar-thumb:hover,
+.operators-roster::-webkit-scrollbar-thumb:hover,
+.item-list::-webkit-scrollbar-thumb:hover,
+.biomod-list::-webkit-scrollbar-thumb:hover,
+.cyberware-list::-webkit-scrollbar-thumb:hover,
+.skill-list::-webkit-scrollbar-thumb:hover,
+.cetacean-abilities::-webkit-scrollbar-thumb:hover,
+.creature-attributes::-webkit-scrollbar-thumb:hover,
+.accordion-content::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg,
+    rgba(107, 182, 255, 0.8) 0%,
+    rgba(64, 224, 208, 0.8) 100%);
+  box-shadow: 0 0 6px rgba(107, 182, 255, 0.4);
+}

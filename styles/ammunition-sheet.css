@@ -1,0 +1,998 @@
+/* =================================== */
+/*          AMMUNITION SHEET           */
+/* =================================== */
+
+.ammunition-sheet {
+  min-height: 520px;
+}
+
+/* Header Section */
+.ammunition-sheet .sheet-header {
+  background: linear-gradient(135deg, #1e3a5f, #2d5a8a);
+  padding: 15px;
+  border-bottom: 2px solid #4a90a4;
+  margin-bottom: 10px;
+}
+
+.ammunition-sheet .header-fields {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.ammunition-sheet .name-section {
+  flex: 1;
+}
+
+.ammunition-sheet .item-name {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  padding: 8px;
+  border: 1px solid #4a90a4;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border-radius: 4px;
+}
+
+.ammunition-sheet .ammo-info-line select {
+  padding: 6px 10px;
+  border: 1px solid #4a90a4;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.ammunition-sheet .ammo-info-line select option {
+  background: #1e3a5f;
+  color: white;
+}
+
+.ammunition-sheet .ammo-quantity-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 200px;
+}
+
+.ammunition-sheet .stat-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: white;
+}
+
+.ammunition-sheet .stat-group label {
+  font-size: 12px;
+  font-weight: bold;
+  min-width: 70px;
+}
+
+.ammunition-sheet .quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.ammunition-sheet .qty-minus,
+.ammunition-sheet .qty-plus {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 1px solid #4a90a4;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border-radius: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 10px;
+}
+
+.ammunition-sheet .qty-minus:hover,
+.ammunition-sheet .qty-plus:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.ammunition-sheet .quantity-input,
+.ammunition-sheet .package-input {
+  width: 60px;
+  padding: 4px 6px;
+  text-align: center;
+  border: 1px solid #4a90a4;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border-radius: 3px;
+}
+
+.ammunition-sheet .unit {
+  font-size: 11px;
+  color: #b0c4de;
+}
+
+.ammunition-sheet .total-rounds {
+  font-weight: bold;
+}
+
+.ammunition-sheet .total-display {
+  color: #87ceeb;
+  font-weight: bold;
+}
+
+/* Main Content */
+.ammunition-sheet .sheet-main {
+  height: calc(100% - 140px);
+}
+
+/* Overview Tab */
+.ammunition-sheet .ammo-overview-section {
+  margin-bottom: 20px;
+}
+
+.ammunition-sheet .overview-stats {
+  padding: 15px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  margin-bottom: 15px;
+}
+
+.ammunition-sheet .stat-display-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 15px;
+}
+
+.ammunition-sheet .stat-display {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  background: rgba(255, 255, 255, 0.05);
+  border-left: 3px solid #4a90a4;
+  border-radius: 4px;
+}
+
+.ammunition-sheet .stat-display i {
+  font-size: 16px;
+  color: #87ceeb;
+  width: 18px;
+  text-align: center;
+}
+
+.ammunition-sheet .stat-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ammunition-sheet .stat-info label {
+  font-size: 11px;
+  font-weight: bold;
+  color: #b0c4de;
+  text-transform: uppercase;
+}
+
+.ammunition-sheet .stat-value {
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
+}
+
+.ammunition-sheet .compatible-weapons-display {
+  margin-bottom: 20px;
+  padding: 15px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+}
+
+.ammunition-sheet .compatible-weapons-display h4 {
+  margin-bottom: 10px;
+  color: #87ceeb;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ammunition-sheet .weapons-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.ammunition-sheet .weapon-tag {
+  padding: 4px 8px;
+  background: rgba(135, 206, 235, 0.2);
+  border: 1px solid #87ceeb;
+  border-radius: 12px;
+  font-size: 12px;
+  color: white;
+}
+
+.ammunition-sheet .no-weapons {
+  color: #b0c4de;
+  font-style: italic;
+  margin: 0;
+}
+
+.ammunition-sheet .description-section {
+  margin-top: 20px;
+}
+
+.ammunition-sheet .description-section label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #87ceeb;
+}
+
+.ammunition-sheet .description-section textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: 8px;
+  border: 1px solid #4a90a4;
+  background: rgba(0, 0, 0, 0.2);
+  color: white;
+  border-radius: 4px;
+  resize: vertical;
+}
+
+/* Properties Tab */
+.ammunition-sheet .properties-section {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.ammunition-sheet .properties-section h3 {
+  color: #87ceeb;
+  margin-bottom: 15px;
+  font-size: 16px;
+  border-bottom: 1px solid #4a90a4;
+  padding-bottom: 5px;
+}
+
+.ammunition-sheet .modifier-row,
+.ammunition-sheet .property-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.ammunition-sheet .modifier-group,
+.ammunition-sheet .property-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.ammunition-sheet .modifier-group label,
+.ammunition-sheet .property-group label {
+  font-size: 12px;
+  font-weight: bold;
+  color: #b0c4de;
+}
+
+.ammunition-sheet .modifier-group input,
+.ammunition-sheet .property-group input,
+.ammunition-sheet .property-group select {
+  padding: 6px 8px;
+  border: 1px solid #4a90a4;
+  background: rgba(0, 0, 0, 0.2);
+  color: white;
+  border-radius: 3px;
+}
+
+.ammunition-sheet .help-text {
+  font-size: 10px;
+  color: #8fbc8f;
+  margin-top: 2px;
+}
+
+.ammunition-sheet .calculated-weight,
+.ammunition-sheet .calculated-value {
+  font-weight: bold;
+  color: #87ceeb;
+  padding: 6px 8px;
+  background: rgba(135, 206, 235, 0.1);
+  border-radius: 3px;
+  border: 1px dashed #87ceeb;
+}
+
+/* Usage Tracking Tab */
+.ammunition-sheet .usage-section {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+/* Custom scrollbar for usage section */
+.ammunition-sheet .usage-section::-webkit-scrollbar {
+  width: 6px;
+}
+
+.ammunition-sheet .usage-section::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+}
+
+.ammunition-sheet .usage-section::-webkit-scrollbar-thumb {
+  background: #4a90a4;
+  border-radius: 3px;
+}
+
+.ammunition-sheet .usage-section::-webkit-scrollbar-thumb:hover {
+  background: #87ceeb;
+}
+
+.ammunition-sheet .usage-stats h3 {
+  color: #87ceeb;
+  margin-bottom: 15px;
+  font-size: 16px;
+  border-bottom: 1px solid #4a90a4;
+  padding-bottom: 5px;
+}
+
+.ammunition-sheet .usage-overview {
+  margin-bottom: 25px;
+}
+
+
+/* Usage stat grid layout */
+.ammunition-sheet .usage-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.ammunition-sheet .usage-stat {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  border-left: 3px solid #4a90a4;
+}
+
+.ammunition-sheet .usage-stat.percentage {
+  border-left-color: #87ceeb;
+}
+
+.ammunition-sheet .usage-stat .stat-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: rgba(74, 144, 164, 0.2);
+  border-radius: 50%;
+  color: #87ceeb;
+}
+
+.ammunition-sheet .usage-stat .stat-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ammunition-sheet .usage-stat .stat-details label {
+  font-size: 11px;
+  font-weight: bold;
+  color: #b0c4de;
+  text-transform: uppercase;
+}
+
+.ammunition-sheet .usage-value {
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+}
+
+.ammunition-sheet .usage-value.total {
+  color: #87ceeb;
+}
+
+.ammunition-sheet .usage-value.fired {
+  color: #ff6b6b;
+}
+
+.ammunition-sheet .usage-value.remaining {
+  color: #4ecdc4;
+}
+
+.ammunition-sheet .usage-value.percent {
+  color: #87ceeb;
+}
+
+/* Progress bar styling */
+.ammunition-sheet .usage-progress {
+  margin-bottom: 25px;
+}
+
+.ammunition-sheet .progress-bar {
+  width: 100%;
+  height: 12px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid #4a90a4;
+}
+
+.ammunition-sheet .progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4ecdc4, #ff6b6b);
+  transition: width 0.3s ease;
+  border-radius: 5px;
+}
+
+.ammunition-sheet .progress-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 4px;
+  font-size: 11px;
+  color: #b0c4de;
+}
+
+/* Usage actions section */
+.ammunition-sheet .usage-actions-section {
+  padding-top: 20px;
+  border-top: 1px solid #4a90a4;
+}
+
+.ammunition-sheet .usage-actions-section h4 {
+  color: #87ceeb;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.ammunition-sheet .section-desc {
+  font-size: 12px;
+  color: #b0c4de;
+  margin-bottom: 15px;
+  font-style: italic;
+}
+
+.ammunition-sheet .custom-fire-section {
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 1px dashed #4a90a4;
+}
+
+.ammunition-sheet .custom-fire-section h5 {
+  color: #87ceeb;
+  margin-bottom: 10px;
+  font-size: 13px;
+}
+
+.ammunition-sheet .custom-fire-controls {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.ammunition-sheet .custom-rounds-input {
+  flex: 1;
+  max-width: 120px;
+  padding: 6px 8px;
+  border: 1px solid #4a90a4;
+  background: rgba(0, 0, 0, 0.2);
+  color: white;
+  border-radius: 3px;
+}
+
+.ammunition-sheet .fire-custom {
+  border-color: #ff6b6b;
+  background: rgba(255, 107, 107, 0.2);
+}
+
+.ammunition-sheet .fire-custom:hover {
+  background: rgba(255, 107, 107, 0.4);
+}
+
+.ammunition-sheet .reset-btn {
+  padding: 4px 8px;
+  font-size: 10px;
+  background: rgba(255, 69, 0, 0.7);
+  border: 1px solid #ff4500;
+  color: white;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.ammunition-sheet .reset-btn:hover {
+  background: rgba(255, 69, 0, 0.9);
+}
+
+.ammunition-sheet .usage-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.ammunition-sheet .usage-btn {
+  padding: 8px 16px;
+  border: 1px solid #4a90a4;
+  background: rgba(74, 144, 164, 0.2);
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: bold;
+  transition: background 0.2s;
+}
+
+.ammunition-sheet .usage-btn:hover {
+  background: rgba(74, 144, 164, 0.4);
+}
+
+.ammunition-sheet .usage-btn.fire-round {
+  border-color: #228b22;
+  background: rgba(34, 139, 34, 0.2);
+}
+
+.ammunition-sheet .usage-btn.fire-round:hover {
+  background: rgba(34, 139, 34, 0.4);
+}
+
+.ammunition-sheet .usage-btn.fire-burst {
+  border-color: #ffa500;
+  background: rgba(255, 165, 0, 0.2);
+}
+
+.ammunition-sheet .usage-btn.fire-burst:hover {
+  background: rgba(255, 165, 0, 0.4);
+}
+
+.ammunition-sheet .usage-btn.fire-full-auto {
+  border-color: #dc143c;
+  background: rgba(220, 20, 60, 0.2);
+}
+
+.ammunition-sheet .usage-btn.fire-full-auto:hover {
+  background: rgba(220, 20, 60, 0.4);
+}
+
+/* Compatible Weapons Section */
+.ammunition-sheet .weapons-compatibility-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+/* Custom scrollbar for weapons compatibility section */
+.ammunition-sheet .weapons-compatibility-section::-webkit-scrollbar {
+  width: 6px;
+}
+
+.ammunition-sheet .weapons-compatibility-section::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+}
+
+.ammunition-sheet .weapons-compatibility-section::-webkit-scrollbar-thumb {
+  background: #4a90a4;
+  border-radius: 3px;
+}
+
+.ammunition-sheet .weapons-compatibility-section::-webkit-scrollbar-thumb:hover {
+  background: #87ceeb;
+}
+
+.ammunition-sheet .weapons-header h3 {
+  color: #87ceeb;
+  margin-bottom: 10px;
+  font-size: 16px;
+  border-bottom: 1px solid #4a90a4;
+  padding-bottom: 5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ammunition-sheet .weapons-header .section-description {
+  font-size: 12px;
+  color: #b0c4de;
+  margin-bottom: 15px;
+  font-style: italic;
+}
+
+.ammunition-sheet .compatible-weapons-management {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.ammunition-sheet .current-weapons-section h4,
+.ammunition-sheet .add-weapons-section h4 {
+  color: #87ceeb;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+/* Current weapons list with scrollbar */
+.ammunition-sheet .weapons-list {
+  max-height: 200px;
+  overflow-y: auto;
+  padding-right: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Custom scrollbar for weapons list */
+.ammunition-sheet .weapons-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.ammunition-sheet .weapons-list::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+}
+
+.ammunition-sheet .weapons-list::-webkit-scrollbar-thumb {
+  background: #4a90a4;
+  border-radius: 3px;
+}
+
+.ammunition-sheet .weapons-list::-webkit-scrollbar-thumb:hover {
+  background: #87ceeb;
+}
+
+/* Weapon item styling */
+.ammunition-sheet .weapon-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px solid #4a90a4;
+  border-radius: 4px;
+  color: white;
+}
+
+.ammunition-sheet .weapon-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ammunition-sheet .weapon-info i {
+  color: #87ceeb;
+  font-size: 14px;
+}
+
+.ammunition-sheet .weapon-info strong {
+  color: white;
+  font-weight: bold;
+}
+
+.ammunition-sheet .weapon-type {
+  color: #b0c4de;
+  font-size: 12px;
+}
+
+.ammunition-sheet .remove-weapon-item {
+  padding: 4px 6px;
+  background: rgba(255, 69, 0, 0.7);
+  border: 1px solid #ff4500;
+  color: white;
+  border-radius: 3px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  height: 24px;
+}
+
+.ammunition-sheet .remove-weapon-item:hover {
+  background: rgba(255, 69, 0, 0.9);
+}
+
+/* Text-based weapon entries */
+.ammunition-sheet .weapon-text-entry {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ammunition-sheet .weapon-input-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px solid #4a90a4;
+  border-radius: 4px;
+}
+
+.ammunition-sheet .weapon-input-group i {
+  color: #87ceeb;
+  font-size: 14px;
+}
+
+.ammunition-sheet .weapon-input-group input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: white;
+  padding: 0;
+}
+
+.ammunition-sheet .weapon-input-group input:focus {
+  outline: none;
+}
+
+/* No weapons display */
+.ammunition-sheet .no-weapons-display {
+  text-align: center;
+  padding: 20px;
+  color: #b0c4de;
+}
+
+.ammunition-sheet .universal-compatibility {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.ammunition-sheet .universal-compatibility i {
+  font-size: 24px;
+  color: #87ceeb;
+  margin-bottom: 8px;
+}
+
+.ammunition-sheet .universal-compatibility p {
+  margin: 0;
+  color: white;
+}
+
+.ammunition-sheet .help-text {
+  font-size: 11px;
+  color: #8fbc8f;
+  font-style: italic;
+}
+
+/* Add weapons section */
+.ammunition-sheet .add-weapons-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Drop zone styling */
+.ammunition-sheet .weapon-drop-zone {
+  border: 2px dashed #4a90a4;
+  border-radius: 6px;
+  padding: 20px;
+  text-align: center;
+  color: #b0c4de;
+  background: rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.ammunition-sheet .weapon-drop-zone:hover {
+  border-color: #87ceeb;
+  background: rgba(135, 206, 235, 0.05);
+}
+
+.ammunition-sheet .drop-zone-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.ammunition-sheet .drop-zone-content i {
+  font-size: 20px;
+  color: #87ceeb;
+}
+
+.ammunition-sheet .drop-zone-content p {
+  margin: 0;
+  color: white;
+}
+
+.ammunition-sheet .drop-indicators {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #8fbc8f;
+  font-size: 12px;
+  margin-top: 8px;
+}
+
+/* Manual add controls */
+.ammunition-sheet .manual-add-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ammunition-sheet .control-row {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.ammunition-sheet .add-text-weapon-btn,
+.ammunition-sheet .select-weapon-modal-btn {
+  padding: 8px 16px;
+  border: 1px solid #4a90a4;
+  background: rgba(74, 144, 164, 0.2);
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: bold;
+  transition: background 0.2s;
+}
+
+.ammunition-sheet .add-text-weapon-btn:hover,
+.ammunition-sheet .select-weapon-modal-btn:hover {
+  background: rgba(74, 144, 164, 0.4);
+}
+
+.ammunition-sheet .add-text-weapon-btn {
+  border-color: #228b22;
+  background: rgba(34, 139, 34, 0.2);
+}
+
+.ammunition-sheet .add-text-weapon-btn:hover {
+  background: rgba(34, 139, 34, 0.4);
+}
+
+.ammunition-sheet .compatible-weapons-section h3 {
+  color: #87ceeb;
+  margin-bottom: 10px;
+  font-size: 16px;
+  border-bottom: 1px solid #4a90a4;
+  padding-bottom: 5px;
+}
+
+.ammunition-sheet .section-desc {
+  font-size: 12px;
+  color: #b0c4de;
+  margin-bottom: 15px;
+  font-style: italic;
+}
+
+.ammunition-sheet .weapons-input-area {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ammunition-sheet .weapon-input-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ammunition-sheet .weapon-input-row input {
+  flex: 1;
+  padding: 6px 8px;
+  border: 1px solid #4a90a4;
+  background: rgba(0, 0, 0, 0.2);
+  color: white;
+  border-radius: 3px;
+}
+
+.ammunition-sheet .remove-weapon {
+  padding: 4px 6px;
+  background: rgba(255, 69, 0, 0.7);
+  border: 1px solid #ff4500;
+  color: white;
+  border-radius: 3px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+}
+
+.ammunition-sheet .remove-weapon:hover {
+  background: rgba(255, 69, 0, 0.9);
+}
+
+.ammunition-sheet .add-weapon-btn {
+  padding: 8px 12px;
+  background: rgba(34, 139, 34, 0.2);
+  border: 1px solid #228b22;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.ammunition-sheet .add-weapon-btn:hover {
+  background: rgba(34, 139, 34, 0.4);
+}
+
+/* Ensure all text is light colored */
+.ammunition-sheet p,
+.ammunition-sheet span:not(.unit):not(.help-text),
+.ammunition-sheet div {
+  color: white;
+}
+
+.ammunition-sheet select option {
+  background: #1e3a5f;
+  color: white;
+}
+
+.ammunition-sheet input[type="text"],
+.ammunition-sheet input[type="number"],
+.ammunition-sheet textarea,
+.ammunition-sheet select {
+  color: white;
+}
+
+.ammunition-sheet input::placeholder,
+.ammunition-sheet textarea::placeholder {
+  color: #b0c4de;
+  opacity: 0.8;
+}
+
+/* Specific overrides for any black text */
+.ammunition-sheet * {
+  color: inherit;
+}
+
+/* Ensure inputs remain white text on dark background */
+.ammunition-sheet input[type="text"]:focus,
+.ammunition-sheet input[type="number"]:focus,
+.ammunition-sheet textarea:focus,
+.ammunition-sheet select:focus {
+  color: white;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* Responsiveness */
+@media (max-width: 700px) {
+  .ammunition-sheet .header-fields {
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .ammunition-sheet .ammo-quantity-stats {
+    min-width: unset;
+  }
+  
+  .ammunition-sheet .stat-display-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .ammunition-sheet .modifier-row,
+  .ammunition-sheet .property-row,
+  .ammunition-sheet .usage-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .ammunition-sheet .usage-actions {
+    flex-direction: column;
+  }
+}

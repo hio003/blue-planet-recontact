@@ -6,21 +6,42 @@
 // Import modules
 import { BluePlanetActor } from "./actor/actor.js";
 import { BluePlanetActorSheet } from "./actor/actor-sheet.js";
+import { BluePlanetCetaceanSheet } from "./actor/cetacean-sheet.js";
+import { BluePlanetNPCSheet } from "./actor/npc-sheet.js";
 import { BluePlanetCreatureSheet } from "./actor/creature-sheet.js";
 import { BluePlanetItem } from "./item/item.js";
 import { BluePlanetItemSheet } from "./item/item-sheet.js";
 import { BluePlanetWeaponSheet } from "./sheets/item-weapon-sheet.js";
 import { BluePlanetEquipmentSheet } from "./sheets/item-equipment-sheet.js";
 import { BluePlanetBiomodSheet } from "./sheets/item-biomod-sheet.js";
+import { BluePlanetCyberwareSheet } from "./sheets/item-cyberware-sheet.js";
 import { BluePlanetSkillSheet } from "./sheets/item-skill-sheet.js";
-import { BluePlanetAmmoTypeSheet } from "./sheets/item-ammo_type-sheet.js";
+import { AmmunitionSheetBPR } from "./item/item-ammunition-sheet.mjs";
+import { showWeaponDamageDialog } from "./weapon-damage-dialog.js";
+import { initializeReactiveUpdates } from "./reactive-updates.js";
+import { getWoundPenalty, getWoundSummary, applyWoundToTarget, showWoundConfirmationDialog } from "./wound-application.js";
+import { AmmunitionBPR } from "./item/item-ammunition.mjs";
 import { BluePlanetSensorSheet } from "./sheets/item-sensor-sheet.js";
 import { BluePlanetFeatureSheet } from "./sheets/item-feature-sheet.js";
 import { BluePlanetRollCard } from "./roll-card.js";
+import { BluePlanetVehicleSheet } from "./actor/vehicle-sheet.js";
+import { BluePlanetRemoteSheet } from "./actor/remote-sheet.js";
 import { preloadHandlebarsTemplates } from "./templates.js";
 import { registerHandlebarsHelpers } from "./helpers.js";
 // Note: chat-utils import removed as automatic scrolling is disabled
 import "./chat-layout-fixer.js";
+import "./combat/initiative.js";
+import { FoundryScrollFixes } from "./foundry-scroll-fixes.js";
+import "./combat/combat-tracker-ui.js";
+import "./combat/floating-combat-window.js";
+// Floating encounter controls removed - using draggable tab controls instead
+import "./combat/floating-window-button.js";
+import "./combat/debug-drag.js";
+// New modules
+import { registerSpeciesMechanicsHooks } from "./species-mechanics.js";
+import { showAdvancementDialog } from "./advancement-tracker.js";
+import { registerEcholocationHooks, showEcholocationInfo } from "./cetacean-echolocation.js";
+import { registerDialogThemeHooks } from "./bp-dialog-hooks.js";
 
 // Initialize system
 Hooks.once('init', async function() {
@@ -29,8 +50,78 @@ Hooks.once('init', async function() {
     BluePlanetActor,
     BluePlanetItem,
     BluePlanetRollCard,
+    AmmunitionBPR,
     rollItemMacro: rollItemMacro,
-    showRollCard: BluePlanetRollCard.show
+    showRollCard: BluePlanetRollCard.show,
+    addBasicCombatSkills: addBasicCombatSkills,
+    applyWoundToTarget: applyWoundToTarget,
+    showWoundConfirmationDialog: showWoundConfirmationDialog,
+    getWoundPenalty: getWoundPenalty,
+    getWoundSummary: getWoundSummary,
+    showAdvancementDialog: showAdvancementDialog,
+    showEcholocationInfo: showEcholocationInfo,
+    // Test function for debugging wound application
+    testWoundApplication: async function() {
+      console.log('BluePlanet: Testing wound application system...');
+      
+      // Get current targets
+      const targets = Array.from(game.user.targets);
+      if (targets.length === 0) {
+        ui.notifications.warn('Please target a token first');
+        return false;
+      }
+      
+      const target = targets[0];
+      const actor = target.actor;
+      
+      // Get controlled tokens (potential attackers)
+      const controlled = canvas.tokens.controlled;
+      const attacker = controlled.length > 0 ? controlled[0].actor : null;
+      
+      console.log('BluePlanet Test: Test scenario:', {
+        targetTokenName: target.name,
+        targetActorName: actor?.name,
+        targetActorId: actor?.id,
+        attackerTokenName: controlled[0]?.name,
+        attackerActorName: attacker?.name,
+        attackerActorId: attacker?.id,
+        isSameActor: actor?.id === attacker?.id,
+        hasWounds: !!actor?.system?.wounds,
+        currentWounds: actor?.system?.wounds
+      });
+      
+      if (!actor) {
+        ui.notifications.error('Target token has no associated actor');
+        return false;
+      }
+      
+      if (actor?.id === attacker?.id) {
+        ui.notifications.warn('Target and attacker are the same! This should NOT happen in real combat.');
+        console.warn('BluePlanet Test: Same actor detected - this explains the self-inflicted wounds bug!');
+      }
+      
+      // Test applying a minor wound
+      try {
+        const result = await applyWoundToTarget(actor, 'Minor Wound', {
+          weaponName: 'Test Weapon',
+          damageRating: 10,
+          successes: 1,
+          attackerName: attacker?.name || 'Test Attacker'
+        });
+        
+        console.log('BluePlanet Test: Wound application result:', result);
+        if (result) {
+          ui.notifications.info(`Successfully applied test minor wound to ${actor.name}`);
+        } else {
+          ui.notifications.error(`Failed to apply test wound to ${actor.name}`);
+        }
+        return result;
+      } catch (error) {
+        console.error('BluePlanet Test: Error applying wound:', error);
+        ui.notifications.error('Error during wound application test');
+        return false;
+      }
+    }
   };
 
   // Define custom Document classes
@@ -38,65 +129,126 @@ Hooks.once('init', async function() {
   CONFIG.Item.documentClass = BluePlanetItem;
 
   // Register sheet application classes
-  foundry.documents.collections.Actors.unregisterSheet("core", foundry.appv1.sheets.ActorSheet);
-  foundry.documents.collections.Actors.registerSheet("blue-planet-recontact", BluePlanetActorSheet, {
-    types: ["character", "npc", "cetacean"],
+  Actors.unregisterSheet("core", foundry.appv1.sheets.ActorSheet);
+  
+  // Register Character sheet
+  Actors.registerSheet("blue-planet-recontact", BluePlanetActorSheet, {
+    types: ["character"],
     makeDefault: true,
     label: "Blue Planet Character Sheet (Popout)"
   });
-  foundry.documents.collections.Actors.registerSheet("blue-planet-recontact", BluePlanetCreatureSheet, {
+  
+  // Register Cetacean sheet
+  Actors.registerSheet("blue-planet-recontact", BluePlanetCetaceanSheet, {
+    types: ["cetacean"],
+    makeDefault: true,
+    label: "Blue Planet Cetacean Sheet (Popout)"
+  });
+  
+  // Register NPC sheet
+  Actors.registerSheet("blue-planet-recontact", BluePlanetNPCSheet, {
+    types: ["npc"],
+    makeDefault: true,
+    label: "Blue Planet NPC Sheet (Popout)"
+  });
+  
+  // Register Creature sheet
+  Actors.registerSheet("blue-planet-recontact", BluePlanetCreatureSheet, {
     types: ["creature"],
-    makeDefault: true
+    makeDefault: true,
+    label: "Blue Planet Creature Sheet"
   });
 
-  foundry.documents.collections.Items.unregisterSheet("core", foundry.appv1.sheets.ItemSheet);
+  // Register Vehicle sheet
+  Actors.registerSheet("blue-planet-recontact", BluePlanetVehicleSheet, {
+    types: ["vehicle"],
+    makeDefault: true,
+    label: "Blue Planet Vehicle Sheet"
+  });
+
+  // Register Remote sheet
+  Actors.registerSheet("blue-planet-recontact", BluePlanetRemoteSheet, {
+    types: ["remote"],
+    makeDefault: true,
+    label: "Blue Planet Remote / CICADA Sheet"
+  });
+
+  Items.unregisterSheet("core", foundry.appv1.sheets.ItemSheet);
   
   // Register specific item sheets for different types
-  foundry.documents.collections.Items.registerSheet("blue-planet-recontact", BluePlanetWeaponSheet, {
+  Items.registerSheet("blue-planet-recontact", BluePlanetWeaponSheet, {
     types: ["weapon"],
     makeDefault: true
   });
-  foundry.documents.collections.Items.registerSheet("blue-planet-recontact", BluePlanetEquipmentSheet, {
+  Items.registerSheet("blue-planet-recontact", BluePlanetEquipmentSheet, {
     types: ["equipment"],
     makeDefault: true
   });
-  foundry.documents.collections.Items.registerSheet("blue-planet-recontact", BluePlanetBiomodSheet, {
+  Items.registerSheet("blue-planet-recontact", BluePlanetBiomodSheet, {
     types: ["biomod"],
+    makeDefault: true
+  });
+  Items.registerSheet("blue-planet-recontact", BluePlanetCyberwareSheet, {
+    types: ["cyberware"],
     makeDefault: true
   });
   
   // Register skill sheet
-  foundry.documents.collections.Items.registerSheet("blue-planet-recontact", BluePlanetSkillSheet, {
+  Items.registerSheet("blue-planet-recontact", BluePlanetSkillSheet, {
     types: ["skill"],
     makeDefault: true
   });
   
-  // Register ammo type sheet
-  foundry.documents.collections.Items.registerSheet("blue-planet-recontact", BluePlanetAmmoTypeSheet, {
-    types: ["ammo_type"],
+  
+  // Register ammunition sheet
+  Items.registerSheet("blue-planet-recontact", AmmunitionSheetBPR, {
+    types: ["ammunition"],
     makeDefault: true
   });
   
   // Register sensor sheet
-  foundry.documents.collections.Items.registerSheet("blue-planet-recontact", BluePlanetSensorSheet, {
+  Items.registerSheet("blue-planet-recontact", BluePlanetSensorSheet, {
     types: ["sensor"],
     makeDefault: true
   });
   
   // Register feature sheet
-  foundry.documents.collections.Items.registerSheet("blue-planet-recontact", BluePlanetFeatureSheet, {
+  Items.registerSheet("blue-planet-recontact", BluePlanetFeatureSheet, {
     types: ["feature"],
     makeDefault: true
   });
   
   // Register generic item sheet for other types
-  foundry.documents.collections.Items.registerSheet("blue-planet-recontact", BluePlanetItemSheet, {
+  Items.registerSheet("blue-planet-recontact", BluePlanetItemSheet, {
     types: ["species"],
     makeDefault: true
   });
 
   // Register Handlebars helpers
   registerHandlebarsHelpers();
+  
+  // Register species mechanics hooks (auto-apply species modifiers on drop)
+  registerSpeciesMechanicsHooks();
+  
+  // Register cetacean echolocation mechanics
+  registerEcholocationHooks();
+
+  // Register dialog theme hooks — aplica el esquema visual BP a todos los diálogos
+  registerDialogThemeHooks();
+
+  // Registrar setting de tema de fichas
+  game.settings.register('blue-planet-recontact', 'defaultSheetTheme', {
+    name: 'Default Sheet Theme',
+    hint: 'Default visual theme for all Blue Planet character sheets.',
+    scope: 'client',
+    config: true,
+    type: String,
+    choices: {
+      'blue-planet': 'Blue Planet (Oceanic)',
+      'dark':        'Dark Theme'
+    },
+    default: 'blue-planet'
+  });
   
   // Preload Handlebars templates
   return preloadHandlebarsTemplates();
@@ -171,7 +323,7 @@ Hooks.once("ready", async function() {
     }
   });
   
-  // Initialize damage roll button functionality globally
+  // Initialize damage roll button functionality globally with targeting support
   $(document).on('click', '.damage-roll-button', async function(e) {
     e.preventDefault();
     e.stopPropagation();
@@ -179,8 +331,9 @@ Hooks.once("ready", async function() {
     const button = $(this);
     const weaponId = button.data('weapon-id');
     const actorId = button.data('actor-id');
+    const calledShotBonus = parseInt(button.data('called-shot-bonus')) || 0;
     
-    console.log('BluePlanet: Damage roll button clicked - Weapon:', weaponId, 'Actor:', actorId);
+    console.log('BluePlanet: Damage roll button clicked - Weapon:', weaponId, 'Actor:', actorId, 'Called Shot Bonus:', calledShotBonus);
     
     // Get actor and weapon
     const actor = game.actors.get(actorId);
@@ -191,17 +344,339 @@ Hooks.once("ready", async function() {
       return;
     }
     
-    // Call the weapon damage roll method directly
+    // Use the new enhanced damage dialog with automatic targeting
     try {
-      await weapon.rollWeaponDamage(weapon.system);
-      console.log('BluePlanet: Damage roll executed successfully');
+      showWeaponDamageDialog(actor, weapon, { calledShotBonus: calledShotBonus });
+      console.log('BluePlanet: Enhanced damage dialog opened with targeting support');
     } catch (error) {
-      console.error('BluePlanet: Error executing damage roll:', error);
-      ui.notifications.error('Error executing damage roll. Check console for details.');
+      console.error('BluePlanet: Error opening enhanced damage dialog:', error);
+      // Fallback to old method if the new dialog fails
+      try {
+        await weapon.rollWeaponDamage(weapon.system, { calledShotBonus: calledShotBonus });
+        console.log('BluePlanet: Fallback damage roll executed successfully');
+      } catch (fallbackError) {
+        console.error('BluePlanet: Fallback damage roll also failed:', fallbackError);
+        ui.notifications.error('Error executing damage roll. Check console for details.');
+      }
     }
   });
   
   console.log('BluePlanet: Global damage accordion and roll button handlers initialized');
+  
+  // Initialize the reactive update system
+  initializeReactiveUpdates();
+  
+  // Set up global event listener for opposed test buttons (for all users)
+  // Global state for auto-blind handling on clients
+  if (!globalThis.BluePlanetAutoBlind) {
+    globalThis.BluePlanetAutoBlind = {
+      active: false,
+      prevRollMode: null
+    };
+  }
+
+  console.log('BluePlanet: Setting up global opposed test listener...');
+  $(document).on('click.blueplanetOpposedTest', '.opposed-test-btn', async function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    console.log('BluePlanet: Opposed test button clicked!');
+    
+    const button = $(this);
+    const actorId = button.data('actor-id');
+    const actionValue = button.data('action-value');
+    const gmPrivateRaw = button.data('gm-private');
+    const isGMPrivate = gmPrivateRaw === true || gmPrivateRaw === 'true';
+    
+    // Get message ID from the chat message element
+    const messageElement = button.closest('.chat-message');
+    const messageId = messageElement.length > 0 ? messageElement[0].dataset.messageId : null;
+    
+    console.log('BluePlanet: Opposed Test button clicked - DEBUG DATA:');
+    console.log('  - Actor ID:', actorId);
+    console.log('  - Action Value:', actionValue);
+    console.log('  - GM Private Raw:', gmPrivateRaw, '(type:', typeof gmPrivateRaw, ')');
+    console.log('  - GM Private Processed:', isGMPrivate);
+    console.log('  - Message ID:', messageId);
+    console.log('  - Button HTML:', button[0].outerHTML);
+    
+    const targetActor = game.actors.get(actorId);
+    if (!targetActor) {
+      ui.notifications.error("Actor not found!");
+      return;
+    }
+    
+    // AUTO-CONVERT TO BLIND GM ROLL: Only when this is a GM roll request (not regular opposed tests)
+    let originalRollMode = null;
+    let rollModeChanged = false;
+    
+    // Only treat as GM roll request when flags explicitly mark it as such and it was private
+    const messageFlags = game.messages.get(messageId)?.flags?.['blue-planet-recontact'];
+    const isGMRollRequest = messageFlags?.rollType === 'gm-opposed-test-request' && messageFlags?.isGMPrivateOpposedTest === true;
+    
+    if (!game.user.isGM && isGMRollRequest) {
+      // Store original roll mode and change to blindroll
+      originalRollMode = game.settings.get('core', 'rollMode');
+      await game.settings.set('core', 'rollMode', 'blindroll');
+      rollModeChanged = true;
+
+      // Persist client-side state to restore later on reveal
+      globalThis.BluePlanetAutoBlind.active = true;
+      globalThis.BluePlanetAutoBlind.prevRollMode = originalRollMode;
+
+      // Try to reflect the change in the chat UI roll mode selector if present
+      try {
+        const rollModeSelect = ui?.chat?.element?.find('select[name="rollMode"]');
+        if (rollModeSelect && rollModeSelect.length) {
+          rollModeSelect.val('blindroll').trigger('change');
+        }
+        // Alternative UI (older/newer Foundry versions) — try generic select
+        else {
+          const genericSelect = $('select[name="rollMode"]');
+          if (genericSelect && genericSelect.length) {
+            genericSelect.val('blindroll').trigger('change');
+          }
+        }
+      } catch (uiErr) {
+        console.warn('BluePlanet: Could not update roll mode UI select:', uiErr);
+      }
+      
+      console.log('BluePlanet: GM Private Roll Request detected - Auto-converting to blind GM roll');
+      console.log('  - Message flags GM request:', isGMRollRequest);
+      console.log('  - Original roll mode:', originalRollMode);
+      console.log('  - New roll mode: blindroll');
+      
+      // Show notification to player
+      ui.notifications.info('GM roll request automatically converted to blind roll for privacy.', { permanent: false });
+    }
+    
+    // Import and show opposed test dialog
+    try {
+      const { showOpposedTestDialog } = await import('./opposed-test-dialog.js');
+      
+      // Always treat as GM private when roll mode was changed
+      const effectiveGMPrivate = rollModeChanged ? true : isGMPrivate;
+      
+      await showOpposedTestDialog(targetActor, actionValue, messageId, effectiveGMPrivate);
+      
+    } catch (error) {
+      console.error('Error opening opposed test dialog:', error);
+      ui.notifications.error('Error opening opposed test dialog. Check console for details.');
+    } finally {
+      // Do not immediately restore here — we will restore on GM reveal signal or public results.
+      // Add a long-timeout fallback in case no reveal arrives to avoid leaving players stuck in blindroll.
+      if (rollModeChanged && originalRollMode !== null) {
+        setTimeout(async () => {
+          if (globalThis.BluePlanetAutoBlind.active) {
+            try {
+              await game.settings.set('core', 'rollMode', originalRollMode);
+              // Try to reflect in UI
+              const rollModeSelect = ui?.chat?.element?.find('select[name="rollMode"]');
+              if (rollModeSelect && rollModeSelect.length) {
+                rollModeSelect.val(originalRollMode).trigger('change');
+              } else {
+                const genericSelect = $('select[name="rollMode"]');
+                if (genericSelect && genericSelect.length) genericSelect.val(originalRollMode).trigger('change');
+              }
+              console.log('BluePlanet: Fallback — Roll mode restored to:', originalRollMode);
+            } catch (restoreErr) {
+              console.warn('BluePlanet: Fallback restore failed:', restoreErr);
+            }
+            globalThis.BluePlanetAutoBlind.active = false;
+            globalThis.BluePlanetAutoBlind.prevRollMode = null;
+            globalThis.BluePlanetAutoBlind.forcePrivate = false;
+          }
+        }, 30000);
+      }
+    }
+  });
+  
+  console.log('BluePlanet: Global opposed test listener set up for user:', game.user?.name || 'unknown');
+
+  // Listen for GM reveal socket to restore players' roll mode and UI
+  try {
+    if (game.socket) {
+      game.socket.on('system.blue-planet-recontact', async (payload) => {
+        if (!payload || typeof payload !== 'object') return;
+
+        // GM handles creating the private opposed results so players don't even see a stub
+        if (payload.type === 'gm-create-opposed-results' && game.user.isGM) {
+          try {
+            const { createOpposedTestResultsMessage } = await import('./opposed-test-dialog.js');
+            const resultsRaw = Array.isArray(payload.results) ? payload.results : [];
+            // Rehydrate actors for display
+            const results = resultsRaw.map(r => {
+              const actor = game.actors.get(r.actorId);
+              return {
+                actor,
+                actionValue: r.actionValue,
+                isInitiator: r.isInitiator,
+                skillUsed: r.skillUsed,
+                rollResult: r.rollResult,
+                baseTarget: r.baseTarget,
+                usedStrain: r.usedStrain,
+                otherBonus: r.otherBonus,
+                isHidden: r.isHidden
+              };
+            }).filter(r => !!r.actor);
+            // Compute winners on GM side
+            results.sort((a, b) => b.actionValue - a.actionValue);
+            const highestAV = results[0]?.actionValue ?? 0;
+            const winners = results.filter(r => r.actionValue === highestAV);
+            await createOpposedTestResultsMessage(results, winners, payload.originalMessageId, true);
+          } catch (err) {
+            console.error('BluePlanet: GM failed to create opposed results message:', err);
+          }
+          return; // Do not run further handlers
+        }
+
+        if (payload.type === 'reveal-opposed-test') {
+          // Only players that auto-switched should restore
+          if (globalThis.BluePlanetAutoBlind.active && globalThis.BluePlanetAutoBlind.prevRollMode) {
+            const prev = globalThis.BluePlanetAutoBlind.prevRollMode;
+            try {
+              await game.settings.set('core', 'rollMode', prev);
+              // Reflect in UI
+              const rollModeSelect = ui?.chat?.element?.find('select[name="rollMode"]');
+              if (rollModeSelect && rollModeSelect.length) {
+                rollModeSelect.val(prev).trigger('change');
+              } else {
+                const genericSelect = $('select[name="rollMode"]');
+                if (genericSelect && genericSelect.length) genericSelect.val(prev).trigger('change');
+              }
+              console.log('BluePlanet: Restored roll mode due to GM reveal:', prev);
+            } catch (err) {
+              console.warn('BluePlanet: Failed to restore roll mode on GM reveal:', err);
+            }
+            globalThis.BluePlanetAutoBlind.active = false;
+            globalThis.BluePlanetAutoBlind.prevRollMode = null;
+            globalThis.BluePlanetAutoBlind.forcePrivate = false;
+          }
+        }
+      });
+    }
+  } catch (sockErr) {
+    console.warn('BluePlanet: Could not attach socket listener for GM reveal:', sockErr);
+  }
+
+  // React to chat messages to (1) auto-switch to blind on GM roll request, and
+  // (2) restore on public opposed results message as a safety net
+  Hooks.on('createChatMessage', async (message) => {
+    try {
+      const flags = message?.flags?.['blue-planet-recontact'];
+      const rollType = flags?.rollType;
+      const isGMRollRequest = rollType === 'gm-opposed-test-request' && flags?.isGMPrivateOpposedTest === true;
+      const isOpposedResults = rollType === 'opposed-test-results';
+      const isGMPrivate = !!flags?.isGMPrivate;
+      const isVisibleToPlayers = !message.blind && (!message.whisper || message.whisper.length === 0);
+
+      // 1) On GM roll request: immediately auto-press Blind GM Roll for players
+      if (isGMRollRequest && !game.user.isGM) {
+        try {
+          const current = game.settings.get('core', 'rollMode');
+          if (!globalThis.BluePlanetAutoBlind.active) {
+            globalThis.BluePlanetAutoBlind.active = true;
+            globalThis.BluePlanetAutoBlind.prevRollMode = current;
+          }
+          // Force opposed results to be private for this request lifecycle
+          globalThis.BluePlanetAutoBlind.forcePrivate = true;
+          await game.settings.set('core', 'rollMode', 'blindroll');
+
+          // Reflect in UI (as if pressing the Blind GM Roll button)
+          const rollModeSelect = ui?.chat?.element?.find('select[name="rollMode"]');
+          if (rollModeSelect && rollModeSelect.length) {
+            rollModeSelect.val('blindroll').trigger('change');
+          } else {
+            const genericSelect = $('select[name="rollMode"]');
+            if (genericSelect && genericSelect.length) genericSelect.val('blindroll').trigger('change');
+          }
+
+          // Attempt to toggle any quick-control button that Foundry might render
+          // (best-effort; not all versions have a clickable blind button)
+          try {
+            const blindBtn = $("a[data-roll-mode='blindroll'], button[data-roll-mode='blindroll']").first();
+            if (blindBtn && blindBtn.length) blindBtn.trigger('click');
+          } catch (uiToggleErr) {
+            // Non-fatal
+          }
+
+          console.log('BluePlanet: Auto-switched to Blind GM Roll due to GM roll request.');
+          ui.notifications?.info('Opposed Test: Auto-switched to Blind GM Roll (GM request).');
+        } catch (autoErr) {
+          console.warn('BluePlanet: Failed to auto-switch to Blind GM Roll on GM request:', autoErr);
+        }
+      }
+
+      // 2) On public opposed results (safety net restore)
+      if (isOpposedResults && isVisibleToPlayers && !isGMPrivate) {
+        if (globalThis.BluePlanetAutoBlind.active && globalThis.BluePlanetAutoBlind.prevRollMode) {
+          const prev = globalThis.BluePlanetAutoBlind.prevRollMode;
+          await game.settings.set('core', 'rollMode', prev);
+          const rollModeSelect = ui?.chat?.element?.find('select[name="rollMode"]');
+          if (rollModeSelect && rollModeSelect.length) {
+            rollModeSelect.val(prev).trigger('change');
+          } else {
+            const genericSelect = $('select[name="rollMode"]');
+            if (genericSelect && genericSelect.length) genericSelect.val(prev).trigger('change');
+          }
+          console.log('BluePlanet: Restored roll mode due to public opposed results message:', prev);
+          globalThis.BluePlanetAutoBlind.active = false;
+          globalThis.BluePlanetAutoBlind.prevRollMode = null;
+          globalThis.BluePlanetAutoBlind.forcePrivate = false;
+        }
+      }
+    } catch (hookErr) {
+      console.warn('BluePlanet: createChatMessage hook handler failed:', hookErr);
+    }
+  });
+  
+  // Set up global event listener for make public buttons (for GMs only)
+  console.log('BluePlanet: Setting up global make-public listener...');
+  $(document).on('click.blueplanetMakePublic', '.make-public-btn', async function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    console.log('BluePlanet: Make public button clicked!');
+    
+    // Only allow GMs to use this
+    if (!game.user.isGM) {
+      ui.notifications.warn('Only GMs can make results public.');
+      return;
+    }
+    
+    const button = $(this);
+    const messageId = button.data('message-id');
+    
+    console.log('Make public button clicked:', { messageId });
+    
+    if (!messageId) {
+      ui.notifications.error('Message ID not found!');
+      return;
+    }
+    
+    // Import and call the make public function
+    try {
+      const { makeOpposedTestResultsPublic } = await import('./opposed-test-dialog.js');
+      await makeOpposedTestResultsPublic(messageId);
+
+      // Broadcast reveal so all clients can restore their roll mode if they auto-switched
+      try {
+        if (game.socket) {
+          game.socket.emit('system.blue-planet-recontact', {
+            type: 'reveal-opposed-test',
+            messageId
+          });
+        }
+      } catch (sockErr) {
+        console.warn('BluePlanet: Failed to emit reveal-opposed-test socket message:', sockErr);
+      }
+    } catch (error) {
+      console.error('Error making results public:', error);
+      ui.notifications.error('Error making results public. Check console for details.');
+    }
+  });
+  
+  console.log('BluePlanet: Global make-public listener set up for user:', game.user?.name || 'unknown');
   
   // Notify users about the new scene controls
   ui.notifications.info('Blue Planet: Roll tools moved to Scene Controls! Look for the water icon (🌊) in the toolbar.', { permanent: false });
@@ -218,9 +693,7 @@ Hooks.once("ready", async function() {
         actor.sheet.render(true, {
           popOut: true,
           editable: true,
-          // Random initial position to avoid overlap
-          top: 80 + Math.random() * 200,
-          left: 200 + Math.random() * 300
+          // Random initial position to avoid overlap + Math.random() * 200 + Math.random() * 300
         });
         console.log(`Blue Planet: Auto-opened character sheet for ${actor.name} in independent window`);
       }, 100);
@@ -261,9 +734,7 @@ Hooks.once("ready", async function() {
             const popoutApp = new BluePlanetActorSheet(app.actor, {
               popOut: true,
               width: 900,
-              height: 700,
-              left: 200 + Math.random() * 300,
-              top: 80 + Math.random() * 200,
+              height: 700 + Math.random() * 300 + Math.random() * 200,
               resizable: true,
               minimizable: true
             });
@@ -298,9 +769,7 @@ Hooks.once("ready", async function() {
             const sheet = new BluePlanetActorSheet(actor, {
               popOut: true,
               width: 900,
-              height: 700,
-              left: 200 + Math.random() * 300,
-              top: 80 + Math.random() * 200,
+              height: 700 + Math.random() * 300 + Math.random() * 200,
               resizable: true,
               minimizable: true
             });
@@ -388,6 +857,31 @@ Hooks.once("ready", async function() {
             icon: "fas fa-dice-three",
             button: true,
             onClick: () => window.executeQuickRoll('3d10kl', 'Specialty Skill Roll')
+          },
+          {
+            name: "advancement",
+            title: "Advancement Tracker",
+            icon: "fas fa-arrow-up",
+            button: true,
+            onClick: () => {
+              const controlled = canvas.tokens.controlled;
+              const actor = controlled.length > 0 ? controlled[0].actor : game.user.character;
+              if (!actor) { ui.notifications.warn('Select a token first.'); return; }
+              showAdvancementDialog(actor);
+            }
+          },
+          {
+            name: "echolocation",
+            title: "Cetacean Echolocation Info",
+            icon: "fas fa-wave-square",
+            button: true,
+            onClick: () => {
+              const controlled = canvas.tokens.controlled;
+              const actor = controlled.length > 0 ? controlled[0].actor : null;
+              if (!actor) { ui.notifications.warn('Select a cetacean token first.'); return; }
+              if (actor.type !== 'cetacean') { ui.notifications.warn('Echolocation is only available for cetacean actors.'); return; }
+              showEcholocationInfo(actor);
+            }
           }
         ]
       };
@@ -468,7 +962,7 @@ Hooks.once("ready", async function() {
       default: "roll"
     }, { 
       width: 400,
-      classes: ["blue-planet-dialog"],
+      classes: ["blue-planet-dialog", "bpr-dialog"],
       resizable: true
     }).render(true);
   };
@@ -534,7 +1028,7 @@ Hooks.once("ready", async function() {
       default: "roll"
     }, { 
       width: 400,
-      classes: ["blue-planet-dialog"],
+      classes: ["blue-planet-dialog", "bpr-dialog"],
       resizable: true
     }).render(true);
   };
@@ -582,7 +1076,7 @@ Hooks.once("ready", async function() {
               const roll = new Roll('3d10');
               roll.evaluate().then(() => {
                 let successes = 0;
-                roll.terms[0].results.forEach(result => {
+                roll.dice[0].results.forEach(result => {
                   if (result.result <= finalRating) successes++;
                 });
                 
@@ -605,7 +1099,7 @@ Hooks.once("ready", async function() {
       default: "roll"
     }, { 
       width: 400,
-      classes: ["blue-planet-dialog"],
+      classes: ["blue-planet-dialog", "bpr-dialog"],
       resizable: true
     }).render(true);
   };
@@ -715,7 +1209,7 @@ globalThis.blueplanet = {
     
   // Count successes
   let successes = 0;
-  roll.terms[0].results.forEach(result => {
+  roll.dice[0].results.forEach(result => {
     if (result.result <= damageRating) successes++;
   });
     
@@ -732,7 +1226,21 @@ globalThis.blueplanet = {
     });
     
     return {roll, successes, woundLevel, damageRating};
-  }
+  },
+  
+  /**
+   * Get wound penalty for an actor
+   * @param {Actor} actor - The actor
+   * @returns {number} Total wound penalty
+   */
+  getWoundPenalty: getWoundPenalty,
+  
+  /**
+   * Get wound summary for an actor
+   * @param {Actor} actor - The actor
+   * @returns {Object} Wound summary object
+   */
+  getWoundSummary: getWoundSummary
 };
 
 /**
@@ -779,4 +1287,78 @@ function rollItemMacro(itemName) {
 
   // Trigger the item roll
   return item.roll();
+}
+
+/**
+ * Add basic combat skills to the selected actor
+ * @param {Actor} actor - The actor to add skills to (optional, uses selected token if not provided)
+ */
+function addBasicCombatSkills(actor = null) {
+  // Get actor from selected token if not provided
+  if (!actor) {
+    const tokens = canvas.tokens?.controlled;
+    if (!tokens || tokens.length === 0) {
+      ui.notifications.warn('Please select a token or provide an actor');
+      return;
+    }
+    actor = tokens[0].actor;
+  }
+  
+  if (!actor) {
+    ui.notifications.warn('No valid actor found');
+    return;
+  }
+  
+  // Define basic combat skills
+  const basicCombatSkills = {
+    'firearms': {
+      label: 'Firearms',
+      rank: 1,
+      attribute: 'coordination',
+      level_type: 'general',
+      aspect: 'experiential'
+    },
+    'melee': {
+      label: 'Melee',
+      rank: 1,
+      attribute: 'coordination',
+      level_type: 'general',
+      aspect: 'experiential'
+    },
+    'brawling': {
+      label: 'Brawling',
+      rank: 1,
+      attribute: 'coordination',
+      level_type: 'general',
+      aspect: 'experiential'
+    },
+    'athletics': {
+      label: 'Athletics',
+      rank: 1,
+      attribute: 'coordination',
+      level_type: 'general',
+      aspect: 'experiential'
+    }
+  };
+  
+  // Get current skills or initialize empty object
+  const currentSkills = actor.system.skills || {};
+  
+  // Add skills that don't already exist
+  let addedSkills = 0;
+  for (const [key, skill] of Object.entries(basicCombatSkills)) {
+    if (!currentSkills[key]) {
+      currentSkills[key] = skill;
+      addedSkills++;
+    }
+  }
+  
+  // Update the actor
+  if (addedSkills > 0) {
+    actor.update({ 'system.skills': currentSkills });
+    ui.notifications.info(`Added ${addedSkills} basic combat skills to ${actor.name}`);
+    console.log(`BluePlanet: Added basic combat skills:`, basicCombatSkills);
+  } else {
+    ui.notifications.info(`${actor.name} already has all basic combat skills`);
+  }
 }

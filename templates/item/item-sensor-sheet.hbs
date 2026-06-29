@@ -1,0 +1,249 @@
+<form class="{{cssClass}} flexcol sensor-sheet" autocomplete="off">
+
+  {{!-- Header --}}
+  <header class="sheet-header">
+    <div class="header-fields">
+      <div class="name-section">
+        <input name="name" type="text" value="{{item.name}}" placeholder="Sensor Name" class="item-name"/>
+        <div class="sensor-type-line">
+          <select name="system.sensor_type">
+            {{#each sensorTypeOptions as |label key|}}
+              <option value="{{key}}" {{#if (eq ../system.sensor_type key)}}selected{{/if}}>{{label}}</option>
+            {{/each}}
+          </select>
+        </div>
+      </div>
+      
+      <div class="sensor-stats">
+        <div class="stat-group">
+          <label>Range:</label>
+          <div class="range-display">
+            <input type="number" name="system.range" value="{{system.range}}" min="0" step="1" class="range-input">
+            <span class="unit">m</span>
+          </div>
+        </div>
+        
+        <div class="stat-group">
+          <label>Resolution:</label>
+          <select name="system.resolution" class="resolution-select">
+            {{#each resolutionOptions as |label key|}}
+              <option value="{{key}}" {{#if (eq ../system.resolution key)}}selected{{/if}}>{{label}}</option>
+            {{/each}}
+          </select>
+        </div>
+        
+        <div class="stat-group">
+          <label>Power:</label>
+          <select name="system.power_consumption" class="power-select">
+            {{#each powerConsumptionOptions as |label key|}}
+              <option value="{{key}}" {{#if (eq ../system.power_consumption key)}}selected{{/if}}>{{label}}</option>
+            {{/each}}
+          </select>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  {{!-- Main Content --}}
+  <section class="sheet-main">
+    
+    {{!-- Navigation Tabs --}}
+    <nav class="sheet-tabs" data-group="primary">
+      <a class="item active" data-tab="description">DESCRIPTION</a>
+      <a class="item" data-tab="technical">TECHNICAL</a>
+      <a class="item" data-tab="properties">PROPERTIES</a>
+    </nav>
+
+    {{!-- Tab Content --}}
+    <section class="sheet-body">
+      
+      {{!-- Description Tab --}}
+      <div class="tab description active" data-group="primary" data-tab="description">
+        <div class="description-section">
+          <label>Description:</label>
+          <textarea name="system.description" placeholder="Sensor description, capabilities, and usage notes">{{system.description}}</textarea>
+        </div>
+        
+        <div class="special-features-section">
+          <div class="features-header">
+            <h3>Special Features</h3>
+            <button type="button" class="feature-add"><i class="fas fa-plus"></i> Add Feature</button>
+          </div>
+          
+          <div class="features-list">
+            {{#each specialFeatures as |feature index|}}
+            <div class="feature-item">
+              <input type="text" name="system.special_features.{{index}}" value="{{feature}}" placeholder="Special feature or capability">
+              <button type="button" class="feature-delete" data-index="{{index}}"><i class="fas fa-trash"></i></button>
+            </div>
+            {{/each}}
+            
+            {{#unless specialFeatures.length}}
+            <div class="no-features">
+              <p><em>No special features defined.</em></p>
+            </div>
+            {{/unless}}
+          </div>
+          
+          <div class="predefined-features">
+            <h4>Quick Add Features:</h4>
+            <div class="quick-features-grid">
+              {{#each predefinedFeatures as |feature|}}
+              <button type="button" class="quick-feature-btn" data-feature="{{feature}}">{{feature}}</button>
+              {{/each}}
+            </div>
+          </div>
+        </div>
+        
+        <div class="notes-section">
+          <label>Additional Notes:</label>
+          <textarea name="system.notes" placeholder="Additional technical details, limitations, operating procedures">{{system.notes}}</textarea>
+        </div>
+      </div>
+
+      {{!-- Technical Tab --}}
+      <div class="tab technical" data-group="primary" data-tab="technical">
+        <div class="technical-section">
+          
+          <div class="technical-row">
+            <div class="property-group">
+              <label>Data Processing:</label>
+              <select name="system.data_processing">
+                {{#each dataProcessingOptions as |label key|}}
+                  <option value="{{key}}" {{#if (eq ../system.data_processing key)}}selected{{/if}}>{{label}}</option>
+                {{/each}}
+              </select>
+            </div>
+            
+            <div class="property-group">
+              <label>Interface Type:</label>
+              <select name="system.interface_type">
+                {{#each interfaceTypeOptions as |label key|}}
+                  <option value="{{key}}" {{#if (eq ../system.interface_type key)}}selected{{/if}}>{{label}}</option>
+                {{/each}}
+              </select>
+            </div>
+          </div>
+          
+          <div class="technical-row">
+            <div class="property-group">
+              <label>Weight:</label>
+              <div class="weight-input">
+                <input type="number" name="system.weight" value="{{system.weight}}" min="0" step="0.1">
+                <span class="unit">kg</span>
+              </div>
+            </div>
+            
+            <div class="property-group">
+              <label>Dimensions:</label>
+              <select name="system.dimensions">
+                {{#each dimensionsOptions as |label key|}}
+                  <option value="{{key}}" {{#if (eq ../system.dimensions key)}}selected{{/if}}>{{label}}</option>
+                {{/each}}
+              </select>
+            </div>
+          </div>
+          
+          <div class="environmental-conditions-section">
+            <div class="conditions-header">
+              <h3>Environmental Operating Conditions</h3>
+              <p class="conditions-description">Specify environmental conditions where this sensor operates effectively.</p>
+              <button type="button" class="condition-add"><i class="fas fa-plus"></i> Add Condition</button>
+            </div>
+            
+            <div class="conditions-list">
+              {{#each environmentalConditions as |condition index|}}
+              <div class="condition-item">
+                <select name="system.environmental_conditions.{{index}}">
+                  <option value="">Select condition...</option>
+                  {{#each ../predefinedConditions as |predefinedCondition|}}
+                    <option value="{{predefinedCondition}}" {{#if (eq predefinedCondition condition)}}selected{{/if}}>{{predefinedCondition}}</option>
+                  {{/each}}
+                </select>
+                <button type="button" class="condition-delete" data-index="{{index}}"><i class="fas fa-trash"></i></button>
+              </div>
+              {{/each}}
+              
+              {{#unless environmentalConditions.length}}
+              <div class="no-conditions">
+                <p><em>No specific environmental conditions defined. Sensor operates in standard conditions.</em></p>
+              </div>
+              {{/unless}}
+            </div>
+          </div>
+          
+          <div class="manufacturer-section">
+            <div class="property-group">
+              <label>Manufacturer:</label>
+              <input type="text" name="system.manufacturer" value="{{system.manufacturer}}" placeholder="Manufacturing company or organization">
+            </div>
+          </div>
+          
+        </div>
+      </div>
+
+      {{!-- Properties Tab --}}
+      <div class="tab properties" data-group="primary" data-tab="properties">
+        <div class="properties-section">
+          
+          <div class="property-row">
+            <div class="property-group">
+              <label>Cost:</label>
+              <div class="cost-input">
+                <input type="number" name="system.cost" value="{{system.cost}}" min="0" step="0.01">
+                <span class="unit">credits</span>
+              </div>
+            </div>
+            
+            <div class="property-group">
+              <label>Availability:</label>
+              <select name="system.availability">
+                {{#each availabilityOptions as |label key|}}
+                  <option value="{{key}}" {{#if (eq ../system.availability key)}}selected{{/if}}>{{label}}</option>
+                {{/each}}
+              </select>
+            </div>
+          </div>
+          
+          <div class="property-row">
+            <div class="property-group">
+              <label>Legality:</label>
+              <select name="system.legality">
+                {{#each legalityOptions as |label key|}}
+                  <option value="{{key}}" {{#if (eq ../system.legality key)}}selected{{/if}}>{{label}}</option>
+                {{/each}}
+              </select>
+            </div>
+          </div>
+          
+          <div class="sensor-capabilities">
+            <h4>Sensor Capabilities:</h4>
+            <div class="capabilities-info">
+              <div class="capability-item">
+                <strong>Visual Sensors:</strong> Standard optical sensors, cameras, light detection
+              </div>
+              <div class="capability-item">
+                <strong>Infrared:</strong> Heat signature detection, thermal imaging
+              </div>
+              <div class="capability-item">
+                <strong>Radar/Sonar:</strong> Active emission-based detection and ranging
+              </div>
+              <div class="capability-item">
+                <strong>Chemical:</strong> Atmospheric analysis, substance identification
+              </div>
+              <div class="capability-item">
+                <strong>Motion:</strong> Movement detection, vibration sensing
+              </div>
+              <div class="capability-item">
+                <strong>Audio:</strong> Sound detection, acoustic analysis
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+
+    </section>
+  </section>
+
+</form>

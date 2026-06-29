@@ -1,6 +1,13 @@
 {
   "Actor": {
-    "types": ["character", "npc", "cetacean", "creature"],
+    "types": [
+      "character",
+      "cetacean",
+      "npc",
+      "creature",
+      "vehicle",
+      "remote"
+    ],
     "templates": {
       "base": {
         "attributes": {
@@ -149,17 +156,179 @@
             "onset": "",
             "damage": 0
           }
+        },
+        "wounds": {
+          "minor": 0,
+          "major": 0,
+          "mortal": 0
+        },
+        "status": {
+          "condition": ""
         }
+      },
+      "vehicle_base": {
+        "description": "",
+        "vehicle_type": "aquatic",
+        "manufacturer": "",
+        "model": "",
+        "dimensions": {
+          "size_category": "medium",
+          "length": 0,
+          "mass": 0
+        },
+        "performance": {
+          "speed_safe": 0,
+          "speed_max": 0,
+          "range": 0,
+          "ceiling": 0,
+          "depth_limit": 0
+        },
+        "durability": {
+          "value": 0,
+          "armor": 0
+        },
+        "autonomy": {
+          "cognition": 0,
+          "coordination": 0
+        },
+        "crew": {
+          "minimum": 1,
+          "maximum": 0
+        },
+        "passengers": {
+          "maximum": 0
+        },
+        "cargo": {
+          "capacity": 0,
+          "unit": "kg"
+        },
+        "maneuvers": {
+          "attack": -99,
+          "defend": 0,
+          "chase_evade": 0,
+          "performance": 0
+        },
+        "availability": "common",
+        "interface_type": "hot",
+        "power_type": "integrated",
+        "cost": 0,
+        "features": {
+          "hardened": false,
+          "armored": false,
+          "sensors": false,
+          "manipulators": false,
+          "weapons": false,
+          "sealed": false,
+          "responsive": false,
+          "smart": false,
+          "gi": false,
+          "stealth": false,
+          "evac_pods": false,
+          "crash_protection": false,
+          "slide_loader": false,
+          "travel_cradle": false,
+          "waterlock": false,
+          "ecm": false,
+          "vr_cockpit": false
+        },
+        "weapons_description": "",
+        "sensors_description": "",
+        "notes": "",
+        "condition": "operational",
+        "wounds": {
+          "minor": 0,
+          "major": 0,
+          "critical": 0,
+          "destroyed": false
+        },
+        "crew_members": [],
+        "passengers_list": []
+      },
+      "remote_base": {
+        "description": "",
+        "remote_type": "cetacean",
+        "manufacturer": "",
+        "model": "",
+        "dimensions": {
+          "size_category": "portable",
+          "mass": 0
+        },
+        "durability": {
+          "value": 0
+        },
+        "autonomy": {
+          "cognition": 0,
+          "coordination": 0
+        },
+        "performance": {
+          "speed": 0,
+          "range_control": 0,
+          "locomotion": "hover"
+        },
+        "cargo": {
+          "capacity": 0,
+          "unit": "kg"
+        },
+        "maneuvers": {
+          "chase_evade": 0
+        },
+        "availability": "common",
+        "interface_type": "hot",
+        "cost": 0,
+        "features": {
+          "hardened": false,
+          "sensors": false,
+          "manipulators": false,
+          "weapons": false,
+          "sealed": false,
+          "rechargeable": false,
+          "smart": false,
+          "gi": false,
+          "hot": true,
+          "ecm": false,
+          "voice_synth": false,
+          "phototropic": false
+        },
+        "weapons_description": "",
+        "sensors_description": "",
+        "notes": "",
+        "condition": "operational",
+        "interface_bonuses": {
+          "neural_jack_direct": 2,
+          "neural_jack_relay": 1,
+          "neural_jack_satellite": 0,
+          "trode_direct": 1,
+          "trode_relay": 0,
+          "trode_satellite": -1
+        },
+        "cetacean_bonuses": {
+          "active": false,
+          "flight_maneuver": 4,
+          "constellation_cognition": 4,
+          "sonar_cognition": 2,
+          "freefall_bonus": 2
+        },
+        "operator": null,
+        "operators_list": []
       }
     },
     "character": {
-      "templates": ["base", "character_base"]
+      "templates": [
+        "base",
+        "character_base"
+      ]
     },
     "npc": {
-      "templates": ["base", "character_base"]
+      "templates": [
+        "base",
+        "character_base"
+      ]
     },
     "cetacean": {
-      "templates": ["base", "character_base"],
+      "templates": [
+        "base",
+        "character_base"
+      ],
       "echolocation": true,
       "diving": {
         "depth": 0,
@@ -167,11 +336,33 @@
       }
     },
     "creature": {
-      "templates": ["creature_base"]
+      "templates": [
+        "creature_base"
+      ]
+    },
+    "vehicle": {
+      "templates": [
+        "vehicle_base"
+      ]
+    },
+    "remote": {
+      "templates": [
+        "remote_base"
+      ]
     }
   },
   "Item": {
-    "types": ["weapon", "equipment", "biomod", "skill", "feature", "species", "ammo_type", "sensor"],
+    "types": [
+      "weapon",
+      "equipment",
+      "biomod",
+      "cyberware",
+      "skill",
+      "feature",
+      "species",
+      "sensor",
+      "ammunition"
+    ],
     "templates": {
       "base": {
         "description": "",
@@ -181,7 +372,9 @@
       }
     },
     "weapon": {
-      "templates": ["base"],
+      "templates": [
+        "base"
+      ],
       "damage": 0,
       "effective_range": 0,
       "features": [],
@@ -190,9 +383,12 @@
       "dimensions": "",
       "ammo_capacity": "high",
       "rate_of_fire": "single",
-      "ammo_types": [],
+      "compatible_ammo": [],
       "models": "",
       "recoil_penalty": 0,
+      "magazine_capacity": 30,
+      "current_ammo": 30,
+      "loaded_ammunition": null,
       "range_modifiers": {
         "short": 0,
         "medium": 0,
@@ -201,7 +397,10 @@
       }
     },
     "equipment": {
-      "templates": ["base"],
+      "templates": [
+        "base"
+      ],
+      "equipped": false,
       "quantity": 1,
       "weight": 0,
       "durability": 10,
@@ -214,13 +413,25 @@
       "interfacing": "cold",
       "models": "",
       "sensors": [],
+      "mechanics": {
+        "initiative_bonus": 0,
+        "wound_penalty_reduction": {
+          "major": 0,
+          "mortal": 0
+        },
+        "natural_armor": 0,
+        "unarmed_damage_bonus": 0
+      },
       "manipulators": false,
       "sealed": false,
       "hardened": false
     },
     "biomod": {
-      "templates": ["base"],
+      "templates": [
+        "base"
+      ],
       "type": "genetic",
+      "active": false,
       "effects": [],
       "attributes": {
         "cognition": 0,
@@ -237,10 +448,56 @@
         "mental": 0,
         "physical": 0
       },
+      "mechanics": {
+        "initiative_bonus": 0,
+        "wound_penalty_reduction": {
+          "major": 0,
+          "mortal": 0
+        },
+        "natural_armor": 0,
+        "unarmed_damage_bonus": 0
+      },
+      "special_rules": []
+    },
+    "cyberware": {
+      "templates": [
+        "base"
+      ],
+      "type": "implant",
+      "active": false,
+      "effects": [],
+      "attributes": {
+        "cognition": 0,
+        "psyche": 0,
+        "coordination": 0,
+        "physique": 0
+      },
+      "durability": 0,
+      "installation_time": "",
+      "recovery_time": "",
+      "dimensions": "",
+      "models": "",
+      "strain_modifiers": {
+        "mental": 0,
+        "physical": 0
+      },
+      "mechanics": {
+        "initiative_bonus": 0,
+        "wound_penalty_reduction": {
+          "major": 0,
+          "mortal": 0
+        },
+        "natural_armor": 0,
+        "unarmed_damage_bonus": 0
+      },
+      "power_requirements": "",
+      "maintenance_interval": "",
       "special_rules": []
     },
     "skill": {
-      "templates": ["base"],
+      "templates": [
+        "base"
+      ],
       "rank": 1,
       "level_type": "general",
       "attribute": "cognition",
@@ -262,7 +519,9 @@
       "tags": []
     },
     "feature": {
-      "templates": ["base"],
+      "templates": [
+        "base"
+      ],
       "category": "technology",
       "feature_type": "",
       "subtype": "",
@@ -272,7 +531,9 @@
       "game_rules": ""
     },
     "species": {
-      "templates": ["base"],
+      "templates": [
+        "base"
+      ],
       "attributes": {
         "cognition": 0,
         "psyche": 0,
@@ -282,22 +543,27 @@
       "special_abilities": [],
       "size_category": "medium"
     },
-    "ammo_type": {
-      "templates": ["base"],
-      "type": "standard",
+    "ammunition": {
+      "templates": [
+        "base"
+      ],
+      "quantity": 1,
+      "package_size": 50,
+      "ammo_type": "standard",
+      "attack_modifier": 0,
       "damage_modifier": 0,
       "range_modifier": 0,
-      "features": [],
+      "penetration": 0,
+      "weight_per_round": 0.001,
+      "cost_per_round": 0.1,
+      "rounds_fired": 0,
       "compatible_weapons": [],
-      "weight": 0.1,
-      "quantity_per_unit": 20,
-      "manufacturer": "",
-      "penetration_rating": 0,
-      "blast_radius": 0,
-      "notes": ""
+      "manufacturer": ""
     },
     "sensor": {
-      "templates": ["base"],
+      "templates": [
+        "base"
+      ],
       "sensor_type": "visual",
       "range": 0,
       "resolution": "standard",

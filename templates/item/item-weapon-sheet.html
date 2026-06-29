@@ -1,0 +1,147 @@
+<form class="{{cssClass}} flexcol weapon-sheet" autocomplete="off">
+
+  {{!-- Header --}}
+  <header class="sheet-header">
+    <div class="header-fields">
+      <div class="name-section">
+        <input name="name" type="text" value="{{item.name}}" placeholder="Weapon Name" class="item-name"/>
+        <div class="weapon-type-line">
+          <select name="system.weapon_type">
+            {{#each weaponTypes as |label key|}}
+              <option value="{{key}}" {{#if (eq ../system.weapon_type key)}}selected{{/if}}>{{label}}</option>
+            {{/each}}
+          </select>
+          <span class="range-display">{{rangeDisplay}}</span>
+        </div>
+      </div>
+      
+      <div class="weapon-stats">
+        <div class="stat-group">
+          <label>Damage Rating:</label>
+          <div class="damage-controls">
+            <input type="number" name="system.damage" value="{{system.damage}}" min="0" max="25" class="damage-input">
+            <button type="button" class="damage-roll rollable" title="Roll Weapon Damage">
+              <i class="fas fa-dice-d10"></i>
+            </button>
+          </div>
+        </div>
+        
+        {{#if (ne system.weapon_type "melee")}}
+        <div class="stat-group">
+          <label>Effective Range:</label>
+          <div class="range-controls">
+            <input type="number" name="system.effective_range" value="{{system.effective_range}}" min="0" class="range-input">
+            <span class="unit">m</span>
+          </div>
+        </div>
+        {{/if}}
+      </div>
+    </div>
+  </header>
+
+  {{!-- Main Content --}}
+  <section class="sheet-main">
+    
+    {{!-- Navigation Tabs --}}
+    <nav class="sheet-tabs" data-group="primary">
+      <a class="item active" data-tab="description">DESCRIPTION</a>
+      <a class="item" data-tab="features">FEATURES</a>
+      <a class="item" data-tab="properties">PROPERTIES</a>
+    </nav>
+
+    {{!-- Tab Content --}}
+    <section class="sheet-body">
+      
+      {{!-- Description Tab --}}
+      <div class="tab description active" data-group="primary" data-tab="description">
+        <div class="description-section">
+          <label>Description:</label>
+          <textarea name="system.description" placeholder="Weapon description and appearance">{{system.description}}</textarea>
+        </div>
+      </div>
+
+      {{!-- Features Tab --}}
+      <div class="tab features" data-group="primary" data-tab="features">
+        <div class="features-section">
+          <div class="features-header">
+            <h3>Weapon Features</h3>
+            <button type="button" class="feature-add"><i class="fas fa-plus"></i> Add Feature</button>
+          </div>
+          
+          <div class="features-list">
+            {{#each weaponFeatures as |feature index|}}
+            <div class="feature-item">
+              <input type="text" name="system.features.{{index}}" value="{{feature}}" placeholder="Feature description">
+              <button type="button" class="feature-delete" data-index="{{index}}"><i class="fas fa-trash"></i></button>
+            </div>
+            {{/each}}
+            
+            {{#unless weaponFeatures.length}}
+            <div class="no-features">
+              <p><em>No special features defined.</em></p>
+            </div>
+            {{/unless}}
+          </div>
+          
+          <div class="feature-examples">
+            <h4>Common Features:</h4>
+            <ul>
+              <li><strong>Automatic:</strong> Can fire multiple rounds per action</li>
+              <li><strong>Concealed:</strong> Easy to hide (+2 to concealment)</li>
+              <li><strong>Two-Handed:</strong> Requires both hands to use effectively</li>
+              <li><strong>Reliable:</strong> Resistant to jamming and malfunction</li>
+              <li><strong>Armor Piercing:</strong> Ignores light armor</li>
+              <li><strong>Non-Lethal:</strong> Causes stun damage instead of wounds</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      {{!-- Properties Tab --}}
+      <div class="tab properties" data-group="primary" data-tab="properties">
+        <div class="properties-section">
+          
+          <div class="property-group">
+            <label>Cost:</label>
+            <input type="number" name="system.cost" value="{{system.cost}}" min="0" step="0.01">
+          </div>
+          
+          <div class="property-group">
+            <label>Availability:</label>
+            <select name="system.availability">
+              {{#each availabilityOptions as |label key|}}
+                <option value="{{key}}" {{#if (eq ../system.availability key)}}selected{{/if}}>{{label}}</option>
+              {{/each}}
+            </select>
+          </div>
+          
+          <div class="property-group">
+            <label>Legality:</label>
+            <select name="system.legality">
+              {{#each legalityOptions as |label key|}}
+                <option value="{{key}}" {{#if (eq ../system.legality key)}}selected{{/if}}>{{label}}</option>
+              {{/each}}
+            </select>
+          </div>
+          
+          <div class="weapon-notes">
+            <h4>Damage System Notes:</h4>
+            <div class="damage-explanation">
+              <p><strong>Damage Tests:</strong> Roll 3d10 vs Damage Rating</p>
+              <ul>
+                <li>Each die ≤ Damage Rating = 1 success</li>
+                <li>1 success = Minor wound</li>
+                <li>2 successes = Major wound</li>
+                <li>3+ successes = Mortal wound</li>
+              </ul>
+              <p><strong>Target Number Modifiers:</strong> Target's Physique and armor reduce the effective Damage Rating.</p>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+
+    </section>
+  </section>
+
+</form>
